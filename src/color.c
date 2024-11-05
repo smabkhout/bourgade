@@ -11,30 +11,30 @@ static const char *txt[MAX_COLORS] = {
 const char* color_start(enum color_t c){
     switch (c)
     {
-        case 0 : //Black ok
+        case 0 : //Black
             return "\033[38;5;0m";
-        case 1 : //White ok
+        case 1 : //White 
             return "\033[38;5;15m";
-        case 2 : //Orange ok
+        case 2 : //Orange 
             return "\033[38;5;202m";
-        case 3 : //Pink ok
+        case 3 : //Pink 
             return "\033[38;5;213m";
-        case 4 : //Violet  ok 
+        case 4 : //Violet 
             return "\033[38;5;129m";
-        case 5 : //Yellow ok
+        case 5 : //Yellow 
             return "\033[38;5;11m";
-        case 6 : //Blue ok
+        case 6 : //Blue 
             return "\033[0;34m";
-        case 7 : //Brown ok
+        case 7 : //Brown 
             return "\033[38;5;94m";
-        case 8 : //Green ok
+        case 8 : //Green 
             return "\033[0;32m";
-        case 9 : //Red ok
+        case 9 : //Red 
             return "\033[0;31m";
-        case 10 : //Shiny ok
+        case 10 : //Shiny 
             return "\033[1;97m";
         default :
-            return "\033[0m";
+            return "\033[0m"; 
     }
 }
 
