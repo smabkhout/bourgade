@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <stdlib.h>
 #include "color.h"
 
 
@@ -11,27 +11,27 @@ static const char *txt[MAX_COLORS] = {
 const char* color_start(enum color_t c){
     switch (c)
     {
-        case 0 : //Black
-            return "\033[0;30m";
-        case 1 : //White
-            return "\033[0;37m";
-        case 2 : //Orange
-            return "\033[m";
-        case 3 : //Pink
+        case 0 : //Black ok
+            return "\033[38;5;0m";
+        case 1 : //White ok
+            return "\033[38;5;15m";
+        case 2 : //Orange ok
+            return "\033[38;5;202m";
+        case 3 : //Pink ok
             return "\033[38;5;213m";
-        case 4 : //Violet
+        case 4 : //Violet  ok 
             return "\033[38;5;129m";
-        case 5 : //Yellow
-            return "\033[0;33m";
-        case 6 : //Blue
+        case 5 : //Yellow ok
+            return "\033[38;5;11m";
+        case 6 : //Blue ok
             return "\033[0;34m";
-        case 7 : //Brown
+        case 7 : //Brown ok
             return "\033[38;5;94m";
-        case 8 : //Green
+        case 8 : //Green ok
             return "\033[0;32m";
-        case 9 : //Red
+        case 9 : //Red ok
             return "\033[0;31m";
-        case 10 : //Shiny
+        case 10 : //Shiny ok
             return "\033[1;97m";
         default :
             return "\033[0m";
@@ -49,5 +49,9 @@ const char* color_to_string(enum color_t c){
 }
 
 int main(int argc, char* argv[]){
+    /*enum color_t c = atoi(argv[1]);
+    char* chaine = argv[2];
+    printf("Ceci est un test : \n");
+    printf("%s %s %s normal\n",color_start(c),chaine,color_stop());*/
     return 0;
 }
