@@ -29,10 +29,3 @@ const char* resource_to_short_string(enum resource_t r){
 
 const char* resource_color_start(enum resource_t r);
 
-
-
-
-
-int main(int argc, char* argv[]){
-    return 0;
-}
