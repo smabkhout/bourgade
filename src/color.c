@@ -47,11 +47,3 @@ const char* color_to_string(enum color_t c){
         return txt[c];
     return "UNKNOWN";
 }
-
-int main(int argc, char* argv[]){
-    /*enum color_t c = atoi(argv[1]);
-    char* chaine = argv[2];
-    printf("Ceci est un test : \n");
-    printf("%s %s %s normal\n",color_start(c),chaine,color_stop());*/
-    return 0;
-}
