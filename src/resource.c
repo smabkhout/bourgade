@@ -80,7 +80,7 @@ void resource_add(unsigned int r1[NUM_RESOURCES],
   }
 }
 
-void resource_add(unsigned int r1[NUM_RESOURCES],
+void resource_sub(unsigned int r1[NUM_RESOURCES],
                   unsigned int r2[NUM_RESOURCES],
                   unsigned int res[NUM_RESOURCES]){
   int i=0;

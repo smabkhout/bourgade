@@ -5,21 +5,13 @@
 #include <string.h>
 
 struct position_t{
-  int x;
-  int y;
+  unsigned int x;
+  unsigned int y;
 };
 
+struct position_t positions[MAX_X][MAX_Y] = {{{0,0}}};
 
 void init_positions(unsigned int seed){
-  srand(seed);
-}
-
-struct position_t pos;
-
-struct position_t* make_position(unsigned int x, unsigned int y){
-  pos.x = x;
-  pos.y = y;
-  return &pos;
 }
 
 struct position_t invalid_pos;
@@ -28,6 +20,15 @@ struct position_t* make_invalid_position(){
   invalid_pos.x = MAX_X;
   invalid_pos.y = MAX_Y;
   return &invalid_pos;
+}
+
+struct position_t* make_position(unsigned int x, unsigned int y){
+  if (x<MAX_X && y<MAX_Y){
+    positions[x][y].x = x;
+    positions[x][y].y = y;
+    return &positions[x][y];
+  }
+  return make_invalid_position;
 }
 
 unsigned int position_x(const struct position_t* p){
@@ -110,12 +111,14 @@ void list_neighbors(const struct position_t* p, struct position_t** ns) {
 
         if (nx >= 0 && nx < MAX_X && ny >= 0 && ny < MAX_Y) {
             ns[count++] = make_position(nx, ny);
-        } else {
-            ns[count++] = make_invalid_position();  // Ajouter une position invalide si hors limites
         }
     }
     // Remplir le reste avec des positions invalides si moins de MAX_NEIGHBORS voisins
     for (; count < MAX_NEIGHBORS; count++) {
         ns[count] = &invalid_pos;
     }
+}
+
+int main(){
+  return 0;
 }
