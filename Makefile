@@ -13,8 +13,8 @@ SRC_FILES = $(SRC_DIR)/color.c $(SRC_DIR)/position.c $(SRC_DIR)/resource.c
 OBJ_FILES = $(OBJ_DIR)/color.o $(OBJ_DIR)/position.o $(OBJ_DIR)/resource.o
 
 # Fichiers de test et exécutables de test
-TEST_FILES = $(TEST_DIR)/test_color.c $(TEST_DIR)/test_position.c
-TEST_EXECUTABLES = test_color test_position
+TEST_FILES = $(TEST_DIR)/test_color.c $(TEST_DIR)/test_position.c $(TEST_DIR)/test_resource.c
+TEST_EXECUTABLES = test_color test_position test_resource
 
 # Cible par défaut
 all: project $(TEST_EXECUTABLES)
@@ -40,6 +40,9 @@ test_color: $(OBJ_FILES) $(OBJ_DIR)/test_color.o
 test_position: $(OBJ_FILES) $(OBJ_DIR)/test_position.o
 	$(CC) $(CFLAGS) $(OBJ_FILES) $(OBJ_DIR)/test_position.o -o test_position
 
+test_resource: $(OBJ_FILES) $(OBJ_DIR)/test_resource.o
+	$(CC) $(CFLAGS) $(OBJ_FILES) $(OBJ_DIR)/test_resource.o -o test_resource
+
 # Nettoyage des fichiers objets et des exécutables
 clean:
 	@rm -f project $(TEST_EXECUTABLES) $(OBJ_DIR)/*.o *~ $(SRC_DIR)/*~ $(TEST_DIR)/*~
@@ -48,6 +51,7 @@ clean:
 $(OBJ_DIR)/project.o: $(SRC_DIR)/project.c
 $(OBJ_DIR)/test_color.o: $(TEST_DIR)/test_color.c $(SRC_DIR)/color.h
 $(OBJ_DIR)/test_position.o: $(TEST_DIR)/test_position.c $(SRC_DIR)/position.h
+$(OBJ_DIR)/test_resource.o: $(TEST_DIR)/test_resource.c $(SRC_DIR)/resource.h
 $(OBJ_DIR)/color.o: $(SRC_DIR)/color.c $(SRC_DIR)/color.h
 $(OBJ_DIR)/position.o: $(SRC_DIR)/position.c $(SRC_DIR)/position.h
 $(OBJ_DIR)/resource.o: $(SRC_DIR)/resource.c $(SRC_DIR)/resource.h
@@ -58,5 +62,7 @@ test: $(TEST_EXECUTABLES)
 	./test_color
 	@echo "Running test_position:"
 	./test_position
+	@echo "Running test_resource:"
+	./test_resource
 
 .PHONY: all clean test
