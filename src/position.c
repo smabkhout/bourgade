@@ -118,3 +118,7 @@ void list_neighbors(const struct position_t* p, struct position_t** ns) {
         ns[count] = &invalid_pos;
     }
 }
+
+int main(){
+  return 0;
+}
