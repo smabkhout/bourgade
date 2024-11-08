@@ -12,7 +12,7 @@ struct batiment_t{
   enum resource_t *earns;
   enum resource_t *costs;
   enum resource_t *supplies;
-  struct position_t position;
+  struct position_t *position;
 };
 
 const char* nom_batiment(struct batiment_t batiment){
@@ -35,6 +35,6 @@ enum resource_t* batiment_earns(struct batiment_t batiment){
   return batiment.earns;
 }
 
-struct position_t batiment_position(struct batiment_t batiment){
+struct position_t* batiment_position(struct batiment_t batiment){
   return batiment.position;
 }
