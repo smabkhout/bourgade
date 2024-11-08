@@ -28,7 +28,7 @@ struct position_t* make_position(unsigned int x, unsigned int y){
     positions[x][y].y = y;
     return &positions[x][y];
   }
-  return make_invalid_position;
+  return make_invalid_position();
 }
 
 unsigned int position_x(const struct position_t* p){
@@ -117,8 +117,4 @@ void list_neighbors(const struct position_t* p, struct position_t** ns) {
     for (; count < MAX_NEIGHBORS; count++) {
         ns[count] = &invalid_pos;
     }
-}
-
-int main(){
-  return 0;
 }
