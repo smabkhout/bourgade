@@ -32,7 +32,7 @@ const char* color_start(enum color_t c){
         case 9 : //Red 
             return "\033[0;31m";
         case 10 : //Shiny 
-            return "\033[1;97m";
+            return "\033[1;11m\033[5m";
         default :
             return "\033[0m"; 
     }
