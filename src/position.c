@@ -83,7 +83,6 @@ void position_to_string(const struct position_t* p, char* buf) {
     itoa(p->x, x_string);
     itoa(p->y, y_string);
 
-    // Assurez-vous que 'buf' a suffisamment d'espace alloué
     strcpy(buf, "L'abscisse est : ");
     strcat(buf, x_string);
     strcat(buf, ", L'ordonnee est : ");
