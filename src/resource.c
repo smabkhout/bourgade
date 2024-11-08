@@ -2,7 +2,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include "resource.h"
-#include <string.h>
+#include "color.h"
+
 
 static const char *txt[MAX_RESOURCES] = {
   "Nothing", "Corn", "Fish", "Wood", "Stone", "Gold", "Ruby", "Silver", "Sapphire", "Emerald"
@@ -30,33 +31,33 @@ const char* resource_to_short_string(enum resource_t r){
 const char* resource_color_start(enum resource_t r){
   switch (r)
   {
-  case 0: //Void
-    return "\033[38;5;0m";
-  case 1: //Yellow
-    return "\033[38;5;11m";
-  case 2: //Blue
-    return "\033[38;5;12m";
-  case 3: //Brown
-    return "\033[38;5;94m";
-  case 4: //Grey
-    return "\033[38;5;8m";
-  case 5: //Gold
-    return "\033[38;5;172m";
-  case 6: //Red
-    return "\033[0;31m";
-  case 7: //Silver
-    return "\033[38;5;7m";
-  case 8: //Cyan
-    return "\033[38;5;14m";
-  case 9: //Green
-    return "\033[0;32m";
+  case NOTHING: //Void
+    return color_start(BLACK);
+  case CORN: //Yellow
+    return color_start(YELLOW);
+  case FISH: //Blue
+    return color_start(BLUE);
+  case WOOD: //Brown
+    return color_start(BROWN);
+  case STONE: //Grey
+    return color_start(WHITE);
+  case GOLD: //Gold
+    return color_start(YELLOW);
+  case RUBY: //Red
+    return color_start(RED);
+  case SILVER: //Silver
+    return color_start(BLACK);
+  case SAPPHIRE: //Cyan
+    return color_start(BLUE);
+  case EMERALD: //Green
+    return color_start(GREEN);
   default:
-    break;
+    return color_start(11);
   }
 }
 
 const char* resource_color_stop(){
-    return "\033[0m";
+    return color_stop();
 }
 
 int resource_le_than(unsigned int r1[NUM_RESOURCES],
