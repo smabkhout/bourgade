@@ -7,48 +7,34 @@
 #endif
 
 
-struct batiment_t{
+struct building_t{
   char* nom;
-  enum resource_t *value;
-  enum resource_t *earns;
-  enum resource_t *costs;
-  enum resource_t *supplies;
+  int value[MAX_RESOURCES];
+  int earns[MAX_RESOURCES];
+  int costs[MAX_RESOURCES];
+  int supplies[MAX_RESOURCES];
   struct position_t *position;
-  enum color_t joueur=BLACK;
+  enum color_t joueur;
 };
 
-const char* nom_batiment(struct batiment_t batiment){
-  return batiment.nom;
-}
 
-enum resource_t* batiment_value(struct batiment_t batiment){
-  return batiment.value;
-}
-
-enum resource_t* batiment_costs(struct batiment_t batiment){
-  return batiment.costs;
-}
-
-enum resource_t* batiment_supplies(struct batiment_t batiment){
-  return batiment.supplies;
-}
-
-enum resource_t* batiment_earns(struct batiment_t batiment){
-  return batiment.earns;
-}
-
-struct position_t* batiment_position(struct batiment_t batiment){
-  return batiment.position;
-}
-
-struct batiment_t make_batiment(char* nom; enum resource_t *value; enum resource_t *earns; enum resource_t *costs; enum resource_t *supplies; struct position_t *position; enum color_t joueur=BLACK){
-  struct batiment_t batiment;
-  batiment.nom = nom;
-  batiment.value = value;
-  batiment.earns = earns;
-  batiment.costs = costs;
-  batiment.supplies = supplies;
+struct building_t make_building(char* nom, int *value, int *earns, int *costs, int *supplies, struct position_t *position, enum color_t joueur){
+  struct building_t batiment;
+  int i = 0;
+  while (i<MAX_RESOURCES){
+    batiment.value[i] = value[i];
+    batiment.earns[i] = earns[i];
+    batiment.costs[i] = costs[i];
+    batiment.supplies[i] = supplies[i];
+    ++i;
+  }
+  int j=0;
+  while (nom[j] != 0){
+    batiment.nom[j] = nom[j];
+    ++j;
+  }
   batiment.position = position;
   batiment.joueur = joueur;
   return batiment;
 }
+
