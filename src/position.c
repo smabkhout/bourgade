@@ -1,17 +1,22 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-#include "position.h"
 #include <string.h>
+#include "position.h"
+#include "worker.h"
+#include "building.h"
 
 struct position_t{
   unsigned int x;
   unsigned int y;
+  struct building_t *building;
+  struct worker_t * worker;
 };
 
 struct position_t positions[MAX_X][MAX_Y] = {{{0,0}}};
 
 void init_positions(unsigned int seed){
+    srand(time(NULL));
 }
 
 struct position_t invalid_pos;
@@ -89,8 +94,6 @@ void position_to_string(const struct position_t* p, char* buf) {
     strcat(buf, ", L'ordonnee est : ");
     strcat(buf, y_string);
 }
-
-
 
 
 int is_valid_position(const struct position_t* p){
