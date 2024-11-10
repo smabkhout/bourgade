@@ -5,12 +5,14 @@
 #include "position.h"
 #include "worker.h"
 #include "building.h"
+#include "mine.h"
 
 struct position_t{
   unsigned int x;
   unsigned int y;
   struct building_t *building;
   struct worker_t * worker;
+  struct mine_t* mine_resource;
 };
 
 struct position_t positions[MAX_X][MAX_Y] = {{{0,0}}};
@@ -98,6 +100,11 @@ void position_to_string(const struct position_t* p, char* buf) {
 
 int is_valid_position(const struct position_t* p){
   return ((p->x < MAX_X)&&(p->y < MAX_Y));
+}
+
+
+int is_free_position(struct position_t pos){ //position libre si ni employe, ni batiment ni ressource pre-existante dessus
+     return ((pos.worker == NULL )&& (pos.building==NULL) && (pos.mine_resource == NULL));
 }
 
 //on check tous les voisins
