@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
-#include "../src/color.h"  // Inclusion du header color.h depuis le dossier src
+#include "../src/color.h"
 
 // Fonction de test pour color_start
 void test_color_start() {
