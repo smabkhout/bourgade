@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "building.h"
-
+#include "position.h"
 
 struct building_t* make_building(char* nom, int *value, int *earns, int *costs, int *supplies, enum color_t joueur){
   struct building_t* batiment = NULL;
@@ -26,7 +26,17 @@ struct building_t* make_building(char* nom, int *value, int *earns, int *costs, 
 
 
 //définir un tableau global avec tous les buildings
-struct building_t list_buildings[MAX_BUILDINGS_PER_PLAYER];
+struct building_t list_buildings[MAX_BUILDINGS_PER_PLAYER] = {
+ {.nom = "Farm", .costs = {0,0,0,0,0,1,0,0,0,0}, .earns={0,0,0,0,0,3,0,0,0,0}, .supplies={0,1,0,0,0,0,0,0,0,0}, .value={0,0,0,1,0,0,0,0,0,0}, .joueur=0, .position = NULL},
+ {.nom = "Samwill", .costs = {0,0,0,0,0,1,0,0,0,0}, .earns={0,0,0,0,0,4,0,0,0,0}, .supplies={0,0,0,3,0,0,0,0,0,0}, .value={0,0,0,2,0,0,0,0,0,0}, .joueur=0, .position = NULL},
+ {.nom = "Pontoon", .costs = {0,0,0,0,0,1,0,0,0,0}, .earns={0,0,0,0,0,5,0,0,0,0}, .supplies={0,0,2,0,0,0,0,0,0,0}, .value={0,0,0,3,0,0,0,0,0,0}, .joueur=0, .position = NULL},
+ {.nom = "Quarry", .costs = {0,0,0,0,0,2,0,0,0,0}, .earns={0,0,0,0,0,5,0,0,0,0}, .supplies={0,0,0,2,0,0,0,0,0,0}, .value={0,0,0,3,0,0,0,0,0,0}, .joueur=0, .position = NULL},
+ {.nom = "Market", .costs = {0,0,0,0,0,3,0,0,0,0}, .earns={0,0,0,0,0,3,0,0,0,0}, .supplies={0,0,0,0,0,0,0,0,0,2}, .value={0,0,0,0,0,6,0,0,0,0}, .joueur=0, .position = NULL},
+ {.nom = "Alchemy lab", .costs = {0,0,0,0,0,2,0,0,0,0}, .earns={0,0,0,0,0,3,0,0,0,0}, .supplies={0,0,0,0,0,0,2,0,0,0}, .value={0,0,0,0,0,0,0,4,0,0}, .joueur=0, .position = NULL},
+ {.nom = "Bakery", .costs = {0,0,0,0,0,1,0,0,0,0}, .earns={0,0,0,0,0,2,0,0,0,0}, .supplies={0,3,0,0,0,0,0,0,0,0}, .value={0,0,0,1,1,0,0,0,0,0}, .joueur=0, .position = NULL}
+};
+
+
 
 void place_building(struct player_t *player, struct position_t* position, struct building_t *building){
   resource_sub(player->stockage, building->costs, player->stockage); //achat du batiment
