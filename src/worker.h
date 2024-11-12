@@ -23,5 +23,8 @@ struct worker_t make_worker(char* name, int cost[MAX_RESOURCES], enum color_t co
     return worker;
 }
 
-//void place_worker(struct player_t player, struct position_t position, struct worker_t worker)
+void place_worker(struct player_t player, struct position_t position, struct worker_t worker){
+  resource_sub(player.stockage, worker.cout);
+  position.worker = worker;
+}
 
