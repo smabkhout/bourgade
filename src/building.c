@@ -37,10 +37,15 @@ struct building_t list_buildings[MAX_BUILDINGS_PER_PLAYER] = {
 };
 
 
-
-void place_building(struct player_t *player, struct position_t* position, struct building_t *building){
-  resource_sub(player->stockage, building->costs, player->stockage); //achat du batiment
+void place_building(struct player_t *player, struct position_t* position, struct building_t *building){ //acheter un batiment
+  resource_sub(player->stockage, building->value, player->stockage); //achat du batiment
+  resource_add(player->stockage, building->earns, player->stockage); //recompense immédiate à l'achat
   building->position = position;
+  building->joueur=player->color;
+}
+
+void activate_building(){ //activer la production d'un batiment
+
 }
 
 int main(int argc, char* argv[])

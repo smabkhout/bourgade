@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include "worker.h"
 
-struct worker_t* make_worker(char* name, int cost[MAX_RESOURCES], enum color_t couleur){
-    struct worker_t* worker  = NULL;
+struct worker_t* make_worker(char* name, int cost[NUM_RESOURCES], enum color_t couleur){
+    struct worker_t *worker  = NULL;
     worker = (struct worker_t*)malloc(sizeof(struct worker_t));
     worker->nom = name;
     worker->joueur = couleur;
-    for (int i = 0; i<MAX_RESOURCES; ++i){
+    for (int i = 0; i<NUM_RESOURCES; ++i){
         worker->costs[i] = cost[i];
     }
     worker->position = make_invalid_position();

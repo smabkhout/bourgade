@@ -9,7 +9,7 @@
 
 struct worker_t {
     char* nom;
-    int costs[MAX_RESOURCES]; //ressources nécessaires à payer l'employé 
+    int costs[NUM_RESOURCES]; //ressources nécessaires à payer l'employé 
     enum color_t joueur; //couleur représentant le joueur qui contrôle l'employé
     struct position_t * position;
 };
