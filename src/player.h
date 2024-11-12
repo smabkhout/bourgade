@@ -8,6 +8,7 @@
 struct player_t{
     enum color_t color;
     int stockage[MAX_RESOURCES]; //entrepot representant les reserves du joueur
+    int number_of_workers; //to follow the number of workers that are used by the player
 };
 
 struct player_t initialize_player(enum color_t couleur){
@@ -19,3 +20,5 @@ struct player_t initialize_player(enum color_t couleur){
     }
     return player;
 }
+
+//gérer les ressources, employés et batiments de chacun des joueurs
