@@ -15,7 +15,7 @@ struct position_t{
   struct mine_t* mine_resource;
 };
 
-struct position_t positions[MAX_X][MAX_Y] = {{{0,0}}};
+struct position_t positions[MAX_X*MAX_Y+ 1];
 
 void init_positions(unsigned int seed){
     srand(time(NULL));
@@ -26,14 +26,16 @@ struct position_t invalid_pos;
 struct position_t* make_invalid_position(){
   invalid_pos.x = MAX_X;
   invalid_pos.y = MAX_Y;
+  invalid_pos.building = NULL;
+  invalid_pos.worker = NULL;
+  invalid_pos.mine_resource = NULL;
   return &invalid_pos;
 }
 
 struct position_t* make_position(unsigned int x, unsigned int y){
   if (x<MAX_X && y<MAX_Y){
-    positions[x][y].x = x;
-    positions[x][y].y = y;
-    return &positions[x][y];
+    positions[y*MAX_X + x].x = x;
+    positions[y*MAX_X + x].y = y;
   }
   return make_invalid_position();
 }
