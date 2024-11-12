@@ -3,16 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include "position.h"
-#include "worker.h"
-#include "building.h"
-#include "mine.h"
 
 struct position_t{
   unsigned int x;
   unsigned int y;
-  struct building_t *building;
-  struct worker_t * worker;
-  struct mine_t* mine_resource;
+  int init; //booléen qui dit si la position a déjà été initialisée ou pas
 };
 
 struct position_t positions[MAX_X*MAX_Y+ 1];
@@ -26,17 +21,21 @@ struct position_t invalid_pos;
 struct position_t* make_invalid_position(){
   invalid_pos.x = MAX_X;
   invalid_pos.y = MAX_Y;
-  invalid_pos.building = NULL;
-  invalid_pos.worker = NULL;
-  invalid_pos.mine_resource = NULL;
+  invalid_pos.init = 1;
   return &invalid_pos;
 }
 
 struct position_t* make_position(unsigned int x, unsigned int y){
-  if (x<MAX_X && y<MAX_Y){
-    positions[y*MAX_X + x].x = x;
-    positions[y*MAX_X + x].y = y;
+  if (positions[y*MAX_X+x].init == 1){
+    return &positions[y*MAX_X+x];
   }
+  else{
+    if (x<MAX_X && y<MAX_Y){
+      positions[y*MAX_X + x].x = x;
+      positions[y*MAX_X + x].y = y;
+      positions[y*MAX_X + x].init = 1;
+    }
+  } 
   return make_invalid_position();
 }
 
@@ -104,11 +103,6 @@ int is_valid_position(const struct position_t* p){
   return ((p->x < MAX_X)&&(p->y < MAX_Y));
 }
 
-
-int is_free_position(struct position_t pos){ //position libre si ni employe, ni batiment ni ressource pre-existante dessus
-     return ((pos.worker == NULL )&& (pos.building==NULL) && (pos.mine_resource == NULL));
-}
-
 //on check tous les voisins
 // de la position pointée par p et on place celles valides dans le tableau ns. Pour celles qui ne sont 
 //pas valides, on utilise make_invalid_position
@@ -129,4 +123,9 @@ void list_neighbors(const struct position_t* p, struct position_t** ns) {
     for (; count < MAX_NEIGHBORS; count++) {
         ns[count] = &invalid_pos;
     }
+}
+
+
+int main(){
+  return 0;
 }

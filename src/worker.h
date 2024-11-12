@@ -13,15 +13,6 @@ struct worker_t {
     enum color_t joueur; //couleur représentant le joueur qui contrôle l'employé
 };
 
-struct worker_t make_worker(char* name, int cost[MAX_RESOURCES], enum color_t couleur){
-    struct worker_t worker;
-    worker.nom = name;
-    worker.joueur = couleur;
-    for (int i = 0; i<MAX_RESOURCES; ++i){
-        worker.cout[i] = cost[i];
-    }
-    return worker;
-}
+struct worker_t* make_worker(char* name, int cost[MAX_RESOURCES], enum color_t couleur);
 
-//void place_worker(struct player_t player, struct position_t position, struct worker_t worker)
 

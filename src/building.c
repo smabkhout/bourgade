@@ -1,45 +1,39 @@
 #include <stdio.h>
-#include "position.h"
-#include "resource.h"
-#include "color.h"
-
-#ifndef MAX_BUILDINGS_PER_PLAYER
- #define MAX_BUILDINGS_PER_PLAYER 7
-#endif
+#include <stdlib.h>
+#include "building.h"
 
 
-struct batiment_t{
-  char* nom;
-  int value[10];
-  int earns[10];
-  int costs[10];
-  int supplies[10];
-  struct position_t *position;
-  enum color_t joueur;
-};
-
-
-
-struct batiment_t make_batiment(char* nom, int *value, int *earns, int *costs, int *supplies, struct position_t *position, enum color_t joueur){
-  struct batiment_t batiment;
+struct building_t* make_building(char* nom, int *value, int *earns, int *costs, int *supplies, enum color_t joueur){
+  struct building_t* batiment = NULL;
+  batiment = (struct building_t*)malloc(sizeof(struct building_t));
   int i = 0;
-  while (i<10){
-    batiment.value[i] = value[i];
-    batiment.earns[i] = earns[i];
-    batiment.costs[i] = costs[i];
-    batiment.supplies[i] = supplies[i];
+  while (i<MAX_RESOURCES){
+    batiment->value[i] = value[i];
+    batiment->earns[i] = earns[i];
+    batiment->costs[i] = costs[i];
+    batiment->supplies[i] = supplies[i];
     ++i;
   }
   int j=0;
   while (nom[j] != 0){
-    batiment.nom[j] = nom[j];
+    batiment->nom[j] = nom[j];
     ++j;
   }
-  batiment.position = position;
-  batiment.joueur = joueur;
+  batiment->joueur = joueur;
   return batiment;
 }
 
-int main(){
+
+//définir un tableau global avec tous les buildings
+struct building_t list_buildings[MAX_BUILDINGS_PER_PLAYER];
+
+//void place_building (struct player_t player, struct position_t position, struct building_t building)
+void place_building(struct player_t *player, struct position_t* position, struct building_t *building){
+  resource_sub(player->stockage, building->costs, player->stockage);
+  
+}
+
+int main(int argc, char* argv[])
+{
   return 0;
 }
