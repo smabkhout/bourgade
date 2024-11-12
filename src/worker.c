@@ -8,12 +8,21 @@ struct worker_t* make_worker(char* name, int cost[MAX_RESOURCES], enum color_t c
     worker->nom = name;
     worker->joueur = couleur;
     for (int i = 0; i<MAX_RESOURCES; ++i){
-        worker->cout[i] = cost[i];
+        worker->costs[i] = cost[i];
     }
+    worker->position = make_invalid_position();
     return worker;
 }
 
-//void place_worker(struct player_t player, struct position_t position, struct worker_t worker)
+void pay_worker(struct player_t *player, struct worker_t* worker)
+{
+    resource_sub(player->stockage,worker->costs,player->stockage); //on déduit de l'entrepot du joueur le salaire du travailleur
+}
+
+void place_worker(struct player_t *player, struct position_t *position, struct worker_t *worker){
+    pay_worker(player,worker);
+    worker->position = position;
+}
 
 int main(){
     return 0;

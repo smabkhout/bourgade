@@ -14,9 +14,9 @@ struct building_t{
   int costs[MAX_RESOURCES];
   int supplies[MAX_RESOURCES];
   enum color_t joueur; //propriétaire du building
+  struct position_t *position;
 };
 
 struct building_t* make_building(char* nom, int *value, int *earns, int *costs, int *supplies, enum color_t joueur);
 
-//void place_building (struct player_t player, struct position_t position, struct building_t building)
 void place_building(struct player_t *player, struct position_t* position, struct building_t *building);

@@ -6,3 +6,5 @@
 int main(void) {
   // To be done
 }
+
+//penser a free les workers et buildings

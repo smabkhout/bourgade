@@ -20,6 +20,7 @@ struct building_t* make_building(char* nom, int *value, int *earns, int *costs, 
     ++j;
   }
   batiment->joueur = joueur;
+  batiment->position = make_invalid_position();
   return batiment;
 }
 
@@ -27,10 +28,9 @@ struct building_t* make_building(char* nom, int *value, int *earns, int *costs, 
 //définir un tableau global avec tous les buildings
 struct building_t list_buildings[MAX_BUILDINGS_PER_PLAYER];
 
-//void place_building (struct player_t player, struct position_t position, struct building_t building)
 void place_building(struct player_t *player, struct position_t* position, struct building_t *building){
-  resource_sub(player->stockage, building->costs, player->stockage);
-  
+  resource_sub(player->stockage, building->costs, player->stockage); //achat du batiment
+  building->position = position;
 }
 
 int main(int argc, char* argv[])
