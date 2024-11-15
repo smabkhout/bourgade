@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "player.h"
+#include "worker.h"
 
 struct player_t* initialize_player(enum color_t couleur){
     struct player_t* player = NULL; 
@@ -9,6 +10,7 @@ struct player_t* initialize_player(enum color_t couleur){
     {
         player->stockage[i] = 0;
     }
+    player->number_of_workers = MAX_WORKERS_PER_PLAYER;
     return player;
 }
 

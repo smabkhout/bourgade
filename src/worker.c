@@ -20,8 +20,8 @@ void pay_worker(struct player_t *player, struct worker_t* worker)
 }
 
 void place_worker(struct player_t *player, struct position_t *position, struct worker_t *worker){
-    pay_worker(player,worker);
     worker->position = position;
+    player->number_of_workers -= 1; //on décrémente le nombre de worker disponibles pour le player
 }
 
 int main(){

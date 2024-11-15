@@ -10,33 +10,38 @@ struct position_t{
   int init; //booléen qui dit si la position a déjà été initialisée ou pas
 };
 
-struct position_t positions[MAX_X*MAX_Y+ 1];
-
-void init_positions(unsigned int seed){
-    srand(time(NULL));
-}
-
-struct position_t invalid_pos;
+struct position_t *positions[MAX_X*MAX_Y+ 1];
 
 struct position_t* make_invalid_position(){
-  invalid_pos.x = MAX_X;
-  invalid_pos.y = MAX_Y;
-  invalid_pos.init = 1;
-  return &invalid_pos;
+  positions[MAX_X*MAX_Y]->x = MAX_X;
+  positions[MAX_X*MAX_Y]->y = MAX_Y;
+  return positions[MAX_X*MAX_Y];
 }
 
 struct position_t* make_position(unsigned int x, unsigned int y){
-  if (positions[y*MAX_X+x].init == 1){
-    return &positions[y*MAX_X+x];
+  if (positions[y*MAX_X+x]->init == 1){
+    return positions[y*MAX_X+x];
   }
   else{
     if (x<MAX_X && y<MAX_Y){
-      positions[y*MAX_X + x].x = x;
-      positions[y*MAX_X + x].y = y;
-      positions[y*MAX_X + x].init = 1;
+      positions[y*MAX_X + x]->x = x;
+      positions[y*MAX_X + x]->y = y;
+      positions[y*MAX_X + x]->init = 1;
+      return positions[y*MAX_X + x];
     }
   } 
   return make_invalid_position();
+}
+
+void init_positions(unsigned int seed){
+    srand(seed);
+    for (int i = 0; i<MAX_X; ++i)
+    {
+      for (int j = 0; j<MAX_Y; ++j)
+      {
+        positions[j*MAX_X+i] = make_position(i,j);
+      }
+    }
 }
 
 unsigned int position_x(const struct position_t* p){
@@ -121,7 +126,7 @@ void list_neighbors(const struct position_t* p, struct position_t** ns) {
     }
     // Remplir le reste avec des positions invalides si moins de MAX_NEIGHBORS voisins
     for (; count < MAX_NEIGHBORS; count++) {
-        ns[count] = &invalid_pos;
+        ns[count] = make_invalid_position();
     }
 }
 
