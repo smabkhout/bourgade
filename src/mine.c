@@ -3,16 +3,19 @@
 #include <stdlib.h>
 #include <time.h>
 
-
-void place_mine(struct cell_t cell, struct mine_t m){
-    cell.mine->r = m.r;
+void place_mine(struct cell_t* cell, struct mine_t m) {
+    if (cell->mine == NULL) {
+        cell->mine = malloc(sizeof(struct mine_t));
+    }
+    cell->mine->r = m.r;
     int i = 0;
-    while(m.name[i]!=0)
-    {
-        cell.mine->name[i] = m.name[i];
+    while (m.name[i] != 0) {
+        cell->mine->name[i] = m.name[i];
         ++i;
     }
+    cell->mine->name[i] = 0;
 }
+
 
 void construct_mines(){
     int i=0;
