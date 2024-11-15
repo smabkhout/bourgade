@@ -8,7 +8,7 @@
 
 /** A bound for the ordinated (y) of the positions (i.e y < MAX_Y). */
 #ifndef MAX_Y
-  #define MAX_Y 3
+  #define MAX_Y 4
 #endif
 
 /** The maximal number of valid positions. */
