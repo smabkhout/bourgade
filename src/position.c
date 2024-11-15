@@ -10,24 +10,24 @@ struct position_t{
   int init; //booléen qui dit si la position a déjà été initialisée ou pas
 };
 
-struct position_t *positions[MAX_X*MAX_Y+ 1];
+struct position_t positions[MAX_X*MAX_Y+ 1];
 
 struct position_t* make_invalid_position(){
-  positions[MAX_X*MAX_Y]->x = MAX_X;
-  positions[MAX_X*MAX_Y]->y = MAX_Y;
-  return positions[MAX_X*MAX_Y];
+  positions[MAX_X*MAX_Y].x = MAX_X;
+  positions[MAX_X*MAX_Y].y = MAX_Y;
+  return &positions[MAX_X*MAX_Y];
 }
 
 struct position_t* make_position(unsigned int x, unsigned int y){
-  if (positions[y*MAX_X+x]->init == 1){
-    return positions[y*MAX_X+x];
+  if (positions[y*MAX_X+x].init == 1){
+    return &positions[y*MAX_X+x];
   }
   else{
     if (x<MAX_X && y<MAX_Y){
-      positions[y*MAX_X + x]->x = x;
-      positions[y*MAX_X + x]->y = y;
-      positions[y*MAX_X + x]->init = 1;
-      return positions[y*MAX_X + x];
+      positions[y*MAX_X + x].x = x;
+      positions[y*MAX_X + x].y = y;
+      positions[y*MAX_X + x].init = 1;
+      return &positions[y*MAX_X + x];
     }
   } 
   return make_invalid_position();
@@ -39,7 +39,7 @@ void init_positions(unsigned int seed){
     {
       for (int j = 0; j<MAX_Y; ++j)
       {
-        positions[j*MAX_X+i] = make_position(i,j);
+        positions[j*MAX_X+i] = *make_position(i,j);
       }
     }
 }
