@@ -1,7 +1,8 @@
-#include "position.h"
+#ifndef __BOARD_H__
+#define __BOARD_H__
+
 #include "worker.h"
 #include "building.h"
-#include "mine.h"
 
 struct cell_t {
     struct position_t* pos;
@@ -22,4 +23,6 @@ struct worker_t* get_worker_from_cell(struct cell_t c);
 
 struct mine_t* get_mine_from_cell(struct cell_t c);
 
-board_t init_board(int num_players);
+struct board_t init_board(int num_players);
+
+#endif

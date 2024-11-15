@@ -1,3 +1,6 @@
+ #ifndef __PLAYER_H__
+ #define __PLAYER_H__
+
 #include "color.h"
 #include "resource.h"
 
@@ -12,3 +15,6 @@ struct player_t{
 };
 
 struct player_t* initialize_player(enum color_t couleur);
+
+
+#endif

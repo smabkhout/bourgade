@@ -1,6 +1,8 @@
+#ifndef __BUILDING_H__
+#define __BUILDING_H__
+
+
 #include "position.h"
-#include "resource.h"
-#include "color.h"
 #include "player.h"
 
 #ifndef MAX_BUILDINGS_PER_PLAYER
@@ -20,3 +22,5 @@ struct building_t{
 struct building_t* make_building(char* nom, int *value, int *earns, int *costs, int *supplies, enum color_t joueur);
 
 void place_building(struct player_t *player, struct position_t* position, struct building_t *building);
+
+#endif

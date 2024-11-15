@@ -1,3 +1,6 @@
+#ifndef __WORKER_H__
+#define __WORKER_H__
+
 #include "resource.h"
 #include "color.h"
 #include "position.h"
@@ -20,3 +23,4 @@ void pay_worker(struct player_t *player, struct worker_t* worker);
 
 void place_worker(struct player_t *player, struct position_t *position, struct worker_t *worker);
 
+#endif
