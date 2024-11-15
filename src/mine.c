@@ -5,13 +5,14 @@
 
 
 void place_mine(struct cell_t* cell, struct mine_t* m){
-    cell->mine->r = m->r;
+    /*cell->mine->r = m->r;
     int i = 0;
     while(m->name[i]!=0)
     {
         cell->mine->name[i] = m->name[i];
         ++i;
-    }
+    }*/
+    cell->mine=m;
 }
 
 void construct_mines(){
