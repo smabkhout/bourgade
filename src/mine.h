@@ -15,7 +15,7 @@ struct mine_t list_mines[4] = {
  {.name = "Rock Mine", .r=STONE},
 };
 
-void place_mine(struct cell_t* cell, struct mine_t* m);
+void place_mine(struct cell_t cell, struct mine_t m);
 
 struct mine_t present_mines[MAX_POSITIONS/4];
 
