@@ -51,6 +51,7 @@ void activate_building(struct player_t *owner, struct player_t *user, struct bui
 }
 
 
+
 int main(int argc, char* argv[])
 {
   return 0;
