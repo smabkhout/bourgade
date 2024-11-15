@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "mine.h"
+#include <stdlib.h>
+#include <time.h>
 
 
 void place_mine(struct cell_t* cell, struct mine_t* m){
@@ -12,8 +14,15 @@ void place_mine(struct cell_t* cell, struct mine_t* m){
     }
 }
 
-//struct mine_t* construct_mine(char* name, enum resource_t r){
-//}
+void construct_mines(){
+    int i=0;
+    while (i<MAX_POSITIONS/4){
+        int a=rand() % 4;
+        present_mines[i]=list_mines[a];
+        ++i;
+    }
+}
+
 
 int main(){
     return 0;

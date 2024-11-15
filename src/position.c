@@ -34,7 +34,7 @@ struct position_t* make_position(unsigned int x, unsigned int y){
 }
 
 void init_positions(unsigned int seed){
-    srand(seed);
+    (void) seed;
     for (int i = 0; i<MAX_X; ++i)
     {
       for (int j = 0; j<MAX_Y; ++j)
