@@ -11,10 +11,10 @@
 
 struct building_t{
   char* nom;
-  int value[MAX_RESOURCES];
-  int earns[MAX_RESOURCES];
-  int costs[MAX_RESOURCES];
-  int supplies[MAX_RESOURCES];
+  unsigned int value[NUM_RESOURCES];
+  unsigned int earns[NUM_RESOURCES];
+  unsigned int costs[NUM_RESOURCES];
+  unsigned int supplies[NUM_RESOURCES];
   enum color_t joueur; //propriétaire du building
   struct position_t *position;
 };

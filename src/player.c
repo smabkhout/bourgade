@@ -6,7 +6,7 @@
 struct player_t* initialize_player(enum color_t couleur){
     struct player_t* player = NULL; 
     player->color = couleur;
-    for (int i = 0; i < MAX_RESOURCES; ++i)
+    for (int i = 0; i < NUM_RESOURCES; ++i)
     {
         player->stockage[i] = 0;
     }
@@ -15,7 +15,6 @@ struct player_t* initialize_player(enum color_t couleur){
 }
 
 
-//gérer les ressources, employés et batiments de chacun des joueurs
 
 int main()
 {

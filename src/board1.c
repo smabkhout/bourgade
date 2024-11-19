@@ -23,7 +23,7 @@ int occurrences(struct mine_t tab[MAX_POSITIONS / 4])
 }
 
 
-struct board_t* init_board(int num_players)
+struct board_t* init_board()
 { // pour initialiser le board, on place N/4 mines de ressources où N est le nombre
     // de positions valides (N>=16). Il faut aussi qu'il y au moins une mine de chaque type sur le board (Field, Forest, River, Rock
     // mine). De plus, le nombre d'emplacement valide parmi les voisins de chaque mine est >= 1.
@@ -78,7 +78,7 @@ struct board_t* init_board(int num_players)
     } while (nb_of_mines < MAX_POSITIONS/4);
     //nb_of_mines vaut (N/4)-1 à la fin du prgramme mais c'est normal car initialisée à 0
     // deuxième condition : chaque mine a au moins 1 position valide dans ses voisins sinon => on refait une génération
-    (void) num_players;
+
     return board;
 }
 

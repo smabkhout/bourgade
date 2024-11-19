@@ -1,7 +1,10 @@
 #include <stdio.h>
-#include "mine.h"
 #include <stdlib.h>
 #include <time.h>
+
+#include "mine.h"
+#include "position.h"
+#include "cell.h"
 
 void place_mine(struct cell_t* cell, struct mine_t m) {
     if (cell->mine == NULL) {

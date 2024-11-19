@@ -10,6 +10,6 @@ struct board_t {
 
 int occurrences(struct mine_t tab[MAX_POSITIONS/4]);
 
-struct board_t* init_board(int num_players);
+struct board_t* init_board();
 
 #endif
