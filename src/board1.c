@@ -78,6 +78,7 @@ struct board_t* init_board()
         for (int i = 0; i<8; ++i){
             free(neighbors[i]);
         }
+        free(neighbors);
     } while (nb_of_mines < MAX_POSITIONS/4);
     //nb_of_mines vaut (N/4)-1 à la fin du prgramme mais c'est normal car initialisée à 0
     // deuxième condition : chaque mine a au moins 1 position valide dans ses voisins sinon => on refait une génération
