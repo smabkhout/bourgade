@@ -2,7 +2,8 @@
 #define __MINE_H__
 
 #include "resource.h"
-#include "board.h"
+
+struct cell_t;
 
 struct mine_t {
     char* name;

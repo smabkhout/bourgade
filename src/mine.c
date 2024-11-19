@@ -17,7 +17,7 @@ void place_mine(struct cell_t* cell, struct mine_t m) {
 }
 
 
-void construct_mines(){
+void construct_mines(){ //modifie le tableau present_mines pour avoir MAX_POSITIONS/4 mines aléatoires
     int i=0;
     while (i<MAX_POSITIONS/4){
         int a=rand() % 4;
