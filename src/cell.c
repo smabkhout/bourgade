@@ -28,9 +28,9 @@ struct cell_t* init_cell()
     return cell;
 }
 
-int is_free_cell(struct cell_t c)
+int is_free_cell(struct cell_t* c)
 { // retourne 1 si la cellule ne contient pas de buildings ou de worker ou de mine
-    return (c.building == NULL) && (c.mine == NULL) && (c.worker == NULL);
+    return (c->building == NULL) && (c->mine == NULL) && (c->worker == NULL);
 }
 
 int main()

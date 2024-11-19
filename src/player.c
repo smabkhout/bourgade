@@ -5,6 +5,7 @@
 
 struct player_t* initialize_player(enum color_t couleur){
     struct player_t* player = NULL; 
+    player = (struct player_t*)malloc(sizeof(struct player_t));
     player->color = couleur;
     for (int i = 0; i < NUM_RESOURCES; ++i)
     {
