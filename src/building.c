@@ -27,13 +27,13 @@ struct building_t* make_building(char* nom, int *value, int *earns, int *costs, 
 
 //définir un tableau global avec tous les buildings
 struct building_t list_buildings[MAX_BUILDINGS_PER_PLAYER] = {
- {.nom = "Farm", .costs = {0,0,0,0,0,1,0,0,0,0}, .earns={0,0,0,0,0,3,0,0,0,0}, .supplies={0,1,0,0,0,0,0,0,0,0}, .value={0,0,0,1,0,0,0,0,0,0}, .joueur=0, .position = NULL},
- {.nom = "Samwill", .costs = {0,0,0,0,0,1,0,0,0,0}, .earns={0,0,0,0,0,4,0,0,0,0}, .supplies={0,0,0,3,0,0,0,0,0,0}, .value={0,0,0,2,0,0,0,0,0,0}, .joueur=0, .position = NULL},
- {.nom = "Pontoon", .costs = {0,0,0,0,0,1,0,0,0,0}, .earns={0,0,0,0,0,5,0,0,0,0}, .supplies={0,0,2,0,0,0,0,0,0,0}, .value={0,0,0,3,0,0,0,0,0,0}, .joueur=0, .position = NULL},
- {.nom = "Quarry", .costs = {0,0,0,0,0,2,0,0,0,0}, .earns={0,0,0,0,0,5,0,0,0,0}, .supplies={0,0,0,2,0,0,0,0,0,0}, .value={0,0,0,3,0,0,0,0,0,0}, .joueur=0, .position = NULL},
- {.nom = "Market", .costs = {0,0,0,0,0,3,0,0,0,0}, .earns={0,0,0,0,0,3,0,0,0,0}, .supplies={0,0,0,0,0,0,0,0,0,2}, .value={0,0,0,0,0,6,0,0,0,0}, .joueur=0, .position = NULL},
- {.nom = "Alchemy lab", .costs = {0,0,0,0,0,2,0,0,0,0}, .earns={0,0,0,0,0,3,0,0,0,0}, .supplies={0,0,0,0,0,0,2,0,0,0}, .value={0,0,0,0,0,0,0,4,0,0}, .joueur=0, .position = NULL},
- {.nom = "Bakery", .costs = {0,0,0,0,0,1,0,0,0,0}, .earns={0,0,0,0,0,2,0,0,0,0}, .supplies={0,3,0,0,0,0,0,0,0,0}, .value={0,0,0,1,1,0,0,0,0,0}, .joueur=0, .position = NULL}
+ {.nom = "Farm", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,3}, .supplies={0,1,0,0,0,0}, .value={0,0,0,1,0,0}, .joueur=0, .position = NULL},
+ {.nom = "Samwill", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,4}, .supplies={0,0,0,3,0,0}, .value={0,0,0,2,0,0}, .joueur=0, .position = NULL},
+ {.nom = "Pontoon", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,5}, .supplies={0,0,2,0,0,0}, .value={0,0,0,3,0,0}, .joueur=0, .position = NULL},
+ {.nom = "Quarry", .costs = {0,0,0,0,0,2}, .earns={0,0,0,0,0,5}, .supplies={0,0,0,2,0,0}, .value={0,0,0,3,0,0}, .joueur=0, .position = NULL},
+ {.nom = "Market", .costs = {0,0,0,0,0,3}, .earns={0,0,0,0,0,3}, .supplies={1,1,1,0,1,0}, .value={0,0,0,0,0,6}, .joueur=0, .position = NULL},
+ {.nom = "Bakery", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,2}, .supplies={0,3,0,0,0,0}, .value={0,0,0,1,1,0}, .joueur=0, .position = NULL},
+ {.nom = "Factory", .costs = {0,0,0,1,1,1}, .earns={0,1,0,0,0,2}, .supplies={0,3,0,1,1,0}, .value={0,1,1,1,1,0}, .joueur=0, .position = NULL}
 };
 
 
@@ -52,7 +52,7 @@ void activate_building(struct player_t *owner, struct player_t *user, struct bui
 
 
 
-int main(int argc, char* argv[])
+int main()
 {
   return 0;
 }

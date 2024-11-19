@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "worker.h"
+#include "cell.h"
 
 struct worker_t* make_worker(char* name, int cost[NUM_RESOURCES], enum color_t couleur){
     struct worker_t *worker  = NULL;
@@ -19,8 +20,8 @@ void pay_worker(struct player_t *player, struct worker_t* worker)
     resource_sub(player->stockage,worker->costs,player->stockage); //on déduit de l'entrepot du joueur le salaire du travailleur
 }
 
-void place_worker(struct player_t *player, struct position_t *position, struct worker_t *worker){
-    worker->position = position;
+void place_worker(struct player_t *player, struct cell_t* cell,  struct worker_t *worker){
+    cell->worker = worker;
     player->number_of_workers -= 1; //on décrémente le nombre de worker disponibles pour le player
 }
 

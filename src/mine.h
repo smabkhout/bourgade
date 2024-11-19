@@ -2,6 +2,7 @@
 #define __MINE_H__
 
 #include "resource.h"
+#include "position.h"
 
 struct cell_t;
 
