@@ -50,7 +50,29 @@ void activate_building(struct player_t *owner, struct player_t *user, struct bui
   resource_add(owner->stockage, building->costs, owner->stockage); //owner récupère le cout d'activation
 }
 
-
+struct building_t** list_buildings_costing_less_than(struct player_t* player){
+  struct building_t **affordable_buildings = NULL;
+  affordable_buildings = (struct building_t **)malloc(sizeof(struct building_t *)*7);
+  int i=0;
+  int j=0;
+  while (i<7){
+    // resource_sub et apres voir s'il y a une resource negative
+    unsigned int new_stockage[NUM_RESOURCES]={1};
+    resource_sub(player->stockage, list_buildings[i].value, new_stockage);
+    int is_affordable=1;
+    for (int i = 0; i<NUM_RESOURCES; ++i){
+      is_affordable = is_affordable*new_stockage[i];
+    }
+    is_affordable = is_affordable >= 0;
+    if (is_affordable){
+      affordable_buildings[j]=&list_buildings[i];
+      ++j;
+    }
+    ++i;
+  }
+  return affordable_buildings;
+}
+//free affordable buildings
 
 int main()
 {
