@@ -17,7 +17,7 @@ struct worker_t* get_worker_from_cell(struct cell_t c);
 
 struct mine_t* get_mine_from_cell(struct cell_t c);
 
-int is_free_cell(struct cell_t c);
+int is_free_cell(struct cell_t* c);
 
 struct cell_t* init_cell();
 
