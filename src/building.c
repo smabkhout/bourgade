@@ -53,6 +53,10 @@ void activate_building(struct player_t *owner, struct player_t *user, struct bui
 struct building_t** list_buildings_costing_less_than(struct player_t* player){
   struct building_t **affordable_buildings = NULL;
   affordable_buildings = (struct building_t **)malloc(sizeof(struct building_t *)*7);
+  for (int i = 0; i < 7; ++i)
+  {
+    affordable_buildings[i] = NULL;
+  }
   int i=0;
   int j=0;
   while (i<7){
@@ -65,6 +69,7 @@ struct building_t** list_buildings_costing_less_than(struct player_t* player){
     }
     is_affordable = is_affordable >= 0;
     if (is_affordable){
+      affordable_buildings[j] = (struct building_t*)malloc(sizeof(struct building_t));
       affordable_buildings[j]=&list_buildings[i];
       ++j;
     }

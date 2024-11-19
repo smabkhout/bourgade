@@ -54,7 +54,10 @@ void game(int num_players)
       place_worker(players[current_player],current_cell,make_worker(workers_names[rand()%6],workers_costs,players[current_player]->color));
       struct building_t ** affordable_buildings = NULL;
       affordable_buildings = list_buildings_costing_less_than(players[current_player]);
-      
+      if (length_of_affordable_buildings(affordable_buildings) > 0)
+      {
+        
+      }
     }
   }
 
