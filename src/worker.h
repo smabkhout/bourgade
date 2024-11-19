@@ -12,6 +12,17 @@
 
 struct cell_t;
 
+char* workers_names[MAX_WORKERS_PER_PLAYER] = {
+    "Franck",
+    "John",
+    "Francis",
+    "Walter",
+    "Hanck",
+    "Georges"
+};
+
+int workers_costs[NUM_RESOURCES] = {0,1,1,1,1,0};
+
 struct worker_t {
     char* nom;
     unsigned int costs[NUM_RESOURCES]; //ressources nécessaires à payer l'employé 
