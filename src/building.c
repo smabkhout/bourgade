@@ -74,6 +74,15 @@ struct building_t** list_buildings_costing_less_than(struct player_t* player){
 }
 //free affordable buildings
 
+int length_of_affordable_buildings(struct building_t **affordable_buildings){
+  int count=0;
+  while (affordable_buildings[count] != NULL){
+    ++count;
+  }
+  return count;
+}
+
+
 int main()
 {
   return 0;
