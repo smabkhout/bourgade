@@ -40,4 +40,6 @@ void pay_worker(struct player_t *player, struct worker_t* worker);
 
 void place_worker(struct player_t *player, struct cell_t* cell, struct worker_t *worker);
 
+void free_worker(struct worker_t* worker);
+
 #endif

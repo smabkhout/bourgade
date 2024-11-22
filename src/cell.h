@@ -21,4 +21,6 @@ int is_free_cell(struct cell_t* c);
 
 struct cell_t* init_cell();
 
+void free_cell(struct cell_t* cell);
+
 #endif

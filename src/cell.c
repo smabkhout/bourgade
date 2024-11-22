@@ -18,6 +18,11 @@ struct mine_t *get_mine_from_cell(struct cell_t c)
     return c.mine;
 }
 
+int is_free_cell(struct cell_t* c)
+{ // retourne 1 si la cellule ne contient pas de buildings ou de worker ou de mine
+    return (c->building == NULL) && (c->mine == NULL) && (c->worker == NULL);
+}
+
 struct cell_t* init_cell()
 {
     struct cell_t* cell = NULL;
@@ -28,7 +33,8 @@ struct cell_t* init_cell()
     return cell;
 }
 
-int is_free_cell(struct cell_t* c)
-{ // retourne 1 si la cellule ne contient pas de buildings ou de worker ou de mine
-    return (c->building == NULL) && (c->mine == NULL) && (c->worker == NULL);
+void free_cell(struct cell_t* cell){
+    free(cell);
 }
+
+
