@@ -31,4 +31,6 @@ void free_affordable_buildings(struct building_t** batiments);
 
 int length_of_affordable_buildings(struct building_t **affordable_buildings);
 
+extern struct building_t present_buildings[MAX_POSITIONS/3];
+
 #endif

@@ -44,10 +44,12 @@ void game(int num_players)
     for (int i = 0; i < num_players; ++i)
     {
       players[i] = initialize_player(random_color%MAX_COLORS);
+      players[i]->number_of_workers = rand()%(MAX_WORKERS_PER_PLAYER) + MAX_POSITIONS/3/num_players;
       ++random_color;
     } // fin de l'initialisation des joueurs
 
     int current_player = 0; //indice pour repérer le joueur actuel dans players
+    int nb_batiments_construits = 0;
     while (exists_a_player_with_free_workers(players, num_players) && exists_an_empty_cell(board)) {
       if (players[current_player]->number_of_workers > 0)
       {
@@ -59,18 +61,13 @@ void game(int num_players)
         struct building_t ** affordable_buildings = NULL;
         affordable_buildings = list_buildings_costing_less_than(players[current_player]);
         int build_choice = rand()%2;
-        if (build_choice)
+        if (length_of_affordable_buildings(affordable_buildings) > 0 && build_choice)
         {
-          if (length_of_affordable_buildings(affordable_buildings) > 0)
-          {
-            int building_choice = rand()%length_of_affordable_buildings(affordable_buildings); //le batiment à construire est choisi aleatoirement pour l'instant
-            struct building_t* a_building = affordable_buildings[building_choice]; //on séléctionne ce batiment à construire
-            place_building(players[current_player], a_pos, a_building);
-          }
-          else
-          {
-            //éliminer le joueur (il a choisi de construire un batiment sans avoir les resources necessaires)
-          }
+          int building_choice = rand()%length_of_affordable_buildings(affordable_buildings); //le batiment à construire est choisi aleatoirement pour l'instant
+          struct building_t* a_building = affordable_buildings[building_choice]; //on séléctionne ce batiment à construire
+          present_buildings[nb_batiments_construits]= *a_building;
+          ++nb_batiments_construits;
+          place_building(players[current_player], a_pos, a_building); //stocker les buildings dans un tableau present buildings
         }
         else
         {
