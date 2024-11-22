@@ -27,6 +27,8 @@ void place_building(struct player_t *player, struct position_t* position, struct
 
 struct building_t** list_buildings_costing_less_than();
 
+void free_affordable_buildings(struct building_t** batiments);
+
 int length_of_affordable_buildings(struct building_t **affordable_buildings);
 
 #endif
