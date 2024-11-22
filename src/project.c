@@ -67,9 +67,31 @@ void game(int num_players)
         }
         else
         {
+          unsigned int x = a_pos % MAX_X;
+          unsigned int y = (a_pos - x) / MAX_X;
           struct position_t **neighbors = NULL;
           neighbors = (struct position_t **)malloc(sizeof(struct position_t *)*8);
           list_neighbors(POS(x,y), neighbors);
+          int e = 0;
+          while(e<8 && is_valid_position(neighbors[e])){
+            //if is_mine => resource add
+            //else if is_building => if wishes to activate => activate building
+            unsigned int neighbor_x = PX(neighbors[e]);
+            unsigned int neighbor_y = PY(neighbors[e]);
+            int neighbor=neighbor_y*MAX_X + neighbor_x;
+            if (board->tab[neighbor]->mine != NULL)
+            {
+              int resource = board->tab[neighbor]->mine->r;
+              ++players[current_player]->stockage[resource];
+            }
+            else if (board->tab[neighbor]->building != NULL)
+            {
+              if () //player wishes to activate     //if he wishes so and can't afford => eliminate player
+              {
+
+              }
+            }
+          }
         }
       }
     }
