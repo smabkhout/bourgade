@@ -86,9 +86,11 @@ void game(int num_players)
             }
             else if (board->tab[neighbor]->building != NULL)
             {
-              if () //player wishes to activate     //if he wishes so and can't afford => eliminate player
+              int choice = rand()%2; //choice of the player whether to activate or not (random for now) 
+              if (choice) //player wishes to activate     //if he wishes so and can't afford => eliminate player
               {
-
+                int owner = board->tab[neighbor]->building->joueur;
+                //activate_building(players[owner], players[current_player], board->tab[neighbor]->building);
               }
             }
           }
