@@ -1,62 +1,47 @@
-#include <stdio.h>
+#include "color.h"
 #include <assert.h>
-#include "../src/color.h"
+#include <stdio.h>
+#include <string.h>
 
-// Fonction de test pour color_start
 void test_color_start() {
-    printf("Testing color_start...\n");
-
-    // Boucle sur toutes les couleurs et vérifie les codes de couleur
-    for (int i = 0; i < MAX_COLORS; i++) {
-        enum color_t color = (enum color_t) i;
-        const char* color_code = color_start(color);
-        
-        // Vérifie que color_start ne retourne pas NULL
-        assert(color_code != NULL);
-
-        // Affiche le nom de la couleur avec le code de couleur
-        printf("%s%s%s\n", color_code, color_to_string(color), color_stop());
-    }
-
-    printf("color_start tests passed!\n");
+    assert(strcmp(color_start(BLACK), "\033[38;5;0m") == 0);
+    assert(strcmp(color_start(WHITE), "\033[38;5;15m") == 0);
+    assert(strcmp(color_start(ORANGE), "\033[38;5;202m") == 0);
+    assert(strcmp(color_start(PINK), "\033[38;5;213m") == 0);
+    assert(strcmp(color_start(VIOLET), "\033[38;5;129m") == 0);
+    assert(strcmp(color_start(YELLOW), "\033[38;5;11m") == 0);
+    assert(strcmp(color_start(BLUE), "\033[0;34m") == 0);
+    assert(strcmp(color_start(BROWN), "\033[38;5;94m") == 0);
+    assert(strcmp(color_start(GREEN), "\033[0;32m") == 0);
+    assert(strcmp(color_start(RED), "\033[0;31m") == 0);
+    assert(strcmp(color_start(SHINY), "\033[1;11m\033[5m") == 0);
+    assert(strcmp(color_start(MAX_COLORS), "\033[0m") == 0);
 }
 
-// Fonction de test pour color_stop
 void test_color_stop() {
-    printf("Testing color_stop...\n");
-
-    const char* reset_code = color_stop();
-    // Vérifie que color_stop ne retourne pas NULL
-    assert(reset_code != NULL);
-
-    printf("color_stop test passed!\n");
+    assert(strcmp(color_stop(), "\033[0m") == 0);
 }
 
-// Fonction de test pour color_to_string
 void test_color_to_string() {
-    printf("Testing color_to_string...\n");
-
-    // Boucle sur toutes les couleurs et vérifie que les chaînes retournées sont non-nulles
-    for (int i = 0; i < MAX_COLORS; i++) {
-        enum color_t color = (enum color_t) i;
-        const char* color_name = color_to_string(color);
-
-        // Vérifie que color_to_string ne retourne pas NULL
-        assert(color_name != NULL);
-        printf("Color %d is called %s\n", i, color_name);
-    }
-
-    printf("color_to_string tests passed!\n");
+    assert(strcmp(color_to_string(BLACK), "Black") == 0);
+    assert(strcmp(color_to_string(WHITE), "White") == 0);
+    assert(strcmp(color_to_string(ORANGE), "Orange") == 0);
+    assert(strcmp(color_to_string(PINK), "Pink") == 0);
+    assert(strcmp(color_to_string(VIOLET), "Violet") == 0);
+    assert(strcmp(color_to_string(YELLOW), "Yellow") == 0);
+    assert(strcmp(color_to_string(BLUE), "Blue") == 0);
+    assert(strcmp(color_to_string(BROWN), "Brown") == 0);
+    assert(strcmp(color_to_string(GREEN), "Green") == 0);
+    assert(strcmp(color_to_string(RED), "Red") == 0);
+    assert(strcmp(color_to_string(SHINY), "Shiny") == 0);
+    assert(strcmp(color_to_string(MAX_COLORS), "UNKNOWN") == 0);
 }
 
 int main() {
-    printf("Starting tests for color module...\n");
-
     test_color_start();
     test_color_stop();
     test_color_to_string();
 
-    printf("All tests for color module passed successfully!\n");
-
+    printf("All color tests passed!\n");
     return 0;
 }
