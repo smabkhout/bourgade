@@ -52,7 +52,12 @@ void game(int num_players)
       if (players[current_player]->number_of_workers > 0)
       {
         struct cell_t* current_cell = NULL;
-        current_cell = find_free_cell(board); //on a besoin de son indice/position sur le board
+        int a_pos = rand()%MAX_X*MAX_Y;
+        while (!is_free_cell(board->tab[a_pos]))
+        {
+          a_pos = rand()%MAX_X*MAX_Y;
+        }
+        current_cell = board->tab[a_pos]; //on a besoin de son indice/position sur le board
         place_worker(players[current_player],current_cell,make_worker(workers_names[rand()%6],workers_costs,players[current_player]->color));
         struct building_t ** affordable_buildings = NULL;
         affordable_buildings = list_buildings_costing_less_than(players[current_player]);

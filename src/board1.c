@@ -104,12 +104,3 @@ void free_board(struct board_t *board)
         }
     }
 }
-
-struct cell_t* find_free_cell(struct board_t* board){
-    int i = rand()%MAX_X*MAX_Y;
-    while (!is_free_cell(board->tab[i]))
-    {
-        i = rand()%MAX_X*MAX_Y;
-    }
-    return board->tab[i]; //position libre aléatoire
-}

@@ -14,6 +14,4 @@ struct board_t* init_board();
 
 void free_board(struct board_t* board);
 
-struct cell_t* find_free_cell(struct board_t* board);
-
 #endif
