@@ -7,8 +7,17 @@
 #include <string.h>
 #include <stdlib.h>
 
+int tab[6] = {1,1,1,0,1,4};
+
 void test_place_building() {
-    struct player_t player = { .stockage = {1, 1, 1, 1, 1, 1}, .color = BLUE };
+    struct player_t *player = NULL;
+    player = (struct player_t*)malloc(sizeof(struct player_t));
+    player->color = BLUE;
+    player->number_of_workers = 7;
+    for (int i = 0;i<6;++i)
+    {
+        player->stockage[i] = tab[i];
+    }
     struct position_t* position = make_position(1, 1);
     unsigned int value[NUM_RESOURCES] = {0, 0, 0, 1, 0, 0};
     unsigned int earns[NUM_RESOURCES] = {0, 0, 0, 0, 0, 3};
@@ -16,32 +25,15 @@ void test_place_building() {
     unsigned int supplies[NUM_RESOURCES] = {0, 1, 0, 0, 0, 0};
     struct building_t* building = NULL;
     building = (struct building_t*)malloc(sizeof(struct building_t));
-    for (int i = 0; i< NUM_RESOURCES; ++i)
-    {
-        building->costs[i] = costs[i];
-        building->value[i]= value[i];
-        building->earns[i]= earns[i];
-        building->supplies[i]=supplies[i];
-    }
-    building->position = make_invalid_position();
-    char name[10] = "Farm";
-    int j = 0;
-    puts("A");
-    while(j<10)
-    {
-        building->nom[j] = name[j];
-        ++j;
-    }
-    puts("B");
-    place_building(&player, position, building);
-    puts("C");
+    place_building(player, position, building);
     assert(building->position == position);
     assert(building->joueur == BLUE);
     for (int i = 0; i < NUM_RESOURCES; i++) {
-        assert(player.stockage[i] == 1 - costs[i] + earns[i]);
+        printf("%d\n",player->stockage[i]);
+        assert(player->stockage[i] == tab[i]);
     }
     free(building);
-    free(position);
+    free(player);
 }
 
 void test_activate_building() {
