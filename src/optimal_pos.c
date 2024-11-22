@@ -15,7 +15,11 @@ struct position_t* choose_optimal_pos(struct board_t* board){
             list_neighbors(POS(x,y), neighbors);
             for (int i = 0; i<8; ++i){
                 int a = PY(neighbors[i])*MAX_X + PX(neighbors[i]);
-                ++histogramme_nb_ressources[a];
+                //il faut tout d'abord vérifier si la position est free (il n'y a pas de worker ni de building dedant)
+                //sinon il n'est pas ncessaire d'incrementer son indice
+                if (board->tab[i]->building != NULL && board->tab[i]->worker != NULL){
+                    ++histogramme_nb_ressources[a];
+                }
             }
             for (int i = 0; i<8; ++i){
                 free(neighbors[i]);
