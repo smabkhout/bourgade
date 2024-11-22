@@ -5,6 +5,7 @@
 #include "position.h"
 #include "board.h"
 #include "player.h"
+#include "optimal_pos.h"
 
 #define NUM_ROUNDS 4
 
@@ -46,32 +47,36 @@ void game(int num_players)
       ++random_color;
     } // fin de l'initialisation des joueurs
 
-
+    int current_player = 0; //indice pour repérer le joueur actuel dans players
     while (exists_a_player_with_free_workers(players, num_players) && exists_an_empty_cell(board)) {
-      int current_player = 0; //indice pour repérer le joueur actuel dans players
       if (players[current_player]->number_of_workers > 0)
       {
         struct cell_t* current_cell = NULL;
-        int a_pos = rand()%MAX_X*MAX_Y;
-        while (!is_free_cell(board->tab[a_pos]))
-        {
-          a_pos = rand()%MAX_X*MAX_Y;
-        }
-        current_cell = board->tab[a_pos]; //on a besoin de son indice/position sur le board
+        struct position_t* a_pos = choose_optimal_pos(board);
+        int a_pos_index = PY(a_pos)*MAX_X+PX(a_pos);
+        current_cell = board->tab[a_pos_index]; //on a besoin de son indice/position sur le board
         place_worker(players[current_player],current_cell,make_worker(workers_names[rand()%6],workers_costs,players[current_player]->color));
         struct building_t ** affordable_buildings = NULL;
         affordable_buildings = list_buildings_costing_less_than(players[current_player]);
-        if (length_of_affordable_buildings(affordable_buildings) > 0)
+        int build_choice = rand()%2;
+        if (build_choice)
         {
-          
+          if (length_of_affordable_buildings(affordable_buildings) > 0)
+          {
+            int building_choice = rand()%length_of_affordable_buildings(affordable_buildings); //le batiment à construire est choisi aleatoirement pour l'instant
+            struct building_t* a_building = affordable_buildings[building_choice]; //on séléctionne ce batiment à construire
+            place_building(players[current_player], a_pos, a_building);
+          }
+          else
+          {
+            //éliminer le joueur (il a choisi de construire un batiment sans avoir les resources necessaires)
+          }
         }
         else
         {
-          unsigned int x = a_pos % MAX_X;
-          unsigned int y = (a_pos - x) / MAX_X;
           struct position_t **neighbors = NULL;
           neighbors = (struct position_t **)malloc(sizeof(struct position_t *)*8);
-          list_neighbors(POS(x,y), neighbors);
+          list_neighbors(a_pos, neighbors);
           int e = 0;
           while(e<8 && is_valid_position(neighbors[e])){
             //if is_mine => resource add
@@ -86,22 +91,25 @@ void game(int num_players)
             }
             else if (board->tab[neighbor]->building != NULL)
             {
-              int choice = rand()%2; //choice of the player whether to activate or not (random for now) 
-              if (choice) //player wishes to activate     //if he wishes so and can't afford => eliminate player
+              int activation_choice = rand()%2; //choice of the player whether to activate or not (random for now) 
+              if (activation_choice) //player wishes to activate     //if he wishes so and can't afford => eliminate player
               {
                 int owner = board->tab[neighbor]->building->joueur;
-                //activate_building(players[owner], players[current_player], board->tab[neighbor]->building);
+                activate_building(players[owner], players[current_player], board->tab[neighbor]->building);
               }
             }
           }
         }
       }
+      ++current_player;
     }
+    //fin de la manche, reset_workers_still_on_board et free la mémoire
   }
 }
 
 int main(void)
 {
+  return 0;
 }
 
 // penser a free tous les mallocs
