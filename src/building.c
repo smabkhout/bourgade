@@ -25,6 +25,11 @@ struct building_t* make_building(char* nom, int *value, int *earns, int *costs, 
 }
 
 
+void free_building(struct building_t* batiment){
+  free(batiment);
+}
+
+
 //définir un tableau global avec tous les buildings
 struct building_t list_buildings[MAX_BUILDINGS_PER_PLAYER] = {
  {.nom = "Farm", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,3}, .supplies={0,1,0,0,0,0}, .value={0,0,0,1,0,0}, .joueur=0, .position = NULL},
