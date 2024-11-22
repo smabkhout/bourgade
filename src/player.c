@@ -3,6 +3,7 @@
 #include "player.h"
 #include "worker.h"
 
+
 struct player_t* initialize_player(enum color_t couleur){
     struct player_t* player = NULL; 
     player = (struct player_t*)malloc(sizeof(struct player_t));
