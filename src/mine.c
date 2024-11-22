@@ -13,6 +13,18 @@ struct mine_t list_mines[4] = {
  {.name = "Rock Mine", .r=STONE},
 };
 
+struct mine_t* make_mine(enum resource_t r, char nom[10]){
+    struct mine_t* mine = NULL;
+    mine = (struct mine_t*)malloc(sizeof(struct mine_t));
+    mine->r = r;
+    int i = 0;
+    while(i<10){
+        mine->name[i] = nom[i];
+        ++i;
+    }
+    return mine;
+}
+
 void place_mine(struct cell_t* cell, struct mine_t m) {
     if (cell->mine == NULL) {
         cell->mine = malloc(sizeof(struct mine_t));

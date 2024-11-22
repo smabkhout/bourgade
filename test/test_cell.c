@@ -21,23 +21,20 @@ void test_is_free_cell() {
     struct cell_t* cell1 = init_cell();
     assert(is_free_cell(cell1) == 1); 
     // Cas 2 : Cellule avec un bâtiment
-    struct building_t* building = make_building("Farm", (int[]){0, 0, 0, 1, 0, 0}, (int[]){0, 0, 0, 0, 0, 3}, (int[]){0, 0, 0, 0, 0, 1}, (int[]){0, 1, 0, 0, 0, 0}, BLUE);
+    struct building_t* building = NULL;
     struct cell_t* cell2 = init_cell();
     cell2->building = building;
     assert(is_free_cell(cell2) == 0); 
     // Cas 3 : Cellule avec un travailleur
-    struct worker_t* worker = create_worker();
+    struct worker_t* worker = NULL;
     struct cell_t* cell3 = init_cell();
     cell3->worker = worker;
     assert(is_free_cell(cell3) == 0);  
     // Cas 4 : Cellule avec une mine
-    struct mine_t* mine = create_mine();
+    struct mine_t* mine = NULL;
     struct cell_t* cell4 = init_cell();
     cell4->mine = mine;
     assert(is_free_cell(cell4) == 0); 
-    free(building);
-    free(worker);
-    free(mine);
     free(cell1);
     free(cell2);
     free(cell3);
@@ -45,7 +42,26 @@ void test_is_free_cell() {
 }
 
 void test_get_building_from_cell() {
-    struct building_t* building = make_building("Farm", (int[]){0, 0, 0, 1, 0, 0}, (int[]){0, 0, 0, 0, 0, 3}, (int[]){0, 0, 0, 0, 0, 1}, (int[]){0, 1, 0, 0, 0, 0}, BLUE);
+    unsigned int value[NUM_RESOURCES] = {0, 0, 0, 1, 0, 0};
+    unsigned int earns[NUM_RESOURCES] = {0, 0, 0, 0, 0, 3};
+    unsigned int costs[NUM_RESOURCES] = {0, 0, 0, 0, 0, 1};
+    unsigned int supplies[NUM_RESOURCES] = {0, 1, 0, 0, 0, 0};
+    struct building_t* building = NULL;
+    building = (struct building_t*)malloc(sizeof(struct building_t));
+    for (int i = 0; i< NUM_RESOURCES; ++i)
+    {
+        building->costs[i] = costs[i];
+        building->value[i]= value[i];
+        building->earns[i]= earns[i];
+        building->supplies[i]=supplies[i];
+    }
+    building->position = make_invalid_position();
+    char nom[10] = "Farm";
+    int j = 0;
+    while(nom[j]!=0)
+    {
+        building->nom[j] = nom[j];
+    }
     struct cell_t* cell = init_cell();
     cell->building = building;
     assert(get_building_from_cell(*cell) == building);
@@ -54,7 +70,8 @@ void test_get_building_from_cell() {
 }
 
 void test_get_worker_from_cell() {
-    struct worker_t* worker = create_worker();  
+    char nom[10] = "John";
+    struct worker_t* worker = make_worker(nom, (unsigned int[]){0,1,1,1,1,0}, BLUE);  
     struct cell_t* cell = init_cell();
     cell->worker = worker;
     assert(get_worker_from_cell(*cell) == worker);
@@ -63,7 +80,8 @@ void test_get_worker_from_cell() {
 }
 
 void test_get_mine_from_cell() {
-    struct mine_t* mine = create_mine(); 
+    char nom[10] = "Farm";
+    struct mine_t* mine = make_mine(CORN, nom); 
     struct cell_t* cell = init_cell();
     cell->mine = mine;
     assert(get_mine_from_cell(*cell) == mine);

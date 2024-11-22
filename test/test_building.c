@@ -7,26 +7,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-void test_make_building() {
-    unsigned int value[NUM_RESOURCES] = {0, 0, 0, 1, 0, 0};
-    unsigned int earns[NUM_RESOURCES] = {0, 0, 0, 0, 0, 3};
-    unsigned int costs[NUM_RESOURCES] = {0, 0, 0, 0, 0, 1};
-    unsigned int supplies[NUM_RESOURCES] = {0, 1, 0, 0, 0, 0};
-    char nom[] = "Farm";
-    struct building_t* building = make_building(nom, value, earns, costs, supplies, RED);
-    assert(building != NULL);
-    assert(strcmp(building->nom, "Farm") == 0);
-    for (int i = 0; i < NUM_RESOURCES; ++i) {
-        assert(building->value[i] == value[i]);
-        assert(building->earns[i] == earns[i]);
-        assert(building->costs[i] == costs[i]);
-        assert(building->supplies[i] == supplies[i]);
-    }
-    assert(building->joueur == RED);
-    assert(is_valid_position(building->position) == 0); 
-    free(building);
-}
-
 void test_place_building() {
     struct player_t player = { .stockage = {1, 1, 1, 1, 1, 1}, .color = BLUE };
     struct position_t* position = make_position(1, 1);
@@ -34,8 +14,27 @@ void test_place_building() {
     unsigned int earns[NUM_RESOURCES] = {0, 0, 0, 0, 0, 3};
     unsigned int costs[NUM_RESOURCES] = {0, 0, 0, 0, 0, 1};
     unsigned int supplies[NUM_RESOURCES] = {0, 1, 0, 0, 0, 0};
-    struct building_t* building = make_building("Farm", value, earns, costs, supplies, BLUE);
+    struct building_t* building = NULL;
+    building = (struct building_t*)malloc(sizeof(struct building_t));
+    for (int i = 0; i< NUM_RESOURCES; ++i)
+    {
+        building->costs[i] = costs[i];
+        building->value[i]= value[i];
+        building->earns[i]= earns[i];
+        building->supplies[i]=supplies[i];
+    }
+    building->position = make_invalid_position();
+    char name[10] = "Farm";
+    int j = 0;
+    puts("A");
+    while(j<10)
+    {
+        building->nom[j] = name[j];
+        ++j;
+    }
+    puts("B");
     place_building(&player, position, building);
+    puts("C");
     assert(building->position == position);
     assert(building->joueur == BLUE);
     for (int i = 0; i < NUM_RESOURCES; i++) {
@@ -53,7 +52,22 @@ void test_activate_building() {
     unsigned int earns[NUM_RESOURCES] = {0, 0, 0, 0, 0, 3};
     unsigned int costs[NUM_RESOURCES] = {0, 0, 0, 0, 0, 1};
     unsigned int supplies[NUM_RESOURCES] = {0, 1, 0, 0, 0, 0};
-    struct building_t* building = make_building("Farm", value, earns, costs, supplies, RED);
+    struct building_t* building = NULL;
+    building = (struct building_t*)malloc(sizeof(struct building_t));
+    for (int i = 0; i< NUM_RESOURCES; ++i)
+    {
+        building->costs[i] = costs[i];
+        building->value[i]= value[i];
+        building->earns[i]= earns[i];
+        building->supplies[i]=supplies[i];
+    }
+    building->position = make_invalid_position();
+    char nom[10] = "Farm";
+    int j = 0;
+    while(nom[j]!=0)
+    {
+        building->nom[j] = nom[j];
+    }
     place_building(&owner, position, building);
     activate_building(&owner, &user, building);
     for (int i = 0; i < NUM_RESOURCES; i++) {
@@ -63,6 +77,7 @@ void test_activate_building() {
     free(building);
     free(position);
 }
+
 
 void test_list_buildings_costing_less_than() {
     struct player_t player;
@@ -97,10 +112,14 @@ void test_list_buildings_costing_less_than() {
 
 
 int main() {
-    test_make_building();
+    puts("1");
     test_place_building();
+    puts("2");
+    puts("3");
     test_activate_building();
+    puts("4");
     test_list_buildings_costing_less_than();
+    puts("5");
     printf("All building tests passed!\n");
     return 0;
 }

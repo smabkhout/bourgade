@@ -9,12 +9,12 @@ SRC_DIR = src
 TEST_DIR = test
 
 # Liste des fichiers sources et objets
-SRC_FILES = $(SRC_DIR)/color.c $(SRC_DIR)/position.c $(SRC_DIR)/resource.c
-OBJ_FILES = $(OBJ_DIR)/color.o $(OBJ_DIR)/position.o $(OBJ_DIR)/resource.o
+SRC_FILES = $(SRC_DIR)/color.c $(SRC_DIR)/position.c $(SRC_DIR)/resource.c $(SRC_DIR)/building.c $(SRC_DIR)/cell.c $(SRC_DIR)/mine.c $(SRC_DIR)/player.c $(SRC_DIR)/worker.c $(SRC_DIR)/board1.c $(SRC_DIR)/optimal_pos.c
+OBJ_FILES = $(OBJ_DIR)/color.o $(OBJ_DIR)/position.o $(OBJ_DIR)/resource.o $(OBJ_DIR)/building.o $(OBJ_DIR)/cell.o $(OBJ_DIR)/mine.o $(OBJ_DIR)/player.o $(OBJ_DIR)/worker.o $(OBJ_DIR)/board1.o $(OBJ_DIR)/optimal_pos.o
 
 # Fichiers de test et exécutables de test
-TEST_FILES = $(TEST_DIR)/test_color.c $(TEST_DIR)/test_position.c $(TEST_DIR)/test_resource.c
-TEST_EXECUTABLES = test_color test_position test_resource
+TEST_FILES = $(TEST_DIR)/test_color.c $(TEST_DIR)/test_position.c $(TEST_DIR)/test_resource.c $(TEST_DIR)/test_building.c $(TEST_DIR)/test_cell.c $(TEST_DIR)/test_mine.c $(TEST_DIR)/test_player.c $(TEST_DIR)/test_worker.c $(TEST_DIR)/test_board.c $(TEST_DIR)/test_optimal_pos.c
+TEST_EXECUTABLES = test_color test_position test_resource test_building test_cell test_mine test_player test_worker test_board test_optimal_pos
 
 # Cible par défaut
 all: project $(TEST_EXECUTABLES)
@@ -43,18 +43,56 @@ test_position: $(OBJ_FILES) $(OBJ_DIR)/test_position.o
 test_resource: $(OBJ_FILES) $(OBJ_DIR)/test_resource.o
 	$(CC) $(CFLAGS) $(OBJ_FILES) $(OBJ_DIR)/test_resource.o -o test_resource
 
+test_building: $(OBJ_FILES) $(OBJ_DIR)/test_building.o
+	$(CC) $(CFLAGS) $(OBJ_FILES) $(OBJ_DIR)/test_building.o -o test_building
+
+test_cell: $(OBJ_FILES) $(OBJ_DIR)/test_cell.o
+	$(CC) $(CFLAGS) $(OBJ_FILES) $(OBJ_DIR)/test_cell.o -o test_cell
+
+test_mine: $(OBJ_FILES) $(OBJ_DIR)/test_mine.o
+	$(CC) $(CFLAGS) $(OBJ_FILES) $(OBJ_DIR)/test_mine.o -o test_mine
+
+test_player: $(OBJ_FILES) $(OBJ_DIR)/test_player.o
+	$(CC) $(CFLAGS) $(OBJ_FILES) $(OBJ_DIR)/test_player.o -o test_player
+
+test_worker: $(OBJ_FILES) $(OBJ_DIR)/test_worker.o
+	$(CC) $(CFLAGS) $(OBJ_FILES) $(OBJ_DIR)/test_worker.o -o test_worker
+
+test_board: $(OBJ_FILES) $(OBJ_DIR)/test_board.o
+	$(CC) $(CFLAGS) $(OBJ_FILES) $(OBJ_DIR)/test_board.o -o test_board
+
+test_optimal_pos: $(OBJ_FILES) $(OBJ_DIR)/test_optimal_pos.o
+	$(CC) $(CFLAGS) $(OBJ_FILES) $(OBJ_DIR)/test_optimal_pos.o -o test_optimal_pos
+
 # Nettoyage des fichiers objets et des exécutables
 clean:
 	@rm -f project $(TEST_EXECUTABLES) $(OBJ_DIR)/*.o *~ $(SRC_DIR)/*~ $(TEST_DIR)/*~
 
 # Dépendances
-$(OBJ_DIR)/project.o: $(SRC_DIR)/project.c
+
 $(OBJ_DIR)/test_color.o: $(TEST_DIR)/test_color.c $(SRC_DIR)/color.h
 $(OBJ_DIR)/test_position.o: $(TEST_DIR)/test_position.c $(SRC_DIR)/position.h
 $(OBJ_DIR)/test_resource.o: $(TEST_DIR)/test_resource.c $(SRC_DIR)/resource.h
+$(OBJ_DIR)/test_building.o: $(TEST_DIR)/test_building.c $(SRC_DIR)/building.h
+$(OBJ_DIR)/test_cell.o: $(TEST_DIR)/test_cell.c $(SRC_DIR)/cell.h
+$(OBJ_DIR)/test_mine.o: $(TEST_DIR)/test_mine.c $(SRC_DIR)/mine.h
+$(OBJ_DIR)/test_player.o: $(TEST_DIR)/test_player.c $(SRC_DIR)/player.h
+$(OBJ_DIR)/test_worker.o: $(TEST_DIR)/test_worker.c $(SRC_DIR)/worker.h
+$(OBJ_DIR)/test_board.o: $(TEST_DIR)/test_board.c $(SRC_DIR)/board.h
+$(OBJ_DIR)/test_optimal_pos.o: $(TEST_DIR)/test_optimal_pos.c $(SRC_DIR)/optimal_pos.h
+
+$(OBJ_DIR)/project.o: $(SRC_DIR)/project.c
 $(OBJ_DIR)/color.o: $(SRC_DIR)/color.c $(SRC_DIR)/color.h
 $(OBJ_DIR)/position.o: $(SRC_DIR)/position.c $(SRC_DIR)/position.h
 $(OBJ_DIR)/resource.o: $(SRC_DIR)/resource.c $(SRC_DIR)/resource.h
+$(OBJ_DIR)/building.o: $(SRC_DIR)/building.c $(SRC_DIR)/building.h
+$(OBJ_DIR)/cell.o: $(SRC_DIR)/cell.c $(SRC_DIR)/cell.h
+$(OBJ_DIR)/mine.o: $(SRC_DIR)/mine.c $(SRC_DIR)/mine.h
+$(OBJ_DIR)/player.o: $(SRC_DIR)/player.c $(SRC_DIR)/player.h
+$(OBJ_DIR)/worker.o: $(SRC_DIR)/worker.c $(SRC_DIR)/worker.h
+$(OBJ_DIR)/board1.o: $(SRC_DIR)/board1.c $(SRC_DIR)/board.h
+$(OBJ_DIR)/optimal_pos.o: $(SRC_DIR)/optimal_pos.c $(SRC_DIR)/optimal_pos.h
+
 
 # Cible pour les tests
 test: $(TEST_EXECUTABLES)
@@ -64,5 +102,18 @@ test: $(TEST_EXECUTABLES)
 	./test_position
 	@echo "Running test_resource:"
 	./test_resource
-
+	@echo "Running test_building:"
+	./test_building
+	@echo "Running test_cell:"
+	./test_cell
+	@echo "Running test_mine:"
+	./test_mine
+	@echo "Running test_player:"
+	./test_player
+	@echo "Running test_worker:"
+	./test_worker
+	@echo "Running test_board:"
+	./test_board
+	@echo "Running test_optimal_pos:"
+	./test_optimal_pos
 .PHONY: all clean test

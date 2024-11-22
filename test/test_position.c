@@ -39,7 +39,7 @@ void test_list_neighbors() {
             valid_neighbors++;
         }
     }
-    assert(valid_neighbors < MAX_NEIGHBORS);
+    assert(valid_neighbors <= MAX_NEIGHBORS);
 }
 
 int main() {

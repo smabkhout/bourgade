@@ -7,11 +7,13 @@
 struct cell_t;
 
 struct mine_t {
-    char* name;
+    char name[10];
     enum resource_t r;
 };
 
 extern struct mine_t list_mines[4];
+
+struct mine_t* make_mine(enum resource_t r, char nom[10]);
 
 void place_mine(struct cell_t* cell, struct mine_t m);
 

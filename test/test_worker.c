@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 void test_make_worker() {
-    int costs[NUM_RESOURCES] = {1, 2, 0, 0, 0, 0};
+    unsigned int costs[NUM_RESOURCES] = {1, 2, 0, 0, 0, 0};
     enum color_t couleur = BLUE;
     char* name = "Worker1";
     struct worker_t* worker = make_worker(name, costs, couleur);
@@ -24,7 +24,7 @@ void test_make_worker() {
 void test_pay_worker() {
     enum color_t couleur = RED;
     struct player_t* player = initialize_player(couleur);
-    int costs[NUM_RESOURCES] = {1, 2, 0, 0, 0, 0};
+    unsigned int costs[NUM_RESOURCES] = {1, 2, 0, 0, 0, 0};
     char* name = "Worker2";
     struct worker_t* worker = make_worker(name, costs, couleur);
     player->stockage[0] = 10; 
@@ -40,7 +40,7 @@ void test_place_worker() {
     enum color_t couleur = GREEN;
     struct player_t* player = initialize_player(couleur);
     struct cell_t* cell = init_cell();
-    int costs[NUM_RESOURCES] = {0, 0, 0, 0, 0, 0};
+    unsigned int costs[NUM_RESOURCES] = {0, 0, 0, 0, 0, 0};
     char* name = "Worker3";
     struct worker_t* worker = make_worker(name, costs, couleur);
     assert(cell->worker == NULL);

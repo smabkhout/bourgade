@@ -12,9 +12,9 @@ char* workers_names[MAX_WORKERS_PER_PLAYER] = {
     "Georges"
 };
 
-int workers_costs[NUM_RESOURCES] = {0,1,1,1,1,0};
+unsigned int workers_costs[NUM_RESOURCES] = {0,1,1,1,1,0};
 
-struct worker_t* make_worker(char* name, int cost[NUM_RESOURCES], enum color_t couleur){
+struct worker_t* make_worker(char* name,unsigned int cost[NUM_RESOURCES], enum color_t couleur){
     struct worker_t *worker  = NULL;
     worker = (struct worker_t*)malloc(sizeof(struct worker_t));
     worker->nom = name;

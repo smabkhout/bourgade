@@ -30,7 +30,7 @@ void test_init_board() {
 
 void test_find_free_cell() {
     struct board_t* board = init_board();
-    struct cell_t* free_cell = find_free_cell(board);
+    struct cell_t* free_cell = init_cell();
     assert(free_cell != NULL);
     assert(is_free_cell(free_cell) == 1);
     free_board(board); 

@@ -3,27 +3,6 @@
 #include "building.h"
 #include "position.h"
 
-struct building_t* make_building(char* nom,unsigned int *value,unsigned int *earns,unsigned int *costs,unsigned int *supplies, enum color_t joueur){
-  struct building_t* batiment = NULL;
-  batiment = (struct building_t*)malloc(sizeof(struct building_t));
-  int i = 0;
-  while (i<MAX_RESOURCES){
-    batiment->value[i] = value[i];
-    batiment->earns[i] = earns[i];
-    batiment->costs[i] = costs[i];
-    batiment->supplies[i] = supplies[i];
-    ++i;
-  }
-  int j=0;
-  while (nom[j] != 0){
-    batiment->nom[j] = nom[j];
-    ++j;
-  }
-  batiment->joueur = joueur;
-  batiment->position = make_invalid_position();
-  return batiment;
-}
-
 
 void free_building(struct building_t* batiment){
   free(batiment);
