@@ -37,30 +37,38 @@ void game(int num_players)
 
   struct player_t **players = NULL;
   players = (struct player_t **)malloc(sizeof(struct player_t *) * num_players);
-  int random_color = rand() % MAX_COLORS;
-  for (int i = 0; i < num_players; ++i)
+  for (int j = 0; j < NUM_ROUNDS; ++j)
   {
-    players[i] = initialize_player(random_color%MAX_COLORS);
-    ++random_color;
-  } // fin de l'initialisation des joueurs
-
-
-  while (exists_a_player_with_free_workers(players, num_players) && exists_an_empty_cell(board)) {
-    int current_player = 0; //indice pour repérer le joueur actuel dans players
-    if (players[current_player]->number_of_workers > 0)
+    int random_color = rand() % MAX_COLORS;
+    for (int i = 0; i < num_players; ++i)
     {
-      struct cell_t* current_cell = NULL;
-      current_cell = find_free_cell(board);
-      place_worker(players[current_player],current_cell,make_worker(workers_names[rand()%6],workers_costs,players[current_player]->color));
-      struct building_t ** affordable_buildings = NULL;
-      affordable_buildings = list_buildings_costing_less_than(players[current_player]);
-      if (length_of_affordable_buildings(affordable_buildings) > 0)
+      players[i] = initialize_player(random_color%MAX_COLORS);
+      ++random_color;
+    } // fin de l'initialisation des joueurs
+
+
+    while (exists_a_player_with_free_workers(players, num_players) && exists_an_empty_cell(board)) {
+      int current_player = 0; //indice pour repérer le joueur actuel dans players
+      if (players[current_player]->number_of_workers > 0)
       {
-        
+        struct cell_t* current_cell = NULL;
+        current_cell = find_free_cell(board); //on a besoin de son indice/position sur le board
+        place_worker(players[current_player],current_cell,make_worker(workers_names[rand()%6],workers_costs,players[current_player]->color));
+        struct building_t ** affordable_buildings = NULL;
+        affordable_buildings = list_buildings_costing_less_than(players[current_player]);
+        if (length_of_affordable_buildings(affordable_buildings) > 0)
+        {
+          
+        }
+        else
+        {
+          struct position_t **neighbors = NULL;
+          neighbors = (struct position_t **)malloc(sizeof(struct position_t *)*8);
+          list_neighbors(POS(x,y), neighbors);
+        }
       }
     }
   }
-
 }
 
 int main(void)
