@@ -11,16 +11,11 @@ struct mine_t {
     enum resource_t r;
 };
 
-struct mine_t list_mines[4] = {
- {.name = "Field", .r=CORN},
- {.name = "Forest", .r=WOOD},
- {.name = "River", .r=FISH},
- {.name = "Rock Mine", .r=STONE},
-};
+extern struct mine_t list_mines[4];
 
 void place_mine(struct cell_t* cell, struct mine_t m);
 
-struct mine_t present_mines[MAX_POSITIONS/4];
+extern struct mine_t present_mines[MAX_POSITIONS/4];
 
 void construct_mines();
 

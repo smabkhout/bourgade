@@ -69,7 +69,7 @@ int resource_le_than(unsigned int r1[NUM_RESOURCES],
     ++i;
   }
   return 1;
-}
+} //return 0 si au moins une ressource de r2 est plus grand que r1, 1 sinon
 
 void resource_add(unsigned int r1[NUM_RESOURCES],
                   unsigned int r2[NUM_RESOURCES],

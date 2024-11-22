@@ -3,6 +3,17 @@
 #include "worker.h"
 #include "cell.h"
 
+char* workers_names[MAX_WORKERS_PER_PLAYER] = {
+    "Franck",
+    "John",
+    "Francis",
+    "Walter",
+    "Hanck",
+    "Georges"
+};
+
+int workers_costs[NUM_RESOURCES] = {0,1,1,1,1,0};
+
 struct worker_t* make_worker(char* name, int cost[NUM_RESOURCES], enum color_t couleur){
     struct worker_t *worker  = NULL;
     worker = (struct worker_t*)malloc(sizeof(struct worker_t));

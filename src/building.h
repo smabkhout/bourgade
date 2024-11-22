@@ -19,11 +19,13 @@ struct building_t{
   struct position_t *position;
 };
 
-struct building_t* make_building(char* nom, int *value, int *earns, int *costs, int *supplies, enum color_t joueur);
+struct building_t* make_building(char* nom,unsigned int *value,unsigned int *earns,unsigned int *costs,unsigned int *supplies, enum color_t joueur);
 
 void free_building(struct building_t* batiment);
 
 void place_building(struct player_t *player, struct position_t* position, struct building_t *building);
+
+void activate_building(struct player_t *owner, struct player_t *user, struct building_t* building);
 
 struct building_t** list_buildings_costing_less_than();
 

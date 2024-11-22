@@ -3,7 +3,7 @@
 #include "building.h"
 #include "position.h"
 
-struct building_t* make_building(char* nom, int *value, int *earns, int *costs, int *supplies, enum color_t joueur){
+struct building_t* make_building(char* nom,unsigned int *value,unsigned int *earns,unsigned int *costs,unsigned int *supplies, enum color_t joueur){
   struct building_t* batiment = NULL;
   batiment = (struct building_t*)malloc(sizeof(struct building_t));
   int i = 0;
@@ -65,14 +65,10 @@ struct building_t** list_buildings_costing_less_than(struct player_t* player){
   int i=0;
   int j=0;
   while (i<7){
-    // resource_sub et apres voir s'il y a une resource negative
-    unsigned int new_stockage[NUM_RESOURCES]={1};
-    resource_sub(player->stockage, list_buildings[i].value, new_stockage);
     int is_affordable=1;
-    for (int i = 0; i<NUM_RESOURCES; ++i){
-      is_affordable = is_affordable*new_stockage[i];
+    for (int res= 0; res<NUM_RESOURCES; ++res){
+      is_affordable = is_affordable*(list_buildings[i].value[res] <= player->stockage[res]);
     }
-    is_affordable = is_affordable >= 0;
     if (is_affordable){
       affordable_buildings[j] = (struct building_t*)malloc(sizeof(struct building_t));
       affordable_buildings[j]=&list_buildings[i];
@@ -82,7 +78,6 @@ struct building_t** list_buildings_costing_less_than(struct player_t* player){
   }
   return affordable_buildings;
 }
-//free affordable buildings
 
 
 void free_affordable_buildings(struct building_t** batiments){

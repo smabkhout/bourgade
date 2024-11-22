@@ -13,19 +13,8 @@
 struct cell_t;
 
 extern char* workers_names[MAX_WORKERS_PER_PLAYER];
+
 extern int workers_costs[NUM_RESOURCES];
-
-
-char* workers_names[MAX_WORKERS_PER_PLAYER] = {
-    "Franck",
-    "John",
-    "Francis",
-    "Walter",
-    "Hanck",
-    "Georges"
-};
-
-int workers_costs[NUM_RESOURCES] = {0,1,1,1,1,0};
 
 struct worker_t {
     char* nom;

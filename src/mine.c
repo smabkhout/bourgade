@@ -6,6 +6,13 @@
 #include "position.h"
 #include "cell.h"
 
+struct mine_t list_mines[4] = {
+ {.name = "Field", .r=CORN},
+ {.name = "Forest", .r=WOOD},
+ {.name = "River", .r=FISH},
+ {.name = "Rock Mine", .r=STONE},
+};
+
 void place_mine(struct cell_t* cell, struct mine_t m) {
     if (cell->mine == NULL) {
         cell->mine = malloc(sizeof(struct mine_t));
@@ -19,6 +26,7 @@ void place_mine(struct cell_t* cell, struct mine_t m) {
     cell->mine->name[i] = 0;
 }
 
+struct mine_t present_mines[MAX_POSITIONS/4];
 
 void construct_mines(){ //modifie le tableau present_mines pour avoir MAX_POSITIONS/4 mines aléatoires
     int i=0;
