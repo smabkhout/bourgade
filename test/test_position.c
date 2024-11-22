@@ -1,6 +1,7 @@
 #include "position.h"
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 
 void test_make_position() {
     struct position_t* p = POS(1, 2);

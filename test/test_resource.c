@@ -51,19 +51,18 @@ void test_resource_color_stop() {
 }
 
 void test_resource_le_than() {
-    unsigned int r1[NUM_RESOURCES] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    unsigned int r2[NUM_RESOURCES] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 9};
-    unsigned int r3[NUM_RESOURCES] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 11};
+    unsigned int r1[NUM_RESOURCES] = {1, 2, 3, 4, 6, 6};
+    unsigned int r2[NUM_RESOURCES] = {1, 2, 3, 4, 5, 6};
+    unsigned int r3[NUM_RESOURCES] = {1, 2, 3, 4, 7, 6};
     
     assert(resource_le_than(r1, r2) == 1);
     assert(resource_le_than(r1, r3) == 0); 
 }
 
 void test_resource_add() {
-    unsigned int r1[NUM_RESOURCES] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    unsigned int r2[NUM_RESOURCES] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    unsigned int r1[NUM_RESOURCES] = {1, 2, 3, 4, 5, 6};
+    unsigned int r2[NUM_RESOURCES] = {1, 1, 1, 1, 1, 1};
     unsigned int res[NUM_RESOURCES];
-    
     resource_add(r1, r2, res);
     for (int i = 0; i < NUM_RESOURCES; i++) {
         assert(res[i] == r1[i] + r2[i]);
@@ -71,8 +70,8 @@ void test_resource_add() {
 }
 
 void test_resource_sub() {
-    unsigned int r1[NUM_RESOURCES] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    unsigned int r2[NUM_RESOURCES] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    unsigned int r1[NUM_RESOURCES] = {10, 9, 8, 7, 6, 5};
+    unsigned int r2[NUM_RESOURCES] = {1, 2, 3, 4, 5, 6};
     unsigned int res[NUM_RESOURCES];
     
     resource_sub(r1, r2, res);
