@@ -15,9 +15,3 @@ struct player_t* initialize_player(enum color_t couleur){
     return player;
 }
 
-
-
-int main()
-{
-    return 0;
-}

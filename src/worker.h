@@ -12,6 +12,10 @@
 
 struct cell_t;
 
+extern char* workers_names[MAX_WORKERS_PER_PLAYER];
+extern int workers_costs[NUM_RESOURCES];
+
+
 char* workers_names[MAX_WORKERS_PER_PLAYER] = {
     "Franck",
     "John",

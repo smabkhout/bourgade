@@ -86,9 +86,3 @@ int length_of_affordable_buildings(struct building_t **affordable_buildings){
   }
   return count;
 }
-
-
-int main()
-{
-  return 0;
-}

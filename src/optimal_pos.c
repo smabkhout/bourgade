@@ -36,8 +36,3 @@ struct position_t* choose_optimal_pos(struct board_t* board){
     unsigned int y = (pos_optimale - x) / MAX_X;
     return POS(x,y);
 }
-
-int main()
-{
-    return 0;
-}

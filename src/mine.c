@@ -28,9 +28,3 @@ void construct_mines(){ //modifie le tableau present_mines pour avoir MAX_POSITI
         ++i;
     }
 }
-
-
-int main(){
-    return 0;
-}
-

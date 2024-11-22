@@ -24,7 +24,3 @@ void place_worker(struct player_t *player, struct cell_t* cell,  struct worker_t
     cell->worker = worker;
     player->number_of_workers -= 1; //on décrémente le nombre de worker disponibles pour le player
 }
-
-int main(){
-    return 0;
-}

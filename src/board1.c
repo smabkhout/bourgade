@@ -113,8 +113,3 @@ struct cell_t* find_free_cell(struct board_t* board){
     }
     return board->tab[i]; //position libre aléatoire
 }
-
-int main()
-{
-    return 0;
-}
