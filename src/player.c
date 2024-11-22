@@ -15,3 +15,7 @@ struct player_t* initialize_player(enum color_t couleur){
     return player;
 }
 
+
+void free_player(struct player_t* player){
+    free(player);
+}

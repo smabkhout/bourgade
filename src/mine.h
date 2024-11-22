@@ -24,4 +24,6 @@ struct mine_t present_mines[MAX_POSITIONS/4];
 
 void construct_mines();
 
+void free_mine(struct mine_t* mine);
+
 #endif

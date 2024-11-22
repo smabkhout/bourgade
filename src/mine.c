@@ -28,3 +28,8 @@ void construct_mines(){ //modifie le tableau present_mines pour avoir MAX_POSITI
         ++i;
     }
 }
+
+void free_mine(struct mine_t* mine)
+{
+    free(mine);
+}

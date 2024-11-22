@@ -16,5 +16,7 @@ struct player_t{
 
 struct player_t* initialize_player(enum color_t couleur);
 
+void free_player(struct player_t* player);
+
 
 #endif
