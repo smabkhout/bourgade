@@ -6,6 +6,7 @@
 #include "board.h"
 #include "player.h"
 #include "optimal_pos.h"
+#include "building.h"
 
 #define NUM_ROUNDS 4
 
@@ -55,7 +56,6 @@ void game(int num_players)
       if (players[current_player]->number_of_workers > 0)
       {
         struct cell_t* current_cell = NULL;
-        //iiiiiiii
         struct position_t* a_pos = choose_optimal_pos(board);
         int a_pos_index = PY(a_pos)*MAX_X+PX(a_pos);
         current_cell = board->tab[a_pos_index]; //on a besoin de son indice/position sur le board
@@ -112,13 +112,17 @@ void game(int num_players)
     //fin de la manche
     //free la mémoire
   }
-  //free chaque player
-  //free tableau players
-  //free board
+  for (int i = 0; i < num_players; ++i)
+  {
+    free_player(players[i]);
+  }
+  free(players);
+  free_board(board);
 }
 
 int main(void)
 {
+  game(4);
   return 0;
 }
 
