@@ -103,6 +103,7 @@ void free_board(struct board_t *board)
             free(board->tab[i]->building);
         }
     }
+    free(board);
 }
 
 void reset_workers_still_on_board(struct board_t* board)

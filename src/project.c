@@ -69,6 +69,7 @@ void game(int num_players)
           present_buildings[nb_batiments_construits]= *a_building;
           ++nb_batiments_construits;
           place_building(players[current_player], a_pos, a_building); //stocker les buildings dans un tableau present buildings
+          free_affordable_buildings(affordable_buildings);
         }
         else
         {
@@ -110,6 +111,9 @@ void game(int num_players)
     //fin de la manche, reset_workers_still_on_board
     //free la mémoire
   }
+  //free chaque player
+  //free tableau players
+  //free board
 }
 
 int main(void)
