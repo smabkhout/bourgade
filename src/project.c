@@ -38,16 +38,17 @@ void game(int num_players)
 
   struct player_t **players = NULL;
   players = (struct player_t **)malloc(sizeof(struct player_t *) * num_players);
+  int NB_OF_WORKERS = rand()%(MAX_WORKERS_PER_PLAYER) + MAX_POSITIONS/3/num_players;
+  int random_color = rand() % MAX_COLORS;
+  for (int i = 0; i < num_players; ++i)
+  {
+    players[i] = initialize_player(random_color%MAX_COLORS);
+    players[i]->number_of_workers = NB_OF_WORKERS;
+    ++random_color;
+  } // fin de l'initialisation des joueurs
+
   for (int j = 0; j < NUM_ROUNDS; ++j)
   {
-    int random_color = rand() % MAX_COLORS;
-    for (int i = 0; i < num_players; ++i)
-    {
-      players[i] = initialize_player(random_color%MAX_COLORS);
-      players[i]->number_of_workers = rand()%(MAX_WORKERS_PER_PLAYER) + MAX_POSITIONS/3/num_players;
-      ++random_color;
-    } // fin de l'initialisation des joueurs
-
     int current_player = 0; //indice pour repérer le joueur actuel dans players
     int nb_batiments_construits = 0;
     while (exists_a_player_with_free_workers(players, num_players) && exists_an_empty_cell(board)) {
@@ -100,7 +101,14 @@ void game(int num_players)
       }
       ++current_player;
     }
-    //fin de la manche, reset_workers_still_on_board et free la mémoire
+    reset_workers_still_on_board(board);
+    for (int i = 0; i < num_players; ++i)
+    {
+      players[i]->number_of_workers = NB_OF_WORKERS;
+    }
+    //reset number of workers for all players
+    //fin de la manche, reset_workers_still_on_board
+    //free la mémoire
   }
 }
 

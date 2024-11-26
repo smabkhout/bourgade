@@ -14,4 +14,6 @@ struct board_t* init_board();
 
 void free_board(struct board_t* board);
 
+void reset_workers_still_on_board(struct board_t*);
+
 #endif
