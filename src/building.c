@@ -50,7 +50,7 @@ struct building_t** list_buildings_costing_less_than(struct player_t* player){
     }
     if (is_affordable){
       affordable_buildings[j] = (struct building_t*)malloc(sizeof(struct building_t));
-      affordable_buildings[j]=&list_buildings[i];
+      affordable_buildings[j]= &list_buildings[i];
       ++j;
     }
     ++i;
