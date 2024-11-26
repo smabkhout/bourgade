@@ -108,7 +108,7 @@ void test_list_buildings_costing_less_than() {
             }
         }
     }
-    free(affordable_buildings);
+    free_affordable_buildings(affordable_buildings);
     printf("All tests completed.\n");
 }
 
