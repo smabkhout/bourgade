@@ -21,9 +21,6 @@ struct position_t* choose_optimal_pos(struct board_t* board){
                     ++histogramme_nb_ressources[a];
                 }
             }
-            for (int i = 0; i<8; ++i){
-                free(neighbors[i]);
-            }
             free(neighbors);
         }
         ++i;

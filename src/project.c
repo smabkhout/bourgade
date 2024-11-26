@@ -97,7 +97,7 @@ void game(int num_players)
               }
             }
           }
-          //free neighbors *8
+          free(neighbors);
         }
         free_affordable_buildings(affordable_buildings);
       }
