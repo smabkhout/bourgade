@@ -5,6 +5,7 @@
 #include "mine.h"
 #include "position.h"
 #include "cell.h"
+#include <assert.h>
 
 struct mine_t list_mines[4] = {
  {.name = "Field", .r=CORN},
@@ -13,12 +14,12 @@ struct mine_t list_mines[4] = {
  {.name = "Rock Mine", .r=STONE},
 };
 
-struct mine_t* make_mine(enum resource_t r, char nom[10]){
+struct mine_t* make_mine(enum resource_t r, char nom[12]){
     struct mine_t* mine = NULL;
     mine = (struct mine_t*)malloc(sizeof(struct mine_t));
     mine->r = r;
     int i = 0;
-    while(i<10){
+    while(i<12){
         mine->name[i] = nom[i];
         ++i;
     }
@@ -38,15 +39,31 @@ void place_mine(struct cell_t* cell, struct mine_t m) {
     cell->mine->name[i] = 0;
 }
 
-struct mine_t present_mines[MAX_POSITIONS/4];
+int max(int a, int b)
+{
+    if (a>b)
+        return a;
+    else
+        return b;
+}
 
-void construct_mines(){ //modifie le tableau present_mines pour avoir MAX_POSITIONS/4 mines aléatoires
-    int i=0;
-    while (i<MAX_POSITIONS/4){
-        int a=rand() % 4;
-        present_mines[i]=list_mines[a];
-        ++i;
+struct mine_t* construct_mines(){ //modifie le tableau present_mines pour avoir MAX_POSITIONS/4 mines aléatoires
+    struct mine_t* present_mines = NULL;
+    present_mines = (struct mine_t*)malloc(sizeof(struct mine_t)*MAX_POSITIONS/4);
+    int j=4;
+    for (int i =0; i< max(4, MAX_POSITIONS/4); i++)
+    {
+        present_mines[i] = list_mines[i];
+         //on s'assure d'avoir au moins une mine de chaque type
+        //en remplissant à la main les 4 premières 
+        printf("%s\n",present_mines[i].name);
     }
+    while (j<MAX_POSITIONS/4){
+        int a=rand()%4;
+        present_mines[j]=list_mines[a];
+        ++j;
+    }
+    return present_mines;
 }
 
 void free_mine(struct mine_t* mine)

@@ -1,6 +1,6 @@
 # Définition des variables
 MAX_X ?= 4
-MAX_Y ?= 3
+MAX_Y ?= 4
 NUM_RESOURCES ?= 5
 BOURGADE_FLAGS = -DMAX_X=$(MAX_X) -DMAX_Y=$(MAX_Y) -DNUM_RESOURCES=$(NUM_RESOURCES)
 CFLAGS = -Wall -Wextra -std=c99 -g3 $(BOURGADE_FLAGS) -I src -I test -fsanitize=address

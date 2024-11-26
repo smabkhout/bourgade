@@ -80,7 +80,7 @@ void test_get_worker_from_cell() {
 }
 
 void test_get_mine_from_cell() {
-    char nom[10] = "Farm";
+    char nom[12] = "Farm";
     struct mine_t* mine = make_mine(CORN, nom); 
     struct cell_t* cell = init_cell();
     cell->mine = mine;

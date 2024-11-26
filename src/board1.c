@@ -5,7 +5,7 @@
 
 
 
-int occurrences(struct mine_t tab[MAX_POSITIONS / 4])
+int occurrences(struct mine_t* tab)
 { // fonction qui vérifie si on a au moins une mine de chaque ressource
     int occ1, occ2, occ3, occ4 = 0;
     for (int i = 0; i < MAX_POSITIONS / 4; ++i)
@@ -40,8 +40,8 @@ struct board_t* init_board()
     }
     do
     {
-        construct_mines();
-    } while (occurrences(present_mines) == 0); // première condition : compter le nombre d'occurences de chaque mine dans le tableau present_mines => si une mine
+        board->present_mines = construct_mines();
+    } while (occurrences(board->present_mines) == 0); // première condition : compter le nombre d'occurences de chaque mine dans le tableau present_mines => si une mine
     // a une occurence à 0 => on refait une génération
 
     int temp_invalid_pos[MAX_POSITIONS / 2]; // à chaque fois qu'on place une mine, on résérve une position voisine à ne pas
@@ -72,17 +72,13 @@ struct board_t* init_board()
             }
         }
         if (is_free_position && is_free_neighbor){
-            place_mine(board->tab[i], present_mines[nb_of_mines]);
+            place_mine(board->tab[i], board->present_mines[nb_of_mines]);
             nb_of_mines += 1;
-        }
-        for (int i = 0; i<8; ++i){
-            free(neighbors[i]);
         }
         free(neighbors);
     } while (nb_of_mines < MAX_POSITIONS/4);
     //nb_of_mines vaut (N/4)-1 à la fin du prgramme mais c'est normal car initialisée à 0
     // deuxième condition : chaque mine a au moins 1 position valide dans ses voisins sinon => on refait une génération
-
     return board;
 }
 
@@ -91,7 +87,7 @@ void free_board(struct board_t *board)
     for (int i = 0; i < MAX_X * MAX_Y; ++i)
     {
         if (board->tab[i]->mine != NULL)
-        { // free mines
+        {
             free(board->tab[i]->mine);
         }
         if (board->tab[i]->worker != NULL)
@@ -103,6 +99,8 @@ void free_board(struct board_t *board)
             free(board->tab[i]->building);
         }
     }
+    if (board->present_mines != NULL)
+        free_mine(board->present_mines);
     free(board);
 }
 

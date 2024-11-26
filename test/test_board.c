@@ -22,7 +22,7 @@ void test_init_board() {
         }
     }
     assert(mine_count == MAX_POSITIONS / 4);
-    int occurrences_result = occurrences(present_mines);
+    int occurrences_result = occurrences(board->present_mines);
     assert(occurrences_result != 0); 
     free_board(board);
     free(board);        

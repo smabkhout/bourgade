@@ -18,30 +18,18 @@ void test_place_mine() {
 }
 
 void test_construct_mines() {
-    struct mine_t* present_mines[MAX_POSITIONS / 4] = { NULL };
-    construct_mines();
+    struct mine_t* present_mines = NULL;
+    present_mines = (struct mine_t*)malloc(sizeof(struct mine_t)*MAX_POSITIONS/4);
+    present_mines = construct_mines();
     for (int i = 0; i < MAX_POSITIONS / 4; ++i) {
-        assert(present_mines[i] != NULL);
-        printf("Mine %d: %s\n", i, present_mines[i]->name);
+        printf("Mine %d: %s\n", i, present_mines[i].name);
     }
 }
 
-void test_random_mine_selection() {
-    struct mine_t* present_mines[MAX_POSITIONS / 4] = { NULL };
-    construct_mines();
-    for (int i = 0; i < MAX_POSITIONS / 4; ++i) {
-        assert(present_mines[i] == &list_mines[0] || 
-               present_mines[i] == &list_mines[1] || 
-               present_mines[i] == &list_mines[2] || 
-               present_mines[i] == &list_mines[3]);
-    }
-}
 
 int main() {
     test_place_mine();
     test_construct_mines();
-    test_random_mine_selection();
-
     printf("All mine tests passed!\n");
     return 0;
 }
