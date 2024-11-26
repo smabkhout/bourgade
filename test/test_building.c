@@ -77,9 +77,9 @@ void test_activate_building() {
         assert(user->stockage[i] == 5 - costs[i] + supplies[i]);
         assert(owner->stockage[i] == tab_final_owner[i]);
     }
-    free(building);
-    free(owner);
-    free(user);
+    free_building(building);
+    free_player(owner);
+    free_player(user);
 }
 
 
@@ -109,6 +109,7 @@ void test_list_buildings_costing_less_than() {
         }
     }
     free_affordable_buildings(affordable_buildings);
+    free_player(player);
     printf("All tests completed.\n");
 }
 

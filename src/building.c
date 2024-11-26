@@ -49,7 +49,6 @@ struct building_t** list_buildings_costing_less_than(struct player_t* player){
       is_affordable = is_affordable*(list_buildings[i].value[res] <= player->stockage[res]);
     }
     if (is_affordable){
-      affordable_buildings[j] = (struct building_t*)malloc(sizeof(struct building_t));
       affordable_buildings[j]= &list_buildings[i];
       ++j;
     }
@@ -60,10 +59,6 @@ struct building_t** list_buildings_costing_less_than(struct player_t* player){
 
 
 void free_affordable_buildings(struct building_t** batiments){
-  for (int i = 0; i<7; ++i)
-  {
-    free(batiments[i]);
-  }
   free(batiments);
 }
 
