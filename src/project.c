@@ -30,6 +30,33 @@ int exists_an_empty_cell(struct board_t* board) //return 1 if there is at least 
   return 0;
 }
 
+void print_board(struct board_t *board)
+{
+  for (int y = 0; y<MAX_Y; ++y)
+  {
+    printf("--------");
+    for (int x = 0; x<MAX_X-1; ++x)
+    {
+      printf("|");
+      printf("--------");
+    }
+    printf("\n");
+    for (int x = 0; x<MAX_X-1; ++x)
+    {
+      printf("        ");
+      printf("|");
+    }
+    printf("\n");
+    for (int x = 0; x<MAX_X-1; ++x)
+    {
+      printf("        ");
+      printf("|");
+    }
+    printf("\n");
+
+  }
+}
+
 void game(int num_players)
 {
   struct building_t* present_buildings = NULL;
@@ -126,7 +153,8 @@ void game(int num_players)
 
 int main(void)
 {
-  game(4);
+  //game(4);
+  print_board(NULL);
   return 0;
 }
 
