@@ -9,7 +9,7 @@ struct board_t {
     struct mine_t* present_mines;
 };
 
-int occurrences(struct mine_t tab[MAX_POSITIONS/4]);
+int occurrences(struct mine_t* tab);
 
 struct board_t* init_board();
 

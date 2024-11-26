@@ -29,10 +29,7 @@ struct board_t* init_board()
     // mine). De plus, le nombre d'emplacement valide parmi les voisins de chaque mine est >= 1.
     struct board_t* board = NULL;
     board = (struct board_t*)malloc(sizeof(struct board_t));
-    for (int i = 0; i < MAX_X*MAX_Y; ++i)
-    {
-        board->tab[i] = (struct cell_t *)malloc(sizeof(struct cell_t));
-    }
+    board->tab = (struct cell_t**)malloc(sizeof(struct cell_t*)*MAX_POSITIONS);
     int nb_of_mines = 0;
     for (int i = 0; i < MAX_X * MAX_Y; i++)
     {
@@ -98,7 +95,9 @@ void free_board(struct board_t *board)
         { // free buildings
             free(board->tab[i]->building);
         }
+        free_cell(board->tab[i]);
     }
+    free(board->tab);
     if (board->present_mines != NULL)
         free_mine(board->present_mines);
     free(board);

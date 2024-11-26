@@ -18,20 +18,21 @@ struct position_t* make_invalid_position(){
   return &positions[MAX_X*MAX_Y];
 }
 
-struct position_t* make_position(unsigned int x, unsigned int y){
-  if (positions[y*MAX_X+x].init == 1){
-    return &positions[y*MAX_X+x];
-  }
-  else{
-    if (x<MAX_X && y<MAX_Y){
-      positions[y*MAX_X + x].x = x;
-      positions[y*MAX_X + x].y = y;
-      positions[y*MAX_X + x].init = 1;
-      return &positions[y*MAX_X + x];
+struct position_t* make_position(unsigned int x, unsigned int y) {
+    if (x >= MAX_X || y >= MAX_Y) {
+        return make_invalid_position();
     }
-  } 
-  return make_invalid_position();
+
+    if (positions[y * MAX_X + x].init == 1) {
+        return &positions[y * MAX_X + x];
+    }
+
+    positions[y * MAX_X + x].x = x;
+    positions[y * MAX_X + x].y = y;
+    positions[y * MAX_X + x].init = 1;
+    return &positions[y * MAX_X + x];
 }
+
 
 void init_positions(unsigned int seed){
     (void) seed;
