@@ -26,11 +26,9 @@ void place_building(struct player_t *player, struct position_t* position, struct
 void activate_building(struct player_t *owner, struct player_t *user, struct building_t* building);
 
 struct building_t** list_buildings_costing_less_than();
-
+  
 void free_affordable_buildings(struct building_t** batiments);
 
 int length_of_affordable_buildings(struct building_t **affordable_buildings);
-
-extern struct building_t present_buildings[MAX_POSITIONS/3];
 
 #endif

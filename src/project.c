@@ -32,6 +32,9 @@ int exists_an_empty_cell(struct board_t* board) //return 1 if there is at least 
 
 void game(int num_players)
 {
+  struct building_t* present_buildings = NULL;
+  present_buildings = (struct building_t*)malloc(sizeof(struct building_t)*MAX_POSITIONS/3);
+
   init_positions(num_players); // initialisation des positions
 
   struct board_t *board = NULL;
@@ -116,6 +119,7 @@ void game(int num_players)
   {
     free_player(players[i]);
   }
+  free(present_buildings);
   free(players);
   free_board(board);
 }
