@@ -56,7 +56,6 @@ struct mine_t* construct_mines(){ //modifie le tableau present_mines pour avoir 
         present_mines[i] = list_mines[i];
          //on s'assure d'avoir au moins une mine de chaque type
         //en remplissant à la main les 4 premières 
-        printf("%s\n",present_mines[i].name);
     }
     while (j<MAX_POSITIONS/4){
         int a=rand()%4;

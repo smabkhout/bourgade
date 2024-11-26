@@ -81,19 +81,19 @@ struct board_t* init_board()
 
 void free_board(struct board_t *board)
 {
-    for (int i = 0; i < MAX_X * MAX_Y; ++i)
+    for (int i = 0; i < MAX_POSITIONS; ++i)
     {
         if (board->tab[i]->mine != NULL)
         {
-            free(board->tab[i]->mine);
+            free_mine(board->tab[i]->mine);
         }
         if (board->tab[i]->worker != NULL)
         { // free workers
-            free(board->tab[i]->worker);
+            free_worker(board->tab[i]->worker);
         }
         if (board->tab[i]->building != NULL)
         { // free buildings
-            free(board->tab[i]->building);
+            free_building(board->tab[i]->building);
         }
         free_cell(board->tab[i]);
     }

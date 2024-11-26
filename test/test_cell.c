@@ -28,7 +28,7 @@ void test_is_free_cell() {
     assert(is_free_cell(cell2) == 0); 
     // Cas 3 : Cellule avec un travailleur
     struct worker_t* worker = NULL;
-    worker = (struct player_t*)malloc(sizeof(struct worker_t));
+    worker = (struct worker_t*)malloc(sizeof(struct worker_t));
     struct cell_t* cell3 = init_cell();
     cell3->worker = worker;
     assert(is_free_cell(cell3) == 0);  
