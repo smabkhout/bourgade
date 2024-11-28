@@ -30,32 +30,47 @@ int exists_an_empty_cell(struct board_t* board) //return 1 if there is at least 
   return 0;
 }
 
-void print_board(struct board_t *board)
-{
-  for (int y = 0; y<MAX_Y; ++y)
-  {
-    printf("--------");
-    for (int x = 0; x<MAX_X-1; ++x)
-    {
-      printf("|");
-      printf("--------");
-    }
-    printf("\n");
-    for (int x = 0; x<MAX_X-1; ++x)
-    {
-      printf("        ");
-      printf("|");
-    }
-    printf("\n");
-    for (int x = 0; x<MAX_X-1; ++x)
-    {
-      printf("        ");
-      printf("|");
-    }
-    printf("\n");
 
-  }
+
+void print_board(struct board_t *board) {
+    for (int y = 0; y < MAX_Y; ++y) {
+        // Ligne horizontale supérieure avec bordure gauche et droite
+        printf("|"); // Bordure gauche
+        for (int x = 0; x < MAX_X; ++x) {
+            printf("--------");
+            if (x < MAX_X - 1) {
+                printf("|"); // Ajouter les séparateurs verticaux sauf après le dernier
+            }
+        }
+        printf("|"); // Bordure droite
+        printf("\n");
+
+        // Deux lignes vides avec bordures gauche et droite
+        for (int line = 0; line < 2; ++line) {
+            printf("|"); // Bordure gauche
+            for (int x = 0; x < MAX_X; ++x) {
+                printf("        ");
+                if (x < MAX_X - 1) {
+                    printf("|"); // Ajouter les séparateurs verticaux sauf après le dernier
+                }
+            }
+            printf("|"); // Bordure droite
+            printf("\n");
+        }
+    }
+
+    // Dernière ligne horizontale avec bordures gauche et droite
+    printf("|"); // Bordure gauche
+    for (int x = 0; x < MAX_X; ++x) {
+        printf("--------");
+        if (x < MAX_X - 1) {
+            printf("|"); // Ajouter les séparateurs verticaux sauf après le dernier
+        }
+    }
+    printf("|"); // Bordure droite
+    printf("\n");
 }
+
 
 void game(int num_players)
 {
