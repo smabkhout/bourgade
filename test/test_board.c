@@ -18,6 +18,7 @@ void test_init_board() {
     for (int i = 0; i < MAX_X * MAX_Y; ++i) {
         if (board->tab[i]->mine != NULL) {
             ++mine_count;
+            printf("%s\n",board->tab[i]->mine->name);
         }
     }
     assert(mine_count == MAX_POSITIONS / 4);
