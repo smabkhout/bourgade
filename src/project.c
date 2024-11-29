@@ -213,12 +213,12 @@ void display_winner(int num_players, struct player_t **players)
   }
 }
 
-void game(int num_players)
+void game(int num_players,int seed)
 {
   struct building_t *present_buildings = NULL;
   present_buildings = (struct building_t *)malloc(sizeof(struct building_t) * MAX_POSITIONS / 3);
 
-  init_positions(num_players); // initialisation des positions
+  init_positions(seed); // initialisation des positions
 
   struct board_t *board = NULL;
   board = init_board(); // initialisation du plateau
@@ -342,6 +342,6 @@ int main(int argc, char *argv[])
       break;
     }
   }
-  game(num_players);
+  game(num_players,seed);
   return 0;
 }
