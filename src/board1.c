@@ -103,6 +103,33 @@ void free_board(struct board_t *board)
     free(board);
 }
 
+void pay_workers_on_board(struct board_t* board, int num_players, struct player_t** players)
+{
+    for (int i = 0; i<MAX_POSITIONS; ++i)
+        {
+            if (board->tab[i]->worker != NULL)
+            {
+                //identifier son joueur (employer)
+                int j = 0;
+                while (j<num_players)
+                {
+                    if (players[j]->color == board->tab[i]->worker->joueur)
+                    break;
+                    ++j;
+                }
+                //vérifier si le joueur peut payer le worker, sinon il va etre éliminé
+                if (resource_le_than(players[j]->stockage, board->tab[i]->worker->costs))
+                {
+                    players[j]->eliminated = 1;
+                }
+                else
+                {
+                    pay_worker(players[j], board->tab[i]->worker);
+                }
+            }
+        }
+}
+
 void reset_workers_still_on_board(struct board_t* board)
 {
     for (int i = 0; i<MAX_POSITIONS; ++i)

@@ -30,6 +30,17 @@ int exists_an_empty_cell(struct board_t* board) //return 1 if there is at least 
   return 0;
 }
 
+int exists_a_player(struct player_t** players, int num_players)
+{
+  int a = 0;
+  for (int i = 0; i<num_players; ++i)
+  {
+    a += players[i]->eliminated;
+  }
+  a = (a == num_players-1) || (a == num_players); //si il ne reste qu'un seul joueur ou aucun joueur
+  return a;
+}
+
 
 
 void print_board(struct board_t *board) {
@@ -71,6 +82,11 @@ void print_board(struct board_t *board) {
     printf("\n");
 }
 
+void display_winner(int num_players, struct player_t** players)
+{
+
+}
+
 
 void game(int num_players)
 {
@@ -93,12 +109,12 @@ void game(int num_players)
     ++random_color;
   } // fin de l'initialisation des joueurs
 
+  int nb_batiments_construits = 0;
   for (int j = 0; j < NUM_ROUNDS; ++j)
   {
     int current_player = 0; //indice pour repérer le joueur actuel dans players
-    int nb_batiments_construits = 0;
-    while (exists_a_player_with_free_workers(players, num_players) && exists_an_empty_cell(board)) {
-      if (players[current_player]->number_of_workers > 0)
+    while (exists_a_player_with_free_workers(players, num_players) && exists_an_empty_cell(board) && exists_a_player(players, num_players)) {
+      if (players[current_player]->number_of_workers > 0 && players[current_player]->eliminated == 0)
       {
         struct cell_t* current_cell = NULL;
         struct position_t* a_pos = choose_optimal_pos(board);
@@ -149,13 +165,18 @@ void game(int num_players)
       }
       ++current_player;
     }
+    //payer les couts d'entretien et eliminer les joueurs qui ne peuvent pas le faire
+    pay_workers_on_board(board, num_players, players);
+    //tous les joueurs restants récupèrents leurs employés
     reset_workers_still_on_board(board);
     for (int i = 0; i < num_players; ++i)
     {
       players[i]->number_of_workers = NB_OF_WORKERS;
     }
     //fin de la manche
-    //free la mémoire
+
+  //annoncer le/les gagnant(s) si existe
+  //fin du jeu, free la mémoire
   }
   for (int i = 0; i < num_players; ++i)
   {
