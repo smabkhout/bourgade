@@ -214,5 +214,3 @@ int main(int argc, char* argv[])
   print_board(NULL);
   return 0;
 }
-
-// penser a free tous les mallocs
