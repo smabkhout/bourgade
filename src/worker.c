@@ -34,6 +34,7 @@ void pay_worker(struct player_t *player, struct worker_t* worker)
 void place_worker(struct player_t *player, struct cell_t* cell,  struct worker_t *worker){
     cell->worker = worker;
     player->number_of_workers -= 1; //on décrémente le nombre de worker disponibles pour le player
+    worker->joueur = player->color; //le worker est maintenant associé au joueur
 }
 
 void free_worker(struct worker_t* worker)
