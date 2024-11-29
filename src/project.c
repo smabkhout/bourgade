@@ -60,7 +60,7 @@ void print_board(struct board_t *board)
       printf("|");
       if (board->tab[y * MAX_X + x]->mine != NULL)
       {
-        printf("%s   ",board->tab[y * MAX_X + x]->mine->name);
+        printf("%c%c      ",board->tab[y * MAX_X + x]->mine->name[0],board->tab[y * MAX_X + x]->mine->name[1]);
       }
       else
       {
@@ -268,10 +268,10 @@ void game(int num_players)
       players[i]->number_of_workers = NB_OF_WORKERS;
     }
     //fin de la manche
-  display_winner(num_players, players);
   //annoncer le/les gagnant(s) si existe
   //fin du jeu, free la mémoire
   }
+  display_winner(num_players, players);
   for (int i = 0; i < num_players; ++i)
   {
     free_player(players[i]);
@@ -283,9 +283,9 @@ void game(int num_players)
 
 int main(int argc, char *argv[])
 {
-  int seed = 0;
-  int num_players = 0;
-  int init_param = 0;
+  int seed = 156;
+  int num_players = 4;
+  int init_param = 2;
   int opt;
   while ((opt = getopt(argc, argv, "s:p:c")) != -1)
   {
@@ -307,6 +307,6 @@ int main(int argc, char *argv[])
       break;
     }
   }
-  game(4);
+  game(num_players);
   return 0;
 }
