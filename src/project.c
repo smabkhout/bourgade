@@ -84,7 +84,7 @@ void print_board(struct board_t *board) {
         }
         printf("+\n");
 
-        // Première ligne de contenu (affichage des mines ou "opt")
+        // Première ligne de contenu (affichage des mines)
         for (int x = 0; x < MAX_X; ++x) {
             printf("|");
             int index = y * MAX_X + x;
@@ -114,15 +114,13 @@ void print_board(struct board_t *board) {
             struct cell_t *cell = board->tab[y * MAX_X + x];
             if (cell->worker) {
                 // Affichage du worker avec sa couleur
-                printf("   %sW%d%s   ",
+                printf("   %sW%s   ",
                        color_start(cell->worker->joueur),
-                       cell->worker->joueur,
                        color_stop());
             } else if (cell->building) {
                 // Affichage du bâtiment avec sa couleur
-                printf("   %sB%d%s   ",
+                printf("   %sB%s   ",
                        color_start(cell->building->joueur),
-                       cell->building->joueur,
                        color_stop());
             } else {
                 print_cell_content("", 8); // Case vide
@@ -303,6 +301,7 @@ void game(int num_players,int seed)
     {
       players[i]->number_of_workers = NB_OF_WORKERS;
     }
+    
     //fin de la manche
   //annoncer le/les gagnant(s) si existe
   //fin du jeu, free la mémoire
