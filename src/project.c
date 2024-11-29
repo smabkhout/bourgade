@@ -127,8 +127,8 @@ void game(int num_players)
             //else if is_building => if wishes to activate => activate building
             unsigned int neighbor_x = PX(neighbors[e]);
             unsigned int neighbor_y = PY(neighbors[e]);
-            int neighbor=neighbor_y*MAX_X + neighbor_x;
-            if (board->tab[neighbor]->mine != NULL)
+            int neighbor=neighbor_y*MAX_X + neighbor_x; 
+            if (board->tab[neighbor]->mine != NULL) //le joueur récupère les resources sur les cases voisines
             {
               int resource = board->tab[neighbor]->mine->r;
               ++players[current_player]->stockage[resource];
