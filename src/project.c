@@ -164,14 +164,14 @@ void display_winner(int num_players, struct player_t **players)
       if (nb_de_gagnants == 1)
       {
         printf("Félicitations au joueur");
-        printf("%s %s %s\n",color_start(players[count]->color), color_to_string(players[count]->color), color_stop());
+        printf("%s %s %s\n",color_start(players[gagnant]->color), color_to_string(players[gagnant]->color), color_stop());
       }
       else
       {
         printf("Félicitations au %d gagnants !!\n", nb_de_gagnants);
         for (int i = 0; i<nb_de_gagnants; ++i)
         {
-          printf("Joueur %s %s %s\n",color_start(players[count]->color), color_to_string(players[count]->color), color_stop());
+          printf("Joueur %s %s %s\n",color_start(players[gagnants[i]]->color), color_to_string(players[gagnants[i]]->color), color_stop());
         }
       }
     }
