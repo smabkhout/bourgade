@@ -48,52 +48,83 @@ int exists_a_player(struct player_t **players, int num_players)
   return a;
 }
 
-void format_name(const char* name, char* buffer, int width) {
-    int name_len = strlen(name);
-    if (name_len > width) {
-        strncpy(buffer, name, width - 1);
-        buffer[width - 1] = '\0';
+void format_cell_content(char *dest, const char *content, int width) {
+    int len = strlen(content);
+    if (len > width) {
+        snprintf(dest, width + 1, "%.5s...", content);
     } else {
-        int padding = (width - name_len) / 2;
-        int extra = (width - name_len) % 2;
-        snprintf(buffer, width + 1, "%*s%s%*s", padding, "", name, padding + extra, "");
+        int padding = (width - len) / 2;
+        snprintf(dest, width + 1, "%*s%s%*s", padding, "", content, padding + (width % 2), "");
     }
 }
 
-
-void print_board(struct board_t* board) {
-    if (!board || !board->tab) {
-        fprintf(stderr, "Error: board is NULL or uninitialized in print_board\n");
+void print_board(struct board_t *board) {
+    if (!board) {
+        puts("board null print");
         return;
     }
 
-    char formatted_name[CELL_WIDTH + 1]; // Buffer pour contenir le texte formaté
+    char formatted_content[9]; // Contenu formaté pour chaque cellule (8 + 1 pour le null terminator)
 
     for (int y = 0; y < MAX_Y; ++y) {
         // Ligne supérieure
         for (int x = 0; x < MAX_X; ++x) {
-            printf("+%.*s", CELL_WIDTH, "--------");
+            printf("+--------");
         }
         printf("+\n");
+
+        // Première ligne de contenu
         for (int x = 0; x < MAX_X; ++x) {
             printf("|");
-            struct cell_t* cell = board->tab[y*MAX_X+x];
+            int index = y * MAX_X + x;
+            struct cell_t *cell = board->tab[index];
             if (cell->mine) {
-                format_name(cell->mine->name, formatted_name, CELL_WIDTH);
-                printf("%s", formatted_name);
+                format_cell_content(formatted_content, cell->mine->name, 8);
             } else {
-                printf("%*s", CELL_WIDTH, ""); // Case vide
+                format_cell_content(formatted_content, "", 8);
             }
+            printf("%s", formatted_content);
+        }
+        printf("|\n");
+
+        // Deuxième ligne de contenu (worker ou bâtiment)
+        for (int x = 0; x < MAX_X; ++x) {
+            printf("|");
+            struct cell_t *cell = board->tab[y * MAX_X + x];
+            if (cell->worker) {
+                snprintf(formatted_content, 9, "   %sW%d%s   ",
+                         color_start(cell->worker->joueur),
+                         cell->worker->joueur,
+                         color_stop());
+            } else if (cell->building) {
+                snprintf(formatted_content, 9, "   %sB%d%s   ",
+                         color_start(cell->building->joueur),
+                         cell->building->joueur,
+                         color_stop());
+            } else {
+                format_cell_content(formatted_content, "", 8);
+            }
+            printf("%s", formatted_content);
+        }
+        printf("|\n");
+
+        // Troisième ligne de contenu (vide ou autre)
+        for (int x = 0; x < MAX_X; ++x) {
+            printf("|");
+            format_cell_content(formatted_content, "", 8);
+            printf("%s", formatted_content);
         }
         printf("|\n");
     }
 
     // Ligne inférieure
     for (int x = 0; x < MAX_X; ++x) {
-        printf("+%.*s", CELL_WIDTH, "--------");
+        printf("+--------");
     }
     printf("+\n");
 }
+
+
 
 
 void display_winner(int num_players, struct player_t **players)
