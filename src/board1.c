@@ -56,11 +56,14 @@ struct board_t* init_board()
         neighbors = (struct position_t **)malloc(sizeof(struct position_t *)*8);
         list_neighbors(POS(x,y), neighbors);
         for (int i = 0; i<8;++i){
-            int a = PY(neighbors[i])*MAX_X + PX(neighbors[i]);
-            for (int k = 0; k < MAX_POSITIONS / 4; k++)
+            if (is_valid_position(neighbors[i]))
             {
-                if (temp_invalid_pos[k] == a)
-                    is_free_neighbor = 0; // vérifie si au moins un voisin de la position i est libre
+                int a = PY(neighbors[i])*MAX_X + PX(neighbors[i]);
+                for (int k = 0; k < MAX_POSITIONS / 4; k++)
+                {
+                    if (temp_invalid_pos[k] == a)
+                        is_free_neighbor = 0; // vérifie si au moins un voisin de la position i est libre
+                }
             }
         }
         if (is_free_position && is_free_neighbor){
