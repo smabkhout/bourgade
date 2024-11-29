@@ -48,13 +48,25 @@ int exists_a_player(struct player_t **players, int num_players)
   return a;
 }
 
-void format_cell_content(char *dest, const char *content, int width) {
+// Fonction pour formater le contenu d'une cellule
+void print_cell_content(const char *content, int width) {
     int len = strlen(content);
+    int spaces_to_pad = width - len;
+    
+    // Si le contenu est trop long, tronquer et ajouter "..."
     if (len > width) {
-        snprintf(dest, width + 1, "%.5s...", content);
-    } else {
-        int padding = (width - len) / 2;
-        snprintf(dest, width + 1, "%*s%s%*s", padding, "", content, padding + (width % 2), "");
+        content = "....";
+        printf("%s", content);
+        return;
+    }
+    int left_padding = spaces_to_pad / 2;
+    int right_padding = spaces_to_pad - left_padding;
+    for (int i = 0; i < left_padding; ++i) {
+        printf(" ");
+    }
+    printf("%s", content);
+    for (int i = 0; i < right_padding; ++i) {
+        printf(" ");
     }
 }
 
@@ -64,8 +76,6 @@ void print_board(struct board_t *board) {
         return;
     }
 
-    char formatted_content[9]; // Contenu formaté pour chaque cellule (8 + 1 pour le null terminator)
-
     for (int y = 0; y < MAX_Y; ++y) {
         // Ligne supérieure
         for (int x = 0; x < MAX_X; ++x) {
@@ -73,17 +83,27 @@ void print_board(struct board_t *board) {
         }
         printf("+\n");
 
-        // Première ligne de contenu
+        // Première ligne de contenu (affichage des mines ou "opt")
         for (int x = 0; x < MAX_X; ++x) {
             printf("|");
             int index = y * MAX_X + x;
             struct cell_t *cell = board->tab[index];
             if (cell->mine) {
-                format_cell_content(formatted_content, cell->mine->name, 8);
+                // Afficher les 2 premières lettres du nom de la mine
+                char mine_name[9]; // Assurer que le nom tient dans la case
+                if (strlen(cell->mine->name) > 8) {
+                    strncpy(mine_name, cell->mine->name, 5);
+                    mine_name[5] = '.';
+                    mine_name[6] = '.';
+                    mine_name[7] = '.';
+                    mine_name[8] = '\0';
+                } else {
+                    strcpy(mine_name, cell->mine->name);
+                }
+                print_cell_content(mine_name, 8);
             } else {
-                format_cell_content(formatted_content, "", 8);
+                print_cell_content("", 8); // Case vide
             }
-            printf("%s", formatted_content);
         }
         printf("|\n");
 
@@ -92,27 +112,27 @@ void print_board(struct board_t *board) {
             printf("|");
             struct cell_t *cell = board->tab[y * MAX_X + x];
             if (cell->worker) {
-                snprintf(formatted_content, 9, "   %sW%d%s   ",
-                         color_start(cell->worker->joueur),
-                         cell->worker->joueur,
-                         color_stop());
+                // Affichage du worker avec sa couleur
+                printf("   %sW%d%s   ",
+                       color_start(cell->worker->joueur),
+                       cell->worker->joueur,
+                       color_stop());
             } else if (cell->building) {
-                snprintf(formatted_content, 9, "   %sB%d%s   ",
-                         color_start(cell->building->joueur),
-                         cell->building->joueur,
-                         color_stop());
+                // Affichage du bâtiment avec sa couleur
+                printf("   %sB%d%s   ",
+                       color_start(cell->building->joueur),
+                       cell->building->joueur,
+                       color_stop());
             } else {
-                format_cell_content(formatted_content, "", 8);
+                print_cell_content("", 8); // Case vide
             }
-            printf("%s", formatted_content);
         }
         printf("|\n");
 
         // Troisième ligne de contenu (vide ou autre)
         for (int x = 0; x < MAX_X; ++x) {
             printf("|");
-            format_cell_content(formatted_content, "", 8);
-            printf("%s", formatted_content);
+            print_cell_content("", 8); // Ligne vide
         }
         printf("|\n");
     }
