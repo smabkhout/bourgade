@@ -27,7 +27,7 @@ struct board_t* init_board()
 { // pour initialiser le board, on place N/4 mines de ressources où N est le nombre
     // de positions valides (N>=16). Il faut aussi qu'il y au moins une mine de chaque type sur le board (Field, Forest, River, Rock
     // mine). De plus, le nombre d'emplacement valide parmi les voisins de chaque mine est >= 1.
-    struct board_t* board = NULL;
+    struct board_t* board;
     board = (struct board_t*)malloc(sizeof(struct board_t));
     board->tab = (struct cell_t**)malloc(sizeof(struct cell_t*)*MAX_POSITIONS);
     int nb_of_mines = 0;
