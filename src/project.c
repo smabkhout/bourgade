@@ -40,12 +40,13 @@ int exists_an_empty_cell(struct board_t *board) // return 1 if there is at least
 int exists_a_player(struct player_t **players, int num_players)
 {
   int a = 0;
+  int b = 0;
   for (int i = 0; i < num_players; ++i)
   {
     a += players[i]->eliminated;
   }
-  a = (a == num_players - 1) || (a == num_players); // si il ne reste qu'un seul joueur ou aucun joueur
-  return a;
+  b = (a == num_players - 1) || (a == num_players); // si il ne reste qu'un seul joueur ou aucun joueur
+  return !b;
 }
 
 // Fonction pour formater le contenu d'une cellule
