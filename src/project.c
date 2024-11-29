@@ -114,6 +114,68 @@ void print_board(struct board_t *board)
 
 void display_winner(int num_players, struct player_t **players)
 {
+  int remaining_players[num_players];
+  int count = 0;
+  for (int i =  0; i<num_players; ++i)
+  {
+    if (players[i]->eliminated == 0)
+    {
+      remaining_players[count] = i;
+      ++count;
+    }
+  }
+  if (count == 0)
+  {
+    printf("Personne n'a gagné (-_-)\n");
+  }
+  else
+  {
+    if (count == 1)
+    {
+      printf("Félicitations au joueur");
+      printf("%s %s %s\n",color_start(players[count]->color), color_to_string(players[count]->color), color_stop());
+    }
+    else
+    {
+      int gagnants[count];
+      for (int i = 0; i<count; ++i)
+      {
+        gagnants[i] = 0;
+      }
+      int gagnant = 0;
+      int nb_de_gagnants = 1;
+      for (int i = 1; i<count; ++i)
+      {
+        if (players[remaining_players[i]]->stockage[5] > players[remaining_players[gagnant]]->stockage[5]) //si il y a un seul gagnant
+        {
+          gagnant = i;
+          nb_de_gagnants = 1;
+          for (int i = 0; i<count; ++i)
+          {
+            gagnants[i] = i;
+          }
+        }
+        if (players[remaining_players[i]]->stockage[5] == players[remaining_players[gagnant]]->stockage[5]) // si on a plusieurs gagnants
+        {
+          gagnants[nb_de_gagnants] = i;
+          ++nb_de_gagnants;
+        }
+      }
+      if (nb_de_gagnants == 1)
+      {
+        printf("Félicitations au joueur");
+        printf("%s %s %s\n",color_start(players[count]->color), color_to_string(players[count]->color), color_stop());
+      }
+      else
+      {
+        printf("Félicitations au %d gagnants !!\n", nb_de_gagnants);
+        for (int i = 0; i<nb_de_gagnants; ++i)
+        {
+          printf("Joueur %s %s %s\n",color_start(players[count]->color), color_to_string(players[count]->color), color_stop());
+        }
+      }
+    }
+  }
 }
 
 void game(int num_players)
@@ -205,10 +267,10 @@ void game(int num_players)
     {
       players[i]->number_of_workers = NB_OF_WORKERS;
     }
-    // fin de la manche
-
-    // annoncer le/les gagnant(s) si existe
-    // fin du jeu, free la mémoire
+    //fin de la manche
+  display_winner(num_players, players);
+  //annoncer le/les gagnant(s) si existe
+  //fin du jeu, free la mémoire
   }
   for (int i = 0; i < num_players; ++i)
   {
