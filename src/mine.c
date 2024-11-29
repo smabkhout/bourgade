@@ -47,9 +47,7 @@ int max(int a, int b)
         return b;
 }
 
-struct mine_t* construct_mines(){ //modifie le tableau present_mines pour avoir MAX_POSITIONS/4 mines aléatoires
-    struct mine_t* present_mines = NULL;
-    present_mines = (struct mine_t*)malloc(sizeof(struct mine_t)*MAX_POSITIONS/4);
+void construct_mines(struct mine_t* present_mines){ //modifie le tableau present_mines pour avoir MAX_POSITIONS/4 mines aléatoires
     int j=4;
     for (int i =0; i< max(4, MAX_POSITIONS/4); i++)
     {
@@ -62,7 +60,6 @@ struct mine_t* construct_mines(){ //modifie le tableau present_mines pour avoir 
         present_mines[j]=list_mines[a];
         ++j;
     }
-    return present_mines;
 }
 
 void free_mine(struct mine_t* mine)

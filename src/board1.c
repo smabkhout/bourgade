@@ -30,6 +30,7 @@ struct board_t* init_board()
     struct board_t* board;
     board = (struct board_t*)malloc(sizeof(struct board_t));
     board->tab = (struct cell_t**)malloc(sizeof(struct cell_t*)*MAX_POSITIONS);
+    board->present_mines = (struct mine_t*)malloc(sizeof(struct mine_t)*MAX_POSITIONS/4);
     int nb_of_mines = 0;
     for (int i = 0; i < MAX_X * MAX_Y; i++)
     {
@@ -37,7 +38,7 @@ struct board_t* init_board()
     }
     do
     {
-        board->present_mines = construct_mines();
+        construct_mines(board->present_mines);
     } while (occurrences(board->present_mines) == 0); // première condition : compter le nombre d'occurences de chaque mine dans le tableau present_mines => si une mine
     // a une occurence à 0 => on refait une génération
 

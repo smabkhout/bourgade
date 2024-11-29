@@ -19,7 +19,8 @@ void test_place_mine() {
 
 void test_construct_mines() {
     struct mine_t* present_mines = NULL;
-    present_mines = construct_mines();
+    present_mines=(struct mine_t*)malloc(sizeof(struct mine_t)*MAX_POSITIONS/4);
+    construct_mines(present_mines);
     for (int i = 0; i < MAX_POSITIONS / 4; ++i) {
         printf("Mine %d: %s\n", i, present_mines[i].name);
     }

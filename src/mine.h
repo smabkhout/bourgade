@@ -19,7 +19,7 @@ void place_mine(struct cell_t* cell, struct mine_t m);
 
 int max(int a, int b);
 
-struct mine_t* construct_mines();
+void construct_mines(struct mine_t* present_mines);
 
 void free_mine(struct mine_t* mine);
 
