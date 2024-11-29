@@ -42,7 +42,7 @@ struct board_t* init_board()
     } while (occurrences(board->present_mines) == 0); // première condition : compter le nombre d'occurences de chaque mine dans le tableau present_mines => si une mine
     // a une occurence à 0 => on refait une génération
 
-    int temp_invalid_pos[MAX_POSITIONS / 2]; // à chaque fois qu'on place une mine, on résérve une position voisine à ne pas
+    int temp_invalid_pos[MAX_POSITIONS / 2] = {0}; // à chaque fois qu'on place une mine, on résérve une position voisine à ne pas
                                              // utiliser lors du placement des autres mines afin de garantir qu'on toujours au moins
                                              // une position voisine valide.
     do
