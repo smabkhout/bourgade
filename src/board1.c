@@ -54,6 +54,10 @@ struct board_t* init_board()
         unsigned int y = (i - x) / MAX_X;
         struct position_t **neighbors = NULL;
         neighbors = (struct position_t **)malloc(sizeof(struct position_t *)*8);
+        for (int i = 0; i<8;i++)
+        {
+            neighbors[i] = make_invalid_position();
+        }
         list_neighbors(POS(x,y), neighbors);
         for (int i = 0; i<8;++i){
             if (is_valid_position(neighbors[i]))
