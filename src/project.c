@@ -342,6 +342,7 @@ int main(int argc, char *argv[])
       break;
     }
   }
+  (void) init_param;
   game(num_players,seed);
   return 0;
 }

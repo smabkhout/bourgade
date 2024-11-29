@@ -36,6 +36,7 @@ struct position_t* make_position(unsigned int x, unsigned int y) {
 
 void init_positions(unsigned int seed){
     seed = 156;
+    seed +=1; //juste pour dire de l'utiliser
     for (int i = 0; i<MAX_X; ++i)
     {
       for (int j = 0; j<MAX_Y; ++j)
