@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
+#include <string.h>
+
 
 #include "position.h"
 #include "board.h"
@@ -11,6 +13,8 @@
 #include "building.h"
 
 #define NUM_ROUNDS 4
+#define CELL_WIDTH 8
+
 
 int exists_a_player_with_free_workers(struct player_t **players, int taille)
 { // return 1 if there is a player with at least one worker available, and else 0
@@ -44,73 +48,53 @@ int exists_a_player(struct player_t **players, int num_players)
   return a;
 }
 
-void print_board(struct board_t *board)
-{
-  if (!board)
-    puts("board null print");
-  for (int y = 0; y < MAX_Y; ++y)
-  {
-    for (int x = 0; x < MAX_X; ++x)
-    {
-      printf("+--------");
+void format_name(const char* name, char* buffer, int width) {
+    int name_len = strlen(name);
+    if (name_len > width) {
+        strncpy(buffer, name, width - 1);
+        buffer[width - 1] = '\0';
+    } else {
+        int padding = (width - name_len) / 2;
+        int extra = (width - name_len) % 2;
+        snprintf(buffer, width + 1, "%*s%s%*s", padding, "", name, padding + extra, "");
+    }
+}
+
+
+void print_board(struct board_t* board) {
+    if (!board || !board->tab) {
+        fprintf(stderr, "Error: board is NULL or uninitialized in print_board\n");
+        return;
+    }
+
+    char formatted_name[CELL_WIDTH + 1]; // Buffer pour contenir le texte formaté
+
+    for (int y = 0; y < MAX_Y; ++y) {
+        // Ligne supérieure
+        for (int x = 0; x < MAX_X; ++x) {
+            printf("+%.*s", CELL_WIDTH, "--------");
+        }
+        printf("+\n");
+        for (int x = 0; x < MAX_X; ++x) {
+            printf("|");
+            struct cell_t* cell = board->tab[y*MAX_X+x];
+            if (cell->mine) {
+                format_name(cell->mine->name, formatted_name, CELL_WIDTH);
+                printf("%s", formatted_name);
+            } else {
+                printf("%*s", CELL_WIDTH, ""); // Case vide
+            }
+        }
+        printf("|\n");
+    }
+
+    // Ligne inférieure
+    for (int x = 0; x < MAX_X; ++x) {
+        printf("+%.*s", CELL_WIDTH, "--------");
     }
     printf("+\n");
-    for (int x = 0; x < MAX_X; ++x)
-    {
-      printf("|");
-      if (board->tab[y * MAX_X + x]->mine != NULL)
-      {
-        printf("%c%c      ",board->tab[y * MAX_X + x]->mine->name[0],board->tab[y * MAX_X + x]->mine->name[1]);
-      }
-      else
-      {
-        printf("        ");
-      }
-    }
-    printf("|\n");
-
-    // Contenu de la cellule (2ème ligne)
-    for (int x = 0; x < MAX_X; ++x)
-    {
-      struct cell_t *cell = board->tab[y * MAX_X + x];
-      printf("|");
-
-      if (cell->worker)
-      {
-        printf("   %sW%d%s   ",
-               color_start(cell->worker->joueur),
-               cell->worker->joueur,
-               color_stop());
-      }
-      else if (cell->building)
-      {
-        printf("   %sB%d%s   ",
-               color_start(cell->building->joueur),
-               cell->building->joueur,
-               color_stop());
-      }
-      else
-      {
-        printf("        "); // Vide
-      }
-    }
-    printf("|\n");
-
-    // Contenu de la cellule (3ème ligne, facultatif)
-    for (int x = 0; x < MAX_X; ++x)
-    {
-      printf("|        "); // Ligne vide
-    }
-    printf("|\n");
-  }
-
-  // Ligne inférieure des cellules
-  for (int x = 0; x < MAX_X; ++x)
-  {
-    printf("+--------");
-  }
-  printf("+\n");
 }
+
 
 void display_winner(int num_players, struct player_t **players)
 {
