@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <getopt.h>
 
 #include "position.h"
 #include "board.h"
@@ -42,50 +44,67 @@ int exists_a_player(struct player_t** players, int num_players)
 }
 
 
-
-void print_board(struct board_t *board) {
+void print_board(struct board_t* board) {
     for (int y = 0; y < MAX_Y; ++y) {
-        // Ligne horizontale supérieure avec bordure gauche et droite
-        printf("|"); // Bordure gauche
+        // Ligne supérieure des cellules
         for (int x = 0; x < MAX_X; ++x) {
-            printf("--------");
-            if (x < MAX_X - 1) {
-                printf("|"); // Ajouter les séparateurs verticaux sauf après le dernier
-            }
+            printf("+--------");
         }
-        printf("|"); // Bordure droite
-        printf("\n");
+        printf("+\n");
 
-        // Deux lignes vides avec bordures gauche et droite
-        for (int line = 0; line < 2; ++line) {
-            printf("|"); // Bordure gauche
-            for (int x = 0; x < MAX_X; ++x) {
+        // Contenu de la cellule (1ère ligne)
+        for (int x = 0; x < MAX_X; ++x) {
+            struct cell_t* cell = &board->tab[y][x];
+            printf("|");
+
+            if (cell->mine) {
+                printf("%s        %s", color_start(cell->mine->r), color_stop());
+            } else {
                 printf("        ");
-                if (x < MAX_X - 1) {
-                    printf("|"); // Ajouter les séparateurs verticaux sauf après le dernier
-                }
             }
-            printf("|"); // Bordure droite
-            printf("\n");
         }
+        printf("|\n");
+
+        // Contenu de la cellule (2ème ligne)
+        for (int x = 0; x < MAX_X; ++x) {
+            struct cell_t* cell = &board->tab[y][x];
+            printf("|");
+
+            if (cell->worker) {
+                printf("   %sW%d%s   ", 
+                       color_start(cell->worker->joueur), 
+                       cell->worker->joueur, 
+                       color_stop());
+            } else if (cell->building) {
+                printf("   %sB%d%s   ", 
+                       color_start(cell->building->joueur), 
+                       cell->building->joueur, 
+                       color_stop());
+            } else {
+                printf("        "); // Vide
+            }
+        }
+        printf("|\n");
+
+        // Contenu de la cellule (3ème ligne, facultatif)
+        for (int x = 0; x < MAX_X; ++x) {
+            printf("|        "); // Ligne vide
+        }
+        printf("|\n");
     }
 
-    // Dernière ligne horizontale avec bordures gauche et droite
-    printf("|"); // Bordure gauche
+    // Ligne inférieure des cellules
     for (int x = 0; x < MAX_X; ++x) {
-        printf("--------");
-        if (x < MAX_X - 1) {
-            printf("|"); // Ajouter les séparateurs verticaux sauf après le dernier
-        }
+        printf("+--------");
     }
-    printf("|"); // Bordure droite
-    printf("\n");
+    printf("+\n");
 }
 
 void display_winner(int num_players, struct player_t** players)
 {
 
 }
+
 
 
 void game(int num_players)
@@ -143,8 +162,8 @@ void game(int num_players)
             //else if is_building => if wishes to activate => activate building
             unsigned int neighbor_x = PX(neighbors[e]);
             unsigned int neighbor_y = PY(neighbors[e]);
-            int neighbor=neighbor_y*MAX_X + neighbor_x;
-            if (board->tab[neighbor]->mine != NULL)
+            int neighbor=neighbor_y*MAX_X + neighbor_x; 
+            if (board->tab[neighbor]->mine != NULL) //le joueur récupère les resources sur les cases voisines
             {
               int resource = board->tab[neighbor]->mine->r;
               ++players[current_player]->stockage[resource];
@@ -187,8 +206,31 @@ void game(int num_players)
   free_board(board);
 }
 
-int main(void)
+int main(int argc, char* argv[])
 {
+  int seed = 0;
+  int num_players = 0;
+  int init_param = 0;
+  int opt; 
+  while((opt = getopt(argc, argv, "s:p:c")) != -1)
+  {
+    switch (opt){
+      case 's':
+        seed=atoi(optarg);
+        break;
+      case 'c': 
+        init_param=atoi(optarg);
+        break;
+      case 'p':
+        num_players =atoi(optarg);
+        break;
+      default:
+        num_players = 4;
+        seed = 156;
+        init_param = 2;
+        break;
+    }
+  }
   //game(4);
   print_board(NULL);
   return 0;
