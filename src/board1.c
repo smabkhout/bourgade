@@ -22,7 +22,6 @@ int occurrences(struct mine_t* tab)
     return (occ1 * occ2 * occ3 * occ4); // retourne 0 si une occurrence est nulle et un entier non nul sinon
 }
 
-
 struct board_t* init_board()
 { // pour initialiser le board, on place N/4 mines de ressources où N est le nombre
     // de positions valides (N>=16). Il faut aussi qu'il y au moins une mine de chaque type sur le board (Field, Forest, River, Rock
@@ -36,12 +35,7 @@ struct board_t* init_board()
     {
         board->tab[i] = init_cell();
     }
-    do
-    {
-        construct_mines(board->present_mines);
-    } while (occurrences(board->present_mines) == 0); // première condition : compter le nombre d'occurences de chaque mine dans le tableau present_mines => si une mine
-    // a une occurence à 0 => on refait une génération
-
+    construct_mines(board->present_mines); //construct mines s'occupe d'avoir au moins une mine de chaque type
     int temp_invalid_pos[MAX_POSITIONS / 2] = {0}; // à chaque fois qu'on place une mine, on résérve une position voisine à ne pas
                                              // utiliser lors du placement des autres mines afin de garantir qu'on toujours au moins
                                              // une position voisine valide.
