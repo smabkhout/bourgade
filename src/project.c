@@ -5,7 +5,6 @@
 #include <getopt.h>
 #include <string.h>
 
-
 #include "position.h"
 #include "board.h"
 #include "player.h"
@@ -14,7 +13,6 @@
 
 #define NUM_ROUNDS 4
 #define CELL_WIDTH 8
-
 
 int exists_a_player_with_free_workers(struct player_t **players, int taille)
 { // return 1 if there is a player with at least one worker available, and else 0
@@ -50,107 +48,128 @@ int exists_a_player(struct player_t **players, int num_players)
 }
 
 // Fonction pour formater le contenu d'une cellule
-void print_cell_content(const char *content, int width) {
-    int len = strlen(content);
-    int spaces_to_pad = width - len;
-    
-    // Si le contenu est trop long, tronquer et ajouter "..."
-    if (len > width) {
-        content = "....";
-        printf("%s", content);
-        return;
-    }
-    int left_padding = spaces_to_pad / 2;
-    int right_padding = spaces_to_pad - left_padding;
-    for (int i = 0; i < left_padding; ++i) {
-        printf(" ");
-    }
+void print_cell_content(const char *content, int width)
+{
+  int len = strlen(content);
+  int spaces_to_pad = width - len;
+
+  // Si le contenu est trop long, tronquer et ajouter "..."
+  if (len > width)
+  {
+    content = "....";
     printf("%s", content);
-    for (int i = 0; i < right_padding; ++i) {
-        printf(" ");
-    }
+    return;
+  }
+  int left_padding = spaces_to_pad / 2;
+  int right_padding = spaces_to_pad - left_padding;
+  for (int i = 0; i < left_padding; ++i)
+  {
+    printf(" ");
+  }
+  printf("%s", content);
+  for (int i = 0; i < right_padding; ++i)
+  {
+    printf(" ");
+  }
 }
 
-void print_board(struct board_t *board) {
-    if (!board) {
-        puts("board null print");
-        return;
-    }
+void print_board(struct board_t *board)
+{
+  if (!board)
+  {
+    puts("board null print");
+    return;
+  }
 
-    for (int y = 0; y < MAX_Y; ++y) {
-        // Ligne supérieure
-        for (int x = 0; x < MAX_X; ++x) {
-            printf("+--------");
-        }
-        printf("+\n");
-
-        // Première ligne de contenu (affichage des mines)
-        for (int x = 0; x < MAX_X; ++x) {
-            printf("|");
-            int index = y * MAX_X + x;
-            struct cell_t *cell = board->tab[index];
-            if (cell->mine) {
-                // Afficher les 2 premières lettres du nom de la mine
-                char mine_name[9]; // Assurer que le nom tient dans la case
-                if (strlen(cell->mine->name) > 8) {
-                    strncpy(mine_name, cell->mine->name, 5);
-                    mine_name[5] = '.';
-                    mine_name[6] = '.';
-                    mine_name[7] = '.';
-                    mine_name[8] = '\0';
-                } else {
-                    strcpy(mine_name, cell->mine->name);
-                }
-                print_cell_content(mine_name, 8);
-            } else {
-                print_cell_content("", 8); // Case vide
-            }
-        }
-        printf("|\n");
-
-        // Deuxième ligne de contenu (worker ou bâtiment)
-        for (int x = 0; x < MAX_X; ++x) {
-            printf("|");
-            struct cell_t *cell = board->tab[y * MAX_X + x];
-            if (cell->worker) {
-                // Affichage du worker avec sa couleur
-                printf("   %sW%s    ",
-                       color_start(cell->worker->joueur),
-                       color_stop());
-            } else if (cell->building) {
-                // Affichage du bâtiment avec sa couleur
-                printf("   %sB%s    ",
-                       color_start(cell->building->joueur),
-                       color_stop());
-            } else {
-                print_cell_content("", 8); // Case vide
-            }
-        }
-        printf("|\n");
-
-        // Troisième ligne de contenu (vide ou autre)
-        for (int x = 0; x < MAX_X; ++x) {
-            printf("|");
-            print_cell_content("", 8); // Ligne vide
-        }
-        printf("|\n");
-    }
-
-    // Ligne inférieure
-    for (int x = 0; x < MAX_X; ++x) {
-        printf("+--------");
+  for (int y = 0; y < MAX_Y; ++y)
+  {
+    // Ligne supérieure
+    for (int x = 0; x < MAX_X; ++x)
+    {
+      printf("+--------");
     }
     printf("+\n");
+
+    // Première ligne de contenu (affichage des mines)
+    for (int x = 0; x < MAX_X; ++x)
+    {
+      printf("|");
+      int index = y * MAX_X + x;
+      struct cell_t *cell = board->tab[index];
+      if (cell->mine)
+      {
+        // Afficher les 2 premières lettres du nom de la mine
+        char mine_name[9]; // Assurer que le nom tient dans la case
+        if (strlen(cell->mine->name) > 8)
+        {
+          strncpy(mine_name, cell->mine->name, 5);
+          mine_name[5] = '.';
+          mine_name[6] = '.';
+          mine_name[7] = '.';
+          mine_name[8] = '\0';
+        }
+        else
+        {
+          strcpy(mine_name, cell->mine->name);
+        }
+        print_cell_content(mine_name, 8);
+      }
+      else
+      {
+        print_cell_content("", 8); // Case vide
+      }
+    }
+    printf("|\n");
+
+    // Deuxième ligne de contenu (worker ou bâtiment)
+    for (int x = 0; x < MAX_X; ++x)
+    {
+      printf("|");
+      struct cell_t *cell = board->tab[y * MAX_X + x];
+      if (cell->worker)
+      {
+        // Affichage du worker avec sa couleur
+        printf("   %sW%s    ",
+               color_start(cell->worker->joueur),
+               color_stop());
+      }
+      else if (cell->building)
+      {
+        // Affichage du bâtiment avec sa couleur
+        printf("   %sB%s    ",
+               color_start(cell->building->joueur),
+               color_stop());
+      }
+      else
+      {
+        print_cell_content("", 8); // Case vide
+      }
+    }
+    printf("|\n");
+
+    // Troisième ligne de contenu (vide ou autre)
+    for (int x = 0; x < MAX_X; ++x)
+    {
+      printf("|");
+      print_cell_content("", 8); // Ligne vide
+    }
+    printf("|\n");
+  }
+
+  // Ligne inférieure
+  for (int x = 0; x < MAX_X; ++x)
+  {
+    printf("+--------");
+  }
+  printf("+\n");
+  printf("\n");
 }
-
-
-
 
 void display_winner(int num_players, struct player_t **players)
 {
   int remaining_players[num_players];
   int count = 0;
-  for (int i =  0; i<num_players; ++i)
+  for (int i = 0; i < num_players; ++i)
   {
     if (players[i]->eliminated == 0)
     {
@@ -167,24 +186,24 @@ void display_winner(int num_players, struct player_t **players)
     if (count == 1)
     {
       printf("Félicitations au joueur");
-      printf("%s %s %s\n",color_start(players[count]->color), color_to_string(players[count]->color), color_stop());
+      printf("%s %s %s\n", color_start(players[count]->color), color_to_string(players[count]->color), color_stop());
     }
     else
     {
       int gagnants[count];
-      for (int i = 0; i<count; ++i)
+      for (int i = 0; i < count; ++i)
       {
         gagnants[i] = 0;
       }
       int gagnant = 0;
       int nb_de_gagnants = 1;
-      for (int i = 1; i<count; ++i)
+      for (int i = 1; i < count; ++i)
       {
-        if (players[remaining_players[i]]->stockage[5] > players[remaining_players[gagnant]]->stockage[5]) //si il y a un seul gagnant
+        if (players[remaining_players[i]]->stockage[5] > players[remaining_players[gagnant]]->stockage[5]) // si il y a un seul gagnant
         {
           gagnant = i;
           nb_de_gagnants = 1;
-          for (int i = 0; i<count; ++i)
+          for (int i = 0; i < count; ++i)
           {
             gagnants[i] = i;
           }
@@ -198,21 +217,21 @@ void display_winner(int num_players, struct player_t **players)
       if (nb_de_gagnants == 1)
       {
         printf("Félicitations au joueur");
-        printf("%s %s %s\n",color_start(players[gagnant]->color), color_to_string(players[gagnant]->color), color_stop());
+        printf("%s %s %s\n", color_start(players[gagnant]->color), color_to_string(players[gagnant]->color), color_stop());
       }
       else
       {
         printf("Félicitations au %d gagnants !!\n", nb_de_gagnants);
-        for (int i = 0; i<nb_de_gagnants; ++i)
+        for (int i = 0; i < nb_de_gagnants; ++i)
         {
-          printf("Joueur %s %s %s\n",color_start(players[gagnants[i]]->color), color_to_string(players[gagnants[i]]->color), color_stop());
+          printf("Joueur %s %s %s\n", color_start(players[gagnants[i]]->color), color_to_string(players[gagnants[i]]->color), color_stop());
         }
       }
     }
   }
 }
 
-void game(int num_players,int seed)
+void game(int num_players, int seed)
 {
   struct building_t *present_buildings = NULL;
   present_buildings = (struct building_t *)malloc(sizeof(struct building_t) * MAX_POSITIONS / 3);
@@ -234,7 +253,6 @@ void game(int num_players,int seed)
     players[i]->number_of_workers = NB_OF_WORKERS;
     ++random_color;
   } // fin de l'initialisation des joueurs
-
   int nb_batiments_construits = 0;
   for (int j = 0; j < NUM_ROUNDS; ++j)
   {
@@ -248,7 +266,7 @@ void game(int num_players,int seed)
         int a_pos_index = PY(a_pos) * MAX_X + PX(a_pos);
         current_cell = board->tab[a_pos_index]; // on a besoin de son indice/position sur le board
         place_worker(players[current_player], current_cell, make_worker(workers_names[rand() % 6], workers_costs, players[current_player]->color));
-        printf("Le joueur %s place un worker à la position (%d,%d)\n",color_to_string(players[current_player]->color),PY(a_pos)+1,PX(a_pos)+1); //on inverse l'affichage par rapport à ce qu'on a fait pour faire comme une matrice
+        printf("Le joueur %s place un worker à la position (%d,%d)\n", color_to_string(players[current_player]->color), PY(a_pos) + 1, PX(a_pos) + 1); // on inverse l'affichage par rapport à ce qu'on a fait pour faire comme une matrice
         print_board(board);
         struct building_t **affordable_buildings = NULL;
         affordable_buildings = list_buildings_costing_less_than(players[current_player]);
@@ -260,7 +278,7 @@ void game(int num_players,int seed)
           present_buildings[nb_batiments_construits] = *a_building;
           ++nb_batiments_construits;
           place_building(players[current_player], a_pos, a_building); // stocker les buildings dans un tableau present buildings
-          printf("Le joueur %s place un batiment %s à la position (%d,%d)\n",color_to_string(players[current_player]->color),a_building->nom,PY(a_pos)+1,PX(a_pos)+1);
+          printf("Le joueur %s place un batiment %s à la position (%d,%d)\n", color_to_string(players[current_player]->color), a_building->nom, PY(a_pos) + 1, PX(a_pos) + 1);
           print_board(board);
         }
         else
@@ -307,10 +325,10 @@ void game(int num_players,int seed)
     {
       players[i]->number_of_workers = NB_OF_WORKERS;
     }
-    
-    //fin de la manche
-  //annoncer le/les gagnant(s) si existe
-  //fin du jeu, free la mémoire
+
+    // fin de la manche
+    // annoncer le/les gagnant(s) si existe
+    // fin du jeu, free la mémoire
   }
   display_winner(num_players, players);
   for (int i = 0; i < num_players; ++i)
@@ -348,7 +366,7 @@ int main(int argc, char *argv[])
       break;
     }
   }
-  (void) init_param;
-  game(num_players,seed);
+  (void)init_param;
+  game(num_players, seed);
   return 0;
 }
