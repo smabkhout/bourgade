@@ -35,16 +35,15 @@ int exists_an_empty_cell(struct board_t *board) // return 1 if there is at least
   return 0;
 }
 
-int exists_a_player(struct player_t **players, int num_players)
+int exists_a_player(struct player_t **players, int num_players) // return 1 if there is still a player who is not eliminated
 {
   int a = 0;
-  int b = 0;
   for (int i = 0; i < num_players; ++i)
   {
-    a += players[i]->eliminated;
+    if (players[i]->eliminated)
+      ++a;
   }
-  b = (a == num_players - 1) || (a == num_players); // si il ne reste qu'un seul joueur ou aucun joueur
-  return !b;
+  return !(a == num_players);
 }
 
 // Fonction pour formater le contenu d'une cellule
@@ -126,7 +125,7 @@ void print_board(struct board_t *board)
     {
       printf("|");
       struct cell_t *cell = board->tab[y * MAX_X + x];
-      if (cell->worker)
+      if (cell->worker && !cell->building)
       {
         // Affichage du worker avec sa couleur
         printf("   %sW%s    ",
@@ -250,7 +249,6 @@ void game(int num_players, int seed)
   for (int i = 0; i < num_players; ++i)
   {
     players[i] = initialize_player(random_color % MAX_COLORS);
-    players[i]->number_of_workers = NB_OF_WORKERS;
     ++random_color;
   } // fin de l'initialisation des joueurs
   int nb_batiments_construits = 0;
@@ -259,63 +257,66 @@ void game(int num_players, int seed)
     int current_player = 0; // indice pour repérer le joueur actuel dans players
     while (exists_a_player_with_free_workers(players, num_players) && exists_an_empty_cell(board) && exists_a_player(players, num_players))
     {
-      if (players[current_player]->number_of_workers > 0 && players[current_player]->eliminated == 0)
+      if (players[current_player] != NULL)
       {
-        struct cell_t *current_cell;
-        struct position_t *a_pos = choose_optimal_pos(board);
-        int a_pos_index = PY(a_pos) * MAX_X + PX(a_pos);
-        current_cell = board->tab[a_pos_index]; // on a besoin de son indice/position sur le board
-        place_worker(players[current_player], current_cell, make_worker(workers_names[rand() % 6], workers_costs, players[current_player]->color));
-        printf("Le joueur %s place un worker à la position (%d,%d)\n", color_to_string(players[current_player]->color), PY(a_pos) + 1, PX(a_pos) + 1); // on inverse l'affichage par rapport à ce qu'on a fait pour faire comme une matrice
-        print_board(board);
-        struct building_t **affordable_buildings = NULL;
-        affordable_buildings = list_buildings_costing_less_than(players[current_player]);
-        int build_choice = rand() % 2;
-        if (length_of_affordable_buildings(affordable_buildings) > 0 && build_choice)
+        if (players[current_player]->number_of_workers > 0 && players[current_player]->eliminated == 0)
         {
-          int building_choice = rand() % length_of_affordable_buildings(affordable_buildings); // le batiment à construire est choisi aleatoirement pour l'instant
-          struct building_t *a_building = affordable_buildings[building_choice];               // on séléctionne ce batiment à construire
-          present_buildings[nb_batiments_construits] = *a_building;
-          ++nb_batiments_construits;
-          place_building(players[current_player], a_pos, a_building); // stocker les buildings dans un tableau present buildings
-          printf("Le joueur %s place un batiment %s à la position (%d,%d)\n", color_to_string(players[current_player]->color), a_building->nom, PY(a_pos) + 1, PX(a_pos) + 1);
+          struct cell_t *current_cell;
+          struct position_t *a_pos = choose_optimal_pos(board);
+          int a_pos_index = PY(a_pos) * MAX_X + PX(a_pos);
+          current_cell = board->tab[a_pos_index]; // on a besoin de son indice/position sur le board
+          place_worker(players[current_player], current_cell, make_worker(workers_names[rand() % 6], workers_costs, players[current_player]->color));
+          printf("Le joueur %s place un worker à la position (%d,%d)\n", color_to_string(players[current_player]->color), PY(a_pos) + 1, PX(a_pos) + 1); // on inverse l'affichage par rapport à ce qu'on a fait pour faire comme une matrice
           print_board(board);
-        }
-        else
-        {
-          struct position_t **neighbors = NULL;
-          neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
-          list_neighbors(a_pos, neighbors);
-          int e = 0;
-          while (e < 8 && is_valid_position(neighbors[e]))
+          struct building_t **affordable_buildings = NULL;
+          affordable_buildings = list_buildings_costing_less_than(players[current_player]);
+          int build_choice = rand() % 2;
+          if (length_of_affordable_buildings(affordable_buildings) > 0 && build_choice)
           {
-            // if is_mine => resource add
-            // else if is_building => if wishes to activate => activate building
-            unsigned int neighbor_x = PX(neighbors[e]);
-            unsigned int neighbor_y = PY(neighbors[e]);
-            int neighbor = neighbor_y * MAX_X + neighbor_x;
-            if (board->tab[neighbor]->mine != NULL) // le joueur récupère les resources sur les cases voisines
-            {
-              int resource = board->tab[neighbor]->mine->r;
-              ++players[current_player]->stockage[resource];
-            }
-            else if (board->tab[neighbor]->building != NULL)
-            {
-              int activation_choice = rand() % 2; // choice of the player whether to activate or not (random for now)
-              if (activation_choice)              // player wishes to activate     //if he wishes so and can't afford => eliminate player
-              {
-                int owner = board->tab[neighbor]->building->joueur;
-                activate_building(players[owner], players[current_player], board->tab[neighbor]->building);
-              }
-            }
-            ++e;
+            int building_choice = rand() % length_of_affordable_buildings(affordable_buildings); // le batiment à construire est choisi aleatoirement pour l'instant
+            struct building_t *a_building = affordable_buildings[building_choice];               // on séléctionne ce batiment à construire
+            present_buildings[nb_batiments_construits] = *a_building;
+            ++nb_batiments_construits;
+            place_building(players[current_player], current_cell, a_building); // stocker les buildings dans un tableau present buildings
+            printf("Le joueur %s construit un batiment %s à la position (%d,%d)\n", color_to_string(players[current_player]->color), a_building->nom, PY(a_pos) + 1, PX(a_pos) + 1);
+            print_board(board);
           }
-          free(neighbors);
+          else
+          {
+            struct position_t **neighbors = NULL;
+            neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
+            list_neighbors(a_pos, neighbors);
+            int e = 0;
+            while (e < 8 && is_valid_position(neighbors[e]))
+            {
+              // if is_mine => resource add
+              // else if is_building => if wishes to activate => activate building
+              unsigned int neighbor_x = PX(neighbors[e]);
+              unsigned int neighbor_y = PY(neighbors[e]);
+              int neighbor = neighbor_y * MAX_X + neighbor_x;
+              if (board->tab[neighbor]->mine != NULL) // le joueur récupère les resources sur les cases voisines
+              {
+                int resource = board->tab[neighbor]->mine->r;
+                ++players[current_player]->stockage[resource];
+              }
+              else if (board->tab[neighbor]->building != NULL)
+              {
+                int activation_choice = rand() % 2; // choice of the player whether to activate or not (random for now)
+                if (activation_choice)              // player wishes to activate     //if he wishes so and can't afford => eliminate player
+                {
+                  int owner = (board->tab[neighbor]->building->joueur)%num_players;
+                  activate_building(players[owner], players[current_player], board->tab[neighbor]->building);
+                  printf("Le joueur %s active le batiment %s qui appartient à %s sur la case (%d,%d).\n", color_to_string(players[current_player]->color), board->tab[neighbor]->building->nom, color_to_string(players[owner]->color), PY(a_pos) + 1, PX(a_pos) + 1);
+                }
+              }
+              ++e;
+            }
+            free(neighbors);
+          }
+          free_affordable_buildings(affordable_buildings);
+          current_player = (current_player + 1) % num_players;
         }
-        free_affordable_buildings(affordable_buildings);
-        ++current_player;
       }
-      
     }
     print_board(board);
     // payer les couts d'entretien et eliminer les joueurs qui ne peuvent pas le faire

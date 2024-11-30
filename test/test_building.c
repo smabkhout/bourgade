@@ -19,7 +19,7 @@ void test_place_building() {
     {
         player->stockage[i] = tab_init[i];
     }
-    struct position_t* position = make_position(1, 1);
+    struct cell_t* cell = (struct cell_t*)malloc(sizeof(struct cell_t));
     unsigned int value[NUM_RESOURCES] = {0, 0, 0, 1, 0, 0};
     unsigned int earns[NUM_RESOURCES] = {0, 0, 0, 0, 0, 3};
     unsigned int costs[NUM_RESOURCES] = {0, 0, 0, 0, 0, 1};
@@ -33,8 +33,7 @@ void test_place_building() {
         building->earns[i] = earns[i];
         building->supplies[i] = supplies[i];
     }
-    place_building(player, position, building);
-    assert(building->position == position);
+    place_building(player, cell, building);
     assert(building->joueur == BLUE);
     for (int i = 0; i < NUM_RESOURCES; i++) {
         assert(player->stockage[i] == tab_final[i]);
@@ -71,7 +70,6 @@ void test_activate_building() {
         building->earns[i]= earns[i];
         building->supplies[i]=supplies[i];
     }
-    building->position = make_invalid_position();
     activate_building(owner, user, building);
     for (int i = 0; i < NUM_RESOURCES; i++) {
         assert(user->stockage[i] == 5 - costs[i] + supplies[i]);

@@ -4,6 +4,7 @@
 
 #include "position.h"
 #include "player.h"
+#include "cell.h"
 
 #ifndef MAX_BUILDINGS_PER_PLAYER
  #define MAX_BUILDINGS_PER_PLAYER 7
@@ -16,12 +17,13 @@ struct building_t{
   unsigned int costs[NUM_RESOURCES];
   unsigned int supplies[NUM_RESOURCES];
   enum color_t joueur; //propriétaire du building
-  struct position_t *position;
 };
+
+struct cell_t;
 
 void free_building(struct building_t* batiment);
 
-void place_building(struct player_t *player, struct position_t* position, struct building_t *building);
+void place_building(struct player_t *player, struct cell_t* cell, struct building_t *building);
 
 void activate_building(struct player_t *owner, struct player_t *user, struct building_t* building);
 

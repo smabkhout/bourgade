@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "building.h"
-#include "position.h"
+
 
 
 void free_building(struct building_t* batiment){
@@ -11,20 +11,20 @@ void free_building(struct building_t* batiment){
 
 //définir un tableau global avec tous les buildings
 struct building_t list_buildings[MAX_BUILDINGS_PER_PLAYER] = {
- {.nom = "Farm", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,3}, .supplies={0,1,0,0,0,0}, .value={0,0,0,1,0,0}, .joueur=0, .position = NULL},
- {.nom = "Samwill", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,4}, .supplies={0,0,0,3,0,0}, .value={0,0,0,2,0,0}, .joueur=0, .position = NULL},
- {.nom = "Pontoon", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,5}, .supplies={0,0,2,0,0,0}, .value={0,0,0,3,0,0}, .joueur=0, .position = NULL},
- {.nom = "Quarry", .costs = {0,0,0,0,0,2}, .earns={0,0,0,0,0,5}, .supplies={0,0,0,2,0,0}, .value={0,0,0,3,0,0}, .joueur=0, .position = NULL},
- {.nom = "Market", .costs = {0,0,0,0,0,3}, .earns={0,0,0,0,0,3}, .supplies={1,1,1,0,1,0}, .value={0,0,0,0,0,6}, .joueur=0, .position = NULL},
- {.nom = "Bakery", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,2}, .supplies={0,3,0,0,0,0}, .value={0,0,0,1,1,0}, .joueur=0, .position = NULL},
- {.nom = "Factory", .costs = {0,0,0,1,1,1}, .earns={0,1,0,0,0,2}, .supplies={0,3,0,1,1,0}, .value={0,1,1,1,1,0}, .joueur=0, .position = NULL}
+ {.nom = "Farm", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,3}, .supplies={0,1,0,0,0,0}, .value={0,0,0,1,0,0}, .joueur=0},
+ {.nom = "Samwill", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,4}, .supplies={0,0,0,3,0,0}, .value={0,0,0,2,0,0}, .joueur=0},
+ {.nom = "Pontoon", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,5}, .supplies={0,0,2,0,0,0}, .value={0,0,0,3,0,0}, .joueur=0},
+ {.nom = "Quarry", .costs = {0,0,0,0,0,2}, .earns={0,0,0,0,0,5}, .supplies={0,0,0,2,0,0}, .value={0,0,0,3,0,0}, .joueur=0},
+ {.nom = "Market", .costs = {0,0,0,0,0,3}, .earns={0,0,0,0,0,3}, .supplies={1,1,1,0,1,0}, .value={0,0,0,0,0,6}, .joueur=0},
+ {.nom = "Bakery", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,2}, .supplies={0,3,0,0,0,0}, .value={0,0,0,1,1,0}, .joueur=0},
+ {.nom = "Factory", .costs = {0,0,0,1,1,1}, .earns={0,1,0,0,0,2}, .supplies={0,3,0,1,1,0}, .value={0,1,1,1,1,0}, .joueur=0}
 };
 
 
-void place_building(struct player_t *player, struct position_t* position, struct building_t *building){ //acheter un batiment
+void place_building(struct player_t *player, struct cell_t* cell, struct building_t *building){ //acheter un batiment
   resource_sub(player->stockage, building->value, player->stockage); //achat du batiment
   resource_add(player->stockage, building->earns, player->stockage); //recompense immédiate à l'achat
-  building->position = position; //on place le batiment au bon endroit
+  cell->building = building; //on place le batiment au bon endroit
   building->joueur=player->color; //on colore le batiment de la couleur de son propriétaire
 }
 

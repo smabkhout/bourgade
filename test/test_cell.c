@@ -61,7 +61,6 @@ void test_get_building_from_cell() {
         building->earns[i]= earns[i];
         building->supplies[i]=supplies[i];
     }
-    building->position = make_invalid_position();
     struct cell_t* cell = init_cell();
     cell->building = building;
     assert(get_building_from_cell(*cell) == building);
