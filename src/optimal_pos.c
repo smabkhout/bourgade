@@ -28,6 +28,10 @@ struct position_t *choose_optimal_pos(struct board_t *board)
                         int resource_count = 0;
                         // Vérifier les voisins de la position courante
                         struct position_t **neighbors = malloc(sizeof(struct position_t *) * 8);
+                        for (int i = 0; i< 8; ++i)
+                        {
+                            neighbors[i] = make_invalid_position();
+                        }
                         list_neighbors(POS(x, y), neighbors);
                         for (int i = 0; i < 8; ++i)
                         {
