@@ -107,7 +107,7 @@ void position_to_string(const struct position_t* p, char* buf) {
 
 
 int is_valid_position(const struct position_t* p){
-  return ((p->x < MAX_X)&&(p->y < MAX_Y));
+  return ((p->x < MAX_X)&&(p->y < MAX_Y)); //
 }
 
 //on check tous les voisins

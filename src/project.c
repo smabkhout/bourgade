@@ -114,12 +114,12 @@ void print_board(struct board_t *board) {
             struct cell_t *cell = board->tab[y * MAX_X + x];
             if (cell->worker) {
                 // Affichage du worker avec sa couleur
-                printf("   %sW%s   ",
+                printf("   %sW%s    ",
                        color_start(cell->worker->joueur),
                        color_stop());
             } else if (cell->building) {
                 // Affichage du bâtiment avec sa couleur
-                printf("   %sB%s   ",
+                printf("   %sB%s    ",
                        color_start(cell->building->joueur),
                        color_stop());
             } else {
@@ -248,6 +248,8 @@ void game(int num_players,int seed)
         int a_pos_index = PY(a_pos) * MAX_X + PX(a_pos);
         current_cell = board->tab[a_pos_index]; // on a besoin de son indice/position sur le board
         place_worker(players[current_player], current_cell, make_worker(workers_names[rand() % 6], workers_costs, players[current_player]->color));
+        printf("Le joueur %s place un worker à la position (%d,%d)\n",color_to_string(players[current_player]->color),PY(a_pos)+1,PX(a_pos)+1); //on inverse l'affichage par rapport à ce qu'on a fait pour faire comme une matrice
+        print_board(board);
         struct building_t **affordable_buildings = NULL;
         affordable_buildings = list_buildings_costing_less_than(players[current_player]);
         int build_choice = rand() % 2;
@@ -258,6 +260,8 @@ void game(int num_players,int seed)
           present_buildings[nb_batiments_construits] = *a_building;
           ++nb_batiments_construits;
           place_building(players[current_player], a_pos, a_building); // stocker les buildings dans un tableau present buildings
+          printf("Le joueur %s place un batiment %s à la position (%d,%d)\n",color_to_string(players[current_player]->color),a_building->nom,PY(a_pos)+1,PX(a_pos)+1);
+          print_board(board);
         }
         else
         {
@@ -286,6 +290,7 @@ void game(int num_players,int seed)
                 activate_building(players[owner], players[current_player], board->tab[neighbor]->building);
               }
             }
+            ++e;
           }
           free(neighbors);
         }
@@ -293,6 +298,7 @@ void game(int num_players,int seed)
       }
       ++current_player;
     }
+    print_board(board);
     // payer les couts d'entretien et eliminer les joueurs qui ne peuvent pas le faire
     pay_workers_on_board(board, num_players, players);
     // tous les joueurs restants récupèrents leurs employés
