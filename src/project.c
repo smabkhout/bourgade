@@ -133,7 +133,7 @@ void print_board(struct board_t *board)
                color_start(cell->worker->joueur),
                color_stop());
       }
-      else if (cell->building)
+      else if (cell->building && cell->worker)
       {
         // Affichage du bâtiment avec sa couleur
         printf("   %sB%s    ",
@@ -261,7 +261,7 @@ void game(int num_players, int seed)
     {
       if (players[current_player]->number_of_workers > 0 && players[current_player]->eliminated == 0)
       {
-        struct cell_t *current_cell = NULL;
+        struct cell_t *current_cell;
         struct position_t *a_pos = choose_optimal_pos(board);
         int a_pos_index = PY(a_pos) * MAX_X + PX(a_pos);
         current_cell = board->tab[a_pos_index]; // on a besoin de son indice/position sur le board
@@ -313,8 +313,9 @@ void game(int num_players, int seed)
           free(neighbors);
         }
         free_affordable_buildings(affordable_buildings);
+        ++current_player;
       }
-      ++current_player;
+      
     }
     print_board(board);
     // payer les couts d'entretien et eliminer les joueurs qui ne peuvent pas le faire
