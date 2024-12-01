@@ -230,6 +230,19 @@ void display_winner(int num_players, struct player_t **players)
   }
 }
 
+void display_remaining_players(int num_players, struct player_t **players)
+{
+  puts("Les joueurs restants sont :");
+  for (int i = 0; i<num_players; ++i)
+  {
+    if (players[i]->eliminated == 0)
+    {
+      printf("Joueur %s %s %s avec %d workers\n", color_start(players[i]->color), color_to_string(players[i]->color), color_stop(), players[i]->number_of_workers);
+    }
+  }
+  printf("\n");
+}
+
 void game(int num_players, int seed)
 {
   struct building_t *present_buildings = NULL;
@@ -254,9 +267,11 @@ void game(int num_players, int seed)
   int nb_batiments_construits = 0;
   for (int j = 0; j < NUM_ROUNDS; ++j)
   {
+    printf("Début de la manche N°%d.\n", j+1);
     int current_player = 0; // indice pour repérer le joueur actuel dans players
     while (exists_a_player_with_free_workers(players, num_players) && exists_an_empty_cell(board) && exists_a_player(players, num_players))
     {
+      puts("PLAY"); // trouver ou est-ce qu'il s'arrete
       if (players[current_player] != NULL)
       {
         if (players[current_player]->number_of_workers > 0 && players[current_player]->eliminated == 0)
@@ -275,7 +290,7 @@ void game(int num_players, int seed)
           {
             int building_choice = rand() % length_of_affordable_buildings(affordable_buildings); // le batiment à construire est choisi aleatoirement pour l'instant
             struct building_t *a_building = affordable_buildings[building_choice];               // on séléctionne ce batiment à construire
-            present_buildings[nb_batiments_construits] = *a_building;
+            present_buildings[nb_batiments_construits] = *a_building; //le contenu de a_building n'est pas copié et par suite apres free_affordable_buildings les batiments deja construits disparaissent
             ++nb_batiments_construits;
             place_building(players[current_player], current_cell, a_building); // stocker les buildings dans un tableau present buildings
             printf("Le joueur %s construit un batiment %s à la position (%d,%d)\n", color_to_string(players[current_player]->color), a_building->nom, PY(a_pos) + 1, PX(a_pos) + 1);
@@ -317,16 +332,22 @@ void game(int num_players, int seed)
           current_player = (current_player + 1) % num_players;
         }
       }
+      display_remaining_players(num_players, players);
     }
+    printf("Player with free workers %d, empty cell %d, exists a player %d.\n", exists_a_player_with_free_workers(players, num_players), exists_an_empty_cell(board), exists_a_player(players, num_players));
+    //pourquoi les buildings disparaissent a la fin de la manche ???
     print_board(board);
     // payer les couts d'entretien et eliminer les joueurs qui ne peuvent pas le faire
     pay_workers_on_board(board, num_players, players);
     // tous les joueurs restants récupèrents leurs employés
+    printf("Player with free workers %d, empty cell %d, exists a player %d.\n", exists_a_player_with_free_workers(players, num_players), exists_an_empty_cell(board), exists_a_player(players, num_players));
+    //dans ce test personne n'a pu payer ses couts d'entretien vers la fin de la manche N°2
     reset_workers_still_on_board(board);
     for (int i = 0; i < num_players; ++i)
     {
-      players[i]->number_of_workers = NB_OF_WORKERS;
+      players[i]->number_of_workers = NB_OF_WORKERS -4; // (-4) juste temporairement pour tester
     }
+
 
     // fin de la manche
     // annoncer le/les gagnant(s) si existe
@@ -337,9 +358,13 @@ void game(int num_players, int seed)
   {
     free_player(players[i]);
   }
+  puts("A");
   free(present_buildings);
+  puts("B");
   free(players);
-  free_board(board);
+  puts("C");
+  free_board(board); //Les batiments sont free() deux fois, une avec free_affordable buildings et l'autre ici, (meme avec la condition batiment != NULL)
+  puts("D");
 }
 
 int main(int argc, char *argv[])
