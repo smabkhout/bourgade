@@ -13,7 +13,7 @@ struct player_t* initialize_player(enum color_t couleur){
     {
         player->stockage[i] = 0; //on met tout à 1 pour qu'ils jouent un peu plus
     }
-    player->number_of_workers = 2; 
+    player->number_of_workers = MAX_WORKERS_PER_PLAYER; 
     return player;
 }
 
