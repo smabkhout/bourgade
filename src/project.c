@@ -280,7 +280,6 @@ void game(int num_players, int seed)
     int current_player = 0; // indice pour repérer le joueur actuel dans players
     while (exists_a_player_with_free_workers(players, num_players) && exists_an_empty_cell(board) && exists_a_player(players, num_players))
     {
-      puts("PLAY"); // trouver ou est-ce qu'il s'arrete
       if (players[current_player] != NULL)
       {
         if (players[current_player]->number_of_workers > 0 && players[current_player]->eliminated == 0)
@@ -291,7 +290,6 @@ void game(int num_players, int seed)
           current_cell = board->tab[a_pos_index]; // on a besoin de son indice/position sur le board
           place_worker(players[current_player], current_cell, make_worker(workers_names[rand() % 6], workers_costs, players[current_player]->color));
           printf("Le joueur %s place un worker à la position (%d,%d)\n", color_to_string(players[current_player]->color), PY(a_pos) + 1, PX(a_pos) + 1); // on inverse l'affichage par rapport à ce qu'on a fait pour faire comme une matrice
-          print_board(board);
           struct building_t **affordable_buildings = NULL;
           affordable_buildings = list_buildings_costing_less_than(players[current_player]);
           int build_choice = rand() % 2;
@@ -303,7 +301,6 @@ void game(int num_players, int seed)
             place_building(players[current_player], current_cell, board->present_buildings[nb_batiments_construits]); // stocker les buildings dans un tableau present buildings
             ++nb_batiments_construits;
             printf("Le joueur %s construit un batiment %s à la position (%d,%d)\n", color_to_string(players[current_player]->color), a_building->nom, PY(a_pos) + 1, PX(a_pos) + 1);
-            print_board(board);
           }
           else
           {
@@ -342,6 +339,7 @@ void game(int num_players, int seed)
         }
       }
       display_remaining_players(num_players, players);
+      print_board(board);
     }
     printf("Player with free workers %d, empty cell %d, exists a player %d.\n", exists_a_player_with_free_workers(players, num_players), exists_an_empty_cell(board), exists_a_player(players, num_players));
     // payer les couts d'entretien et eliminer les joueurs qui ne peuvent pas le faire
@@ -354,8 +352,6 @@ void game(int num_players, int seed)
     {
       players[i]->number_of_workers = NB_OF_WORKERS;
     }
-
-    print_board(board);
 
     if ((exists_a_player(players,num_players) == 0) || (exists_a_player(players, num_players)==1)) //tous les joueurs sont éliminés, ou alors il n'en reste qu'un
     {

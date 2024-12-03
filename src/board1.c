@@ -72,7 +72,6 @@ struct board_t* init_board()
         }
         if (is_free_position && is_free_neighbor){
             place_mine(board->tab[i], board->present_mines[nb_of_mines]);
-            printf("%s placed at (%d,%d)\n",board->present_mines[nb_of_mines].name, y+1,x+1);
             nb_of_mines += 1;
         }
         free(neighbors);
