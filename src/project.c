@@ -259,7 +259,7 @@ void game(int num_players, int seed)
     }
   }//initialisation des batiments du plateau
 
-
+  
   print_board(board);
 
   struct player_t **players = NULL;
@@ -338,14 +338,26 @@ void game(int num_players, int seed)
           current_player = (current_player + 1) % num_players;
         }
       }
-      display_remaining_players(num_players, players);
-      print_board(board);
+
+
+      //display_remaining_players(num_players, players);
+
+
+      //affichage 
+      //valgrind aime pas
+      //print_board(board);
     }
-    printf("Player with free workers %d, empty cell %d, exists a player %d.\n", exists_a_player_with_free_workers(players, num_players), exists_an_empty_cell(board), exists_a_player(players, num_players));
+    
+    //printf("Player with free workers %d, empty cell %d, exists a player %d.\n", exists_a_player_with_free_workers(players, num_players), exists_an_empty_cell(board), exists_a_player(players, num_players));
+
+
     // payer les couts d'entretien et eliminer les joueurs qui ne peuvent pas le faire
     pay_workers_on_board(board, num_players, players);
     // tous les joueurs restants récupèrents leurs employés
-    printf("Player with free workers %d, empty cell %d, exists a player %d.\n", exists_a_player_with_free_workers(players, num_players), exists_an_empty_cell(board), exists_a_player(players, num_players));
+
+    //printf("Player with free workers %d, empty cell %d, exists a player %d.\n", exists_a_player_with_free_workers(players, num_players), exists_an_empty_cell(board), exists_a_player(players, num_players));
+
+
     //dans ce test personne n'a pu payer ses couts d'entretien vers la fin de la manche N°2
     reset_workers_still_on_board(board);
     for (int i = 0; i < num_players; ++i)
@@ -357,11 +369,11 @@ void game(int num_players, int seed)
     {
       break;
     }
-
     // fin de la manche
     // annoncer le/les gagnant(s) si existe
     // fin du jeu, free la mémoire
   }
+  print_board(board);
   display_winner(num_players, players);
   for (int i = 0; i < num_players; ++i)
   {
