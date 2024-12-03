@@ -14,6 +14,8 @@
 #define NUM_ROUNDS 4
 #define CELL_WIDTH 8
 
+int affichage = 0;
+
 int exists_a_player_with_free_workers(struct player_t **players, int taille)
 { // return 1 if there is a player with at least one worker available, and else 0
   int result = 0;
@@ -336,16 +338,18 @@ void game(int num_players, int init_param)
           }
           free_affordable_buildings(affordable_buildings);
           current_player = (current_player + 1) % num_players;
+          if (affichage)
+          {
+            print_board(board);
+          }
         }
       }
 
-
-      //display_remaining_players(num_players, players);
-
-
-      //affichage 
-      //valgrind aime pas
-      //print_board(board);
+      if (affichage)
+      {
+        display_remaining_players(num_players, players);
+        print_board(board);
+      }
     }
     
     //printf("Player with free workers %d, empty cell %d, exists a player %d.\n", exists_a_player_with_free_workers(players, num_players), exists_an_empty_cell(board), exists_a_player(players, num_players));
@@ -394,7 +398,7 @@ int main(int argc, char *argv[])
   int num_players = 4;
   int init_param = 2;
   int opt;
-  while ((opt = getopt(argc, argv, "s:p:c")) != -1)
+  while ((opt = getopt(argc, argv, "s:p:c:v")) != -1)
   {
     switch (opt)
     {
@@ -406,6 +410,9 @@ int main(int argc, char *argv[])
       break;
     case 'p':
       num_players = atoi(optarg);
+      break;
+    case 'v':
+      affichage = 1;
       break;
     default:
       num_players = 4;
