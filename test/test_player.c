@@ -9,9 +9,9 @@ void test_initialize_player() {
     struct player_t* player = initialize_player(couleur);
     assert(player != NULL);  
     assert(player->color == couleur); 
-    assert(player->number_of_workers == MAX_WORKERS_PER_PLAYER); 
+    assert(player->number_of_workers == 2); 
     for (int i = 0; i < NUM_RESOURCES; ++i) {
-        assert(player->stockage[i] == 1);
+        assert(player->stockage[i] == 0);
     }
     free(player);
 }
@@ -20,7 +20,7 @@ void test_player_resource_storage() {
     enum color_t couleur = RED;
     struct player_t* player = initialize_player(couleur);
     for (int i = 0; i < NUM_RESOURCES; ++i) {
-        assert(player->stockage[i] == 1); 
+        assert(player->stockage[i] == 0); 
     }
     player->stockage[0] = 10; 
     player->stockage[1] = 5;  

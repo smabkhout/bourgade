@@ -362,7 +362,7 @@ void game(int num_players, int seed)
     reset_workers_still_on_board(board);
     for (int i = 0; i < num_players; ++i)
     {
-      players[i]->number_of_workers = NB_OF_WORKERS;
+      players[i]->number_of_workers = NB_OF_WORKERS-4;
     }
 
     if ((exists_a_player(players,num_players) == 0) || (exists_a_player(players, num_players)==1)) //tous les joueurs sont éliminés, ou alors il n'en reste qu'un
