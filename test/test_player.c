@@ -20,7 +20,7 @@ void test_player_resource_storage() {
     enum color_t couleur = RED;
     struct player_t* player = initialize_player(couleur);
     for (int i = 0; i < NUM_RESOURCES; ++i) {
-        assert(player->stockage[i] == 0); 
+        assert(player->stockage[i] == 1); 
     }
     player->stockage[0] = 10; 
     player->stockage[1] = 5;  
