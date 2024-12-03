@@ -46,7 +46,7 @@ struct board_t* init_board()
         int is_free_neighbor = 1;
         for (int k = 0; k < MAX_POSITIONS / 4; k++)
         {
-            if (temp_invalid_pos[k] == i)
+            if (temp_invalid_pos[k] == i || !is_free_cell(board->tab[i]))
                 is_free_position = 0;
         } // verifier si la position est libre
 
@@ -72,10 +72,11 @@ struct board_t* init_board()
         }
         if (is_free_position && is_free_neighbor){
             place_mine(board->tab[i], board->present_mines[nb_of_mines]);
+            printf("%s placed at (%d,%d)\n",board->present_mines[nb_of_mines].name, y+1,x+1);
             nb_of_mines += 1;
         }
         free(neighbors);
-    } while (nb_of_mines < MAX_POSITIONS/4 + 1);
+    } while (nb_of_mines < MAX_POSITIONS/4);
     //nb_of_mines vaut (N/4)-1 à la fin du prgramme mais c'est normal car initialisée à 0
     // deuxième condition : chaque mine a au moins 1 position valide dans ses voisins sinon => on refait une génération
     return board;
