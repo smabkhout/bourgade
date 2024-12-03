@@ -11,7 +11,7 @@ struct position_t
     int init; // booléen qui dit si la position a déjà été initialisée ou pas
 };
 
-int type_plateau = 0;
+int type_plateau = 14;
 
 struct position_t positions[MAX_X * MAX_Y + 1];
 
@@ -44,15 +44,17 @@ void init_positions(unsigned int seed)
 {
     switch (seed)
     {
-    case '1': //voisins distance 2
+    case 1: //voisins distance 2
         type_plateau = 1;
         break;
-    case '2': //géométrie torique
+    case 2: //géométrie torique
         type_plateau = 2;
         break;
-    case '3': //plateau infernal
+    case 3: //plateau infernal
         type_plateau = 3;
+        break;
     default: //jeu de base
+        type_plateau = 0;
         break;
     }
     for (int i = 0; i < MAX_X; ++i)
