@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "building.h"
 
 
@@ -70,4 +71,16 @@ int length_of_affordable_buildings(struct building_t **affordable_buildings){
     ++count;
   }
   return count;
+}
+
+void copy_building(struct building_t* b2, struct building_t* b1){
+  b2->joueur = b1->joueur;
+  strcpy(b2->nom, b1->nom);
+  for (int i = 0; i<NUM_RESOURCES; ++i)
+  {
+    b2->costs[i] = b1->costs[i];
+    b2->earns[i] = b1->earns[i];
+    b2->value[i] = b1->value[i];
+    b2->supplies[i] = b1->supplies[i];
+  }
 }

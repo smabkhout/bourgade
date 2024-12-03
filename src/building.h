@@ -11,7 +11,7 @@
 #endif
 
 struct building_t{
-  char* nom;
+  char nom[12];
   unsigned int value[NUM_RESOURCES];
   unsigned int earns[NUM_RESOURCES];
   unsigned int costs[NUM_RESOURCES];
@@ -32,5 +32,7 @@ struct building_t** list_buildings_costing_less_than();
 void free_affordable_buildings(struct building_t** batiments);
 
 int length_of_affordable_buildings(struct building_t **affordable_buildings);
+
+void copy_building(struct building_t* building1, struct building_t* building2);
 
 #endif

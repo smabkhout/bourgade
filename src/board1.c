@@ -138,7 +138,7 @@ void reset_workers_still_on_board(struct board_t* board)
 {
     for (int i = 0; i<MAX_POSITIONS; ++i)
     {
-        if (board->tab[i]->worker != NULL)
+        if (board->tab[i]->worker != NULL && board->tab[i]->building == NULL)
         {
             free_worker(board->tab[i]->worker);
             board->tab[i]->worker = NULL;

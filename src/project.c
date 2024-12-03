@@ -245,13 +245,20 @@ void display_remaining_players(int num_players, struct player_t **players)
 
 void game(int num_players, int seed)
 {
-  struct building_t *present_buildings = NULL;
-  present_buildings = (struct building_t *)malloc(sizeof(struct building_t) * MAX_POSITIONS / 3);
-
   init_positions(seed); // initialisation des positions
 
   struct board_t *board = NULL;
-  board = init_board(); // initialisation du plateau
+  board = init_board(); // initialisation du plateau sans les buildings
+  board->present_buildings = (struct building_t**)malloc(sizeof(struct building_t*)*MAX_BUILDINGS_PER_PLAYER*num_players);
+  for (int i = 0; i< MAX_BUILDINGS_PER_PLAYER*num_players; ++i)
+  {
+    board->present_buildings[i] = (struct building_t*)malloc(sizeof(struct building_t));
+    for (int j = 0; j<10; ++j)
+    {
+      board->present_buildings[i]->nom[j] = '-';
+    }
+  }//initialisation des batiments du plateau
+
 
   print_board(board);
 
@@ -264,6 +271,8 @@ void game(int num_players, int seed)
     players[i] = initialize_player(random_color % MAX_COLORS);
     ++random_color;
   } // fin de l'initialisation des joueurs
+
+
   int nb_batiments_construits = 0;
   for (int j = 0; j < NUM_ROUNDS; ++j)
   {
@@ -290,9 +299,9 @@ void game(int num_players, int seed)
           {
             int building_choice = rand() % length_of_affordable_buildings(affordable_buildings); // le batiment à construire est choisi aleatoirement pour l'instant
             struct building_t *a_building = affordable_buildings[building_choice];               // on séléctionne ce batiment à construire
-            present_buildings[nb_batiments_construits] = *a_building; //le contenu de a_building n'est pas copié et par suite apres free_affordable_buildings les batiments deja construits disparaissent
+            copy_building(board->present_buildings[nb_batiments_construits],a_building); //le contenu de a_building n'est pas copié et par suite apres free_affordable_buildings les batiments deja construits disparaissent
+            place_building(players[current_player], current_cell, board->present_buildings[nb_batiments_construits]); // stocker les buildings dans un tableau present buildings
             ++nb_batiments_construits;
-            place_building(players[current_player], current_cell, a_building); // stocker les buildings dans un tableau present buildings
             printf("Le joueur %s construit un batiment %s à la position (%d,%d)\n", color_to_string(players[current_player]->color), a_building->nom, PY(a_pos) + 1, PX(a_pos) + 1);
             print_board(board);
           }
@@ -335,8 +344,6 @@ void game(int num_players, int seed)
       display_remaining_players(num_players, players);
     }
     printf("Player with free workers %d, empty cell %d, exists a player %d.\n", exists_a_player_with_free_workers(players, num_players), exists_an_empty_cell(board), exists_a_player(players, num_players));
-    //pourquoi les buildings disparaissent a la fin de la manche ???
-    print_board(board);
     // payer les couts d'entretien et eliminer les joueurs qui ne peuvent pas le faire
     pay_workers_on_board(board, num_players, players);
     // tous les joueurs restants récupèrents leurs employés
@@ -345,9 +352,10 @@ void game(int num_players, int seed)
     reset_workers_still_on_board(board);
     for (int i = 0; i < num_players; ++i)
     {
-      players[i]->number_of_workers = NB_OF_WORKERS -4; // (-4) juste temporairement pour tester
+      players[i]->number_of_workers = NB_OF_WORKERS;
     }
 
+    print_board(board);
 
     // fin de la manche
     // annoncer le/les gagnant(s) si existe
@@ -358,13 +366,13 @@ void game(int num_players, int seed)
   {
     free_player(players[i]);
   }
-  puts("A");
-  free(present_buildings);
-  puts("B");
   free(players);
-  puts("C");
+  for (int i = 0; i< MAX_BUILDINGS_PER_PLAYER*num_players; ++i)
+  {
+    free(board->present_buildings[i]);
+  }
+  free(board->present_buildings);
   free_board(board); //Les batiments sont free() deux fois, une avec free_affordable buildings et l'autre ici, (meme avec la condition batiment != NULL)
-  puts("D");
 }
 
 int main(int argc, char *argv[])
