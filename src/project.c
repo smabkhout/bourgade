@@ -243,9 +243,9 @@ void display_remaining_players(int num_players, struct player_t **players)
   printf("\n");
 }
 
-void game(int num_players, int seed)
+void game(int num_players, int init_param)
 {
-  init_positions(seed); // initialisation des positions
+  init_positions(init_param); // initialisation des positions
 
   struct board_t *board = NULL;
   board = init_board(); // initialisation du plateau sans les buildings
@@ -414,7 +414,7 @@ int main(int argc, char *argv[])
       break;
     }
   }
-  (void)init_param;
-  game(num_players, seed);
+  (void) seed;
+  game(num_players, init_param);
   return 0;
 }

@@ -4,26 +4,33 @@
 #include <string.h>
 #include "position.h"
 
-struct position_t{
-  unsigned int x;
-  unsigned int y;
-  int init; //booléen qui dit si la position a déjà été initialisée ou pas
+struct position_t
+{
+    unsigned int x;
+    unsigned int y;
+    int init; // booléen qui dit si la position a déjà été initialisée ou pas
 };
 
-struct position_t positions[MAX_X*MAX_Y+ 1];
+int type_plateau = 0;
 
-struct position_t* make_invalid_position(){
-  positions[MAX_X*MAX_Y].x = MAX_X;
-  positions[MAX_X*MAX_Y].y = MAX_Y;
-  return &positions[MAX_X*MAX_Y];
+struct position_t positions[MAX_X * MAX_Y + 1];
+
+struct position_t *make_invalid_position()
+{
+    positions[MAX_X * MAX_Y].x = MAX_X;
+    positions[MAX_X * MAX_Y].y = MAX_Y;
+    return &positions[MAX_X * MAX_Y];
 }
 
-struct position_t* make_position(unsigned int x, unsigned int y) {
-    if (x >= MAX_X || y >= MAX_Y) {
+struct position_t *make_position(unsigned int x, unsigned int y)
+{
+    if (x >= MAX_X || y >= MAX_Y)
+    {
         return make_invalid_position();
     }
 
-    if (positions[y * MAX_X + x].init == 1) {
+    if (positions[y * MAX_X + x].init == 1)
+    {
         return &positions[y * MAX_X + x];
     }
 
@@ -33,57 +40,73 @@ struct position_t* make_position(unsigned int x, unsigned int y) {
     return &positions[y * MAX_X + x];
 }
 
-
-void init_positions(unsigned int seed){
-    seed = 156;
-    seed +=1; //juste pour dire de l'utiliser
-    for (int i = 0; i<MAX_X; ++i)
+void init_positions(unsigned int seed)
+{
+    switch (seed)
     {
-      for (int j = 0; j<MAX_Y; ++j)
-      {
-        positions[j*MAX_X+i] = *make_position(i,j);
-      }
+    case '1': //voisins distance 2
+        type_plateau = 1;
+        break;
+    case '2': //géométrie torique
+        type_plateau = 2;
+        break;
+    case '3': //plateau infernal
+        type_plateau = 3;
+    default: //jeu de base
+        break;
+    }
+    for (int i = 0; i < MAX_X; ++i)
+    {
+        for (int j = 0; j < MAX_Y; ++j)
+        {
+            positions[j * MAX_X + i] = *make_position(i, j);
+        }
     }
 }
 
-unsigned int position_x(const struct position_t* p){
-  return p->x;
+unsigned int position_x(const struct position_t *p)
+{
+    return p->x;
 }
 
-unsigned int position_y(const struct position_t* p){
-  return p->y;
+unsigned int position_y(const struct position_t *p)
+{
+    return p->y;
 }
 
-void mirror(char* str)
+void mirror(char *str)
 {
     int l = strlen(str);
-    int m = l / 2; 
+    int m = l / 2;
     int i = 0;
     char tmp;
-    while (i < m) {
+    while (i < m)
+    {
         tmp = str[i];
-        str[i] = str[l-i-1];
-        str[l-i-1] = tmp;
+        str[i] = str[l - i - 1];
+        str[l - i - 1] = tmp;
         i = i + 1;
     }
 }
 
-void itoa(int val, char* dst) //int to string
+void itoa(int val, char *dst) // int to string
 {
     char digits[] = "0123456789";
     int i = 0;
     int neg = val < 0;
 
     if (neg) // Sinon le modulo est negatif
-        val = - val;
+        val = -val;
 
-    do {
+    do
+    {
         dst[i] = digits[val % 10];
         val = val / 10;
         i = i + 1;
     } while (val);
 
-    if (neg) { // cas particulier pour le signe
+    if (neg)
+    { // cas particulier pour le signe
         dst[i] = '-';
         i = i + 1;
     }
@@ -92,7 +115,8 @@ void itoa(int val, char* dst) //int to string
     mirror(dst);
 }
 
-void position_to_string(const struct position_t* p, char* buf) {
+void position_to_string(const struct position_t *p, char *buf)
+{
     char x_string[12];
     char y_string[12];
 
@@ -105,29 +129,96 @@ void position_to_string(const struct position_t* p, char* buf) {
     strcat(buf, y_string);
 }
 
-
-int is_valid_position(const struct position_t* p){
-  return (p && (p->x < MAX_X)&&(p->y < MAX_Y)); 
+int is_valid_position(const struct position_t *p)
+{
+    if (type_plateau == 0 || type_plateau == 1 || type_plateau == 2)
+        return (p && (p->x < MAX_X) && (p->y < MAX_Y) );
+    else //plateau infernal 
+    {
+        return !(p == &positions[MAX_X*MAX_Y]);
+    }
 }
 
-//on check tous les voisins
-// de la position pointée par p et on place celles valides dans le tableau ns. Pour celles qui ne sont 
-//pas valides, on utilise make_invalid_position
-void list_neighbors(const struct position_t* p, struct position_t** ns) {
-    int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};  // Déplacements en x
-    int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};  // Déplacements en y
+// on check tous les voisins
+//  de la position pointée par p et on place celles valides dans le tableau ns. Pour celles qui ne sont
+// pas valides, on utilise make_invalid_position
+void list_neighbors(const struct position_t *p, struct position_t **ns)
+{
+    if (type_plateau == 0 || type_plateau == 3) //jeu de base ou plateau de jeu infernal
+    {
+        int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1}; // Déplacements en x
+        int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1}; // Déplacements en y
 
-    unsigned int count = 0;
-    for (int i = 0; i < 8; i++) {
-        int nx = p->x + dx[i];
-        int ny = p->y + dy[i];
+        unsigned int count = 0;
+        for (int i = 0; i < 8; i++)
+        {
+            int nx = p->x + dx[i];
+            int ny = p->y + dy[i];
 
-        if (nx >= 0 && nx < MAX_X && ny >= 0 && ny < MAX_Y) {
-            ns[count++] = make_position(nx, ny);
+            if (nx >= 0 && nx < MAX_X && ny >= 0 && ny < MAX_Y)
+            {
+                ns[count++] = make_position(nx, ny);
+            }
+        }
+        // Remplir le reste avec des positions invalides si moins de MAX_NEIGHBORS voisins
+        for (; count < MAX_NEIGHBORS; count++)
+        {
+            ns[count] = make_invalid_position();
         }
     }
-    // Remplir le reste avec des positions invalides si moins de MAX_NEIGHBORS voisins
-    for (; count < MAX_NEIGHBORS; count++) {
-        ns[count] = make_invalid_position();
+    else if (type_plateau == 1) //voisins distance 2 directions cardinales
+    {
+        int dx[] = {-1,-2,1,2,0,0,0,0}; // Déplacements en x
+        int dy[] = {0,0,0,0,-1,-2,1,2}; // Déplacements en y
+
+        unsigned int count = 0;
+        for (int i = 0; i < 8; i++)
+        {
+            int nx = p->x + dx[i];
+            int ny = p->y + dy[i];
+
+            if (nx >= 0 && nx < MAX_X && ny >= 0 && ny < MAX_Y)
+            {
+                ns[count++] = make_position(nx, ny);
+            }
+        }
+        // Remplir le reste avec des positions invalides si moins de MAX_NEIGHBORS voisins
+        for (; count < MAX_NEIGHBORS; count++)
+        {
+            ns[count] = make_invalid_position();
+        }
+    }
+    else if (type_plateau == 2) //géométrie torique
+    {
+        int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1}; // Déplacements en x
+        int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1}; // Déplacements en y
+
+        unsigned int count = 0;
+        for (int i = 0; i < 8; i++)
+        {
+            int nx = p->x + dx[i];
+            int ny = p->y + dy[i];
+
+            if (nx >= 0 && nx < MAX_X && ny >= 0 && ny < MAX_Y)
+            {
+                ns[count++] = make_position(nx, ny);
+            }
+            else 
+            {
+                if (nx >= MAX_X)
+                    nx = nx%MAX_X;
+                else if (nx < 0)
+                    nx += MAX_X;
+                if (ny >=MAX_Y)
+                    ny = ny%MAX_Y;
+                else if ( ny < 0)
+                    ny += MAX_Y;
+            }
+        }
+        // Remplir le reste avec des positions invalides si moins de MAX_NEIGHBORS voisins
+        for (; count < MAX_NEIGHBORS; count++)
+        {
+            ns[count] = make_invalid_position();
+        }
     }
 }
