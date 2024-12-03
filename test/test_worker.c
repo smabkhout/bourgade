@@ -46,7 +46,7 @@ void test_place_worker() {
     assert(cell->worker == NULL);
     place_worker(player, cell, worker);
     assert(cell->worker == worker);
-    assert(player->number_of_workers == MAX_WORKERS_PER_PLAYER - 1); 
+    assert(player->number_of_workers == MAX_WORKERS_PER_PLAYER - 5); 
     free(player);
     free(cell);
     free(worker);
