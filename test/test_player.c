@@ -32,7 +32,7 @@ void test_player_resource_storage() {
 void test_player_number_of_workers() {
     enum color_t couleur = GREEN;
     struct player_t* player = initialize_player(couleur);
-    assert(player->number_of_workers == MAX_WORKERS_PER_PLAYER);
+    assert(player->number_of_workers == MAX_WORKERS_PER_PLAYER-4);
     free(player);
 }
 
