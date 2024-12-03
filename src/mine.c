@@ -39,9 +39,9 @@ void place_mine(struct cell_t* cell, struct mine_t m) {
     cell->mine->name[i] = 0;
 }
 
-int max(int a, int b)
+int min(int a, int b)
 {
-    if (a>b)
+    if (a<b)
         return a;
     else
         return b;
@@ -49,7 +49,7 @@ int max(int a, int b)
 
 void construct_mines(struct mine_t* present_mines){ //modifie le tableau present_mines pour avoir MAX_POSITIONS/4 mines aléatoires
     int j=4;
-    for (int i =0; i< max(4, MAX_POSITIONS/4); i++)
+    for (int i =0; i< min(4, MAX_POSITIONS/4); i++)
     {
         present_mines[i] = list_mines[i];
          //on s'assure d'avoir au moins une mine de chaque type

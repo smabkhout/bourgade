@@ -60,18 +60,17 @@ struct position_t *choose_optimal_pos(struct board_t *board)
         return optimal_pos; // Retourne la position optimale si elle est valide
     else {
         //retourne tout autre position aléatoire sinon, tant que celle-ci est valide
-        unsigned int x = rand()%MAX_X;
-        unsigned int y = rand()%MAX_Y;
-        struct position_t* pos = POS(x,y);
-        int index = y* MAX_X + x;
-        while (!is_valid_position(pos) || board->tab[index]->mine!=NULL || board->tab[index]->worker!=NULL || board->tab[index]->building!=NULL)
-        //tant que la position est invalide ou que la case contient une mine, un worker ou un building,
-        //on en choisit une autre
+        for (unsigned int x = 0;x<MAX_X;++x)
         {
-            x = rand()%MAX_X;
-            y = rand()%MAX_Y;
-            pos = POS(x,y);
+            for (unsigned int y= 0;y<MAX_Y;++y)
+            {
+                struct position_t* pos = POS(x,y);
+                int index = y*MAX_X+x;
+                if (is_free_cell(board->tab[index]))
+                    return pos;
+            }
         }
-        return pos;
+        printf("Plus de positions valides sur le plateau !");
+        return make_invalid_position();
     }
 }

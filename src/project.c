@@ -35,7 +35,7 @@ int exists_an_empty_cell(struct board_t *board) // return 1 if there is at least
   return 0;
 }
 
-int exists_a_player(struct player_t **players, int num_players) // return 1 if there is still a player who is not eliminated
+int exists_a_player(struct player_t **players, int num_players) // return the number of players who are not eliminated
 {
   int a = 0;
   for (int i = 0; i < num_players; ++i)
@@ -43,7 +43,7 @@ int exists_a_player(struct player_t **players, int num_players) // return 1 if t
     if (players[i]->eliminated)
       ++a;
   }
-  return !(a == num_players);
+  return num_players-a;
 }
 
 // Fonction pour formater le contenu d'une cellule
@@ -330,7 +330,7 @@ void game(int num_players, int seed)
                 {
                   int owner = (board->tab[neighbor]->building->joueur)%num_players;
                   activate_building(players[owner], players[current_player], board->tab[neighbor]->building);
-                  printf("Le joueur %s active le batiment %s qui appartient à %s sur la case (%d,%d).\n", color_to_string(players[current_player]->color), board->tab[neighbor]->building->nom, color_to_string(players[owner]->color), PY(a_pos) + 1, PX(a_pos) + 1);
+                  printf("Le joueur %s, qui est sur la case (%d,%d), active le batiment %s qui appartient à %s sur la case (%d,%d).\n", color_to_string(players[current_player]->color),PY(a_pos) + 1, PX(a_pos) + 1, board->tab[neighbor]->building->nom, color_to_string(players[owner]->color),neighbor_y+1,neighbor_x+1);
                 }
               }
               ++e;
@@ -356,6 +356,11 @@ void game(int num_players, int seed)
     }
 
     print_board(board);
+
+    if ((exists_a_player(players,num_players) == 0) || (exists_a_player(players, num_players)==1)) //tous les joueurs sont éliminés, ou alors il n'en reste qu'un
+    {
+      break;
+    }
 
     // fin de la manche
     // annoncer le/les gagnant(s) si existe
