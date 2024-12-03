@@ -11,7 +11,7 @@ void test_initialize_player() {
     assert(player->color == couleur); 
     assert(player->number_of_workers == MAX_WORKERS_PER_PLAYER); 
     for (int i = 0; i < NUM_RESOURCES; ++i) {
-        assert(player->stockage[i] == 0);
+        assert(player->stockage[i] == 1);
     }
     free(player);
 }
