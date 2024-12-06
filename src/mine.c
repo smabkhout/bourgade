@@ -144,3 +144,52 @@ void parcours_composante_connexe(struct position_t *pos_initial, int *indices_co
     // on parcoure tous les voisins, si tous ces voisins sont deja dans indices composantes connexes/invalides/pas des mines on s'arrete
     // on met un -1 apres la fin de chaque composante;
 }
+
+int cost_of_mine_placement(struct board_t *board)
+{
+    int longueur = 0;
+    int indices_composantes[MAX_POSITIONS / 2] = {-1};
+    // contient les indices des positions
+    // on a MAX_POS/4 mines, au pire on a
+    // MAX_POS/4 amas différents et MAX_POS/4 0 entre chaque donc MAX_POS/2 au total
+    for (int i = 0; i < MAX_POSITIONS; ++i)
+    {
+
+        if (board->tab[i]->mine)
+        {
+            unsigned int x = i % MAX_X;
+            unsigned int y = (i - x) / MAX_X;
+            /*
+            struct position_t **neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
+            for (int j = 0; j < 8; ++j)
+            {
+                neighbors[i] = make_invalid_position();
+            }
+            list_neighbors(POS(x, y), neighbors);
+
+            for (int k = 0; k < 8; ++k)
+            {
+                parcours_composante_connexe(neighbors[i], indices_composantes, longueur, board);
+            }
+            free(neighbors);*/
+            parcours_composante_connexe(POS(x,y),indices_composantes,longueur,board);
+        }
+    }
+    int length_of_group=0;
+    int cost = 0;
+    int i = 0;
+    while (i < MAX_POSITIONS/2)
+    {
+        if (indices_composantes[i] != -1)
+        {
+            ++length_of_group;
+        }
+        else 
+        {
+            cost += length_of_group*length_of_group;
+            length_of_group = 0;
+        }
+        ++i;
+    }
+    return cost;
+}

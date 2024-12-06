@@ -7,6 +7,8 @@
 
 struct cell_t;
 
+struct board_t;
+
 struct mine_t {
     char name[12];
     enum resource_t r;
@@ -22,6 +24,8 @@ void construct_mines(struct mine_t* present_mines);
 
 void free_mine(struct mine_t* mine);
 
-void parcours_composante_connexe(struct position_t *pos_initial, int *indices_composantes_connexes, int longueur, struct board_t *board);
+void parcours_composante_connexe(struct position_t* pos_initial, int* indices_composante, int longueur, struct board_t* board);
+
+int cost_of_mine_placement(struct board_t* board);
 
 #endif
