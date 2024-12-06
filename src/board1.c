@@ -44,14 +44,13 @@ struct board_t* init_board()
         int i = rand() % (MAX_X * MAX_Y);
         int is_free_position = 1;
         int is_free_neighbor = 1;
-        for (int k = 0; k < MAX_POSITIONS / 4; k++)
-        {
-            if (temp_invalid_pos[k] == i || !is_free_cell(board->tab[i]))
-                is_free_position = 0;
-        } // verifier si la position est libre
-
         unsigned int x = i % MAX_X;
         unsigned int y = (i - x) / MAX_X;
+        for (int k = 0; k < MAX_POSITIONS / 4; k++)
+        {
+            if (temp_invalid_pos[k] == i || !is_free_cell(board->tab[i]) || !is_valid_position(POS(x,y)))
+                is_free_position = 0;
+        } // verifier si la position est libre        
         struct position_t **neighbors = NULL;
         neighbors = (struct position_t **)malloc(sizeof(struct position_t *)*8);
         for (int i = 0; i<8;i++)
