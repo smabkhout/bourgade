@@ -14,7 +14,8 @@ void test_make_position() {
 }
 
 void test_is_valid_position() {
-    struct position_t* p = POS(1, 2);
+    init_positions(3);
+    struct position_t* p = POS(1,2);
     assert(is_valid_position(p));
     p = make_invalid_position();
     assert(!is_valid_position(p));
