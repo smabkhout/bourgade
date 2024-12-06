@@ -22,4 +22,6 @@ void construct_mines(struct mine_t* present_mines);
 
 void free_mine(struct mine_t* mine);
 
+void parcours_composante_connexe(struct position_t *pos_initial, int *indices_composantes_connexes, int longueur, struct board_t *board);
+
 #endif

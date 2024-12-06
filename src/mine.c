@@ -110,7 +110,7 @@ void parcours_composante_connexe(struct position_t *pos_initial, int *indices_co
             }
         }
     }
-    int est_pos_finale_composante_connexe = 0;
+    int est_pos_finale_composante_connexe = 1;
     for (int i = 0; i < 8; ++i)
     {
         int neighbor_index = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
@@ -123,6 +123,21 @@ void parcours_composante_connexe(struct position_t *pos_initial, int *indices_co
                 break;
             }
         }
+        if (board->tab[neighbor_index]->mine)
+        {
+            if (!appartient_autre_composante)
+            {
+                est_pos_finale_composante_connexe = 0; //si l'un des voisins est une mine qui n'est dans aucune des composantes alors on n'a pas encore finit notre composante connexe
+                break;  //il se peut qu'on est deja sur à cette etape qu'on est dans la derniere case puisqu'on a sortit de l'appel recursif
+                        //tester sans tous ces boucles là
+            }
+                
+        }
+    }
+    if (est_pos_finale_composante_connexe)
+    {
+        ++longueur;
+        return; //si notre case est la derniere de la composante, il suffit d'incrémenter longueur vers l'indice suivant et s'arreter
     }
     free(neighbors);
     // penser à mettre une condition d'arret pour le dernier element d'une composante;
