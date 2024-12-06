@@ -57,13 +57,30 @@ void init_positions(unsigned int seed)
         type_plateau = 0;
         break;
     }
-    for (int i = 0; i < MAX_X; ++i)
+    if (type_plateau == 3)
     {
-        for (int j = 0; j < MAX_Y; ++j)
+        for (int i = 0; i < MAX_X; ++i)
         {
-            positions[j * MAX_X + i] = *make_position(i, j);
+            for (int j = 0; j < MAX_Y; ++j)
+            {
+                if ((i%2 == 0) || (j%2 == 0))
+                    positions[j * MAX_X + i] = *make_invalid_position();
+                else
+                    positions[j * MAX_X + i] = *make_position(i, j);
+            }
         }
     }
+    else
+    {
+        for (int i = 0; i < MAX_X; ++i)
+        {
+            for (int j = 0; j < MAX_Y; ++j)
+            {
+                positions[j * MAX_X + i] = *make_position(i, j);
+            }
+        }
+    }
+    
 }
 
 unsigned int position_x(const struct position_t *p)
