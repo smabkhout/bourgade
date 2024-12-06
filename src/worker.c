@@ -1,18 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "worker.h"
-#include "cell.h"
 
-char* workers_names[MAX_WORKERS_PER_PLAYER] = {
-    "Franck",
-    "John",
-    "Francis",
-    "Walter",
-    "Hanck",
-    "Georges"
-};
 
-unsigned int workers_costs[NUM_RESOURCES] = {0,1,1,1,1,0};
 
 struct worker_t* make_worker(char* name,unsigned int cost[NUM_RESOURCES], enum color_t couleur){
     struct worker_t *worker  = NULL;
@@ -40,4 +30,43 @@ void place_worker(struct player_t *player, struct cell_t* cell,  struct worker_t
 void free_worker(struct worker_t* worker)
 {
     free(worker);
+}
+
+void pay_workers_on_board(struct board_t* board, int num_players, struct player_t** players)
+{
+    for (int i = 0; i<MAX_POSITIONS; ++i)
+        {
+            if (board->tab[i]->worker != NULL)
+            {
+                //identifier son joueur (employer)
+                int j = 0;
+                while (j<num_players)
+                {
+                    if (players[j]->color == board->tab[i]->worker->joueur)
+                    break;
+                    ++j;
+                }
+                //vérifier si le joueur peut payer le worker, sinon il va etre éliminé
+                if (resource_le_than(players[j]->stockage, board->tab[i]->worker->costs))
+                {
+                    players[j]->eliminated = 1;
+                }
+                else
+                {
+                    pay_worker(players[j], board->tab[i]->worker);
+                }
+            }
+        }
+}
+
+void reset_workers_still_on_board(struct board_t* board)
+{
+    for (int i = 0; i<MAX_POSITIONS; ++i)
+    {
+        if (board->tab[i]->worker != NULL && board->tab[i]->building == NULL)
+        {
+            free_worker(board->tab[i]->worker);
+            board->tab[i]->worker = NULL;
+        }
+    }
 }

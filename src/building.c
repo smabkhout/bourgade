@@ -11,7 +11,7 @@ void free_building(struct building_t* batiment){
 
 
 //définir un tableau global avec tous les buildings
-struct building_t list_buildings[MAX_BUILDINGS_PER_PLAYER] = {
+static struct building_t list_buildings[MAX_BUILDINGS_PER_PLAYER] = {
  {.nom = "Farm", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,3}, .supplies={0,1,0,0,0,0}, .value={0,0,0,1,0,0}, .joueur=0},
  {.nom = "Samwill", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,4}, .supplies={0,0,0,3,0,0}, .value={0,0,0,2,0,0}, .joueur=0},
  {.nom = "Pontoon", .costs = {0,0,0,0,0,1}, .earns={0,0,0,0,0,5}, .supplies={0,0,2,0,0,0}, .value={0,0,0,3,0,0}, .joueur=0},

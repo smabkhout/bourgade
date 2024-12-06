@@ -3,6 +3,7 @@
 
 #include "resource.h"
 #include "position.h"
+#include "cell.h"
 
 struct cell_t;
 
@@ -10,8 +11,6 @@ struct mine_t {
     char name[12];
     enum resource_t r;
 };
-
-extern struct mine_t list_mines[4];
 
 struct mine_t* make_mine(enum resource_t r, char nom[12]);
 

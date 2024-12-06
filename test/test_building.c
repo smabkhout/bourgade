@@ -7,8 +7,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-unsigned int tab_init[6] = {1,1,1,1,1,1};
-unsigned int tab_final[6] = {1,1,1,0,1,4};
+static unsigned int tab_init[6] = {1,1,1,1,1,1};
+static unsigned int tab_final[6] = {1,1,1,0,1,4};
 
 void test_place_building() {
     struct player_t *player = NULL;
@@ -42,10 +42,10 @@ void test_place_building() {
     free(player);
 }
 
-unsigned int tab_initial_user[6] = {5,5,5,5,5,5};
-unsigned int tab_initial_owner[6] = {1,1,1,1,1,1};
+static unsigned int tab_initial_user[6] = {5,5,5,5,5,5};
+static unsigned int tab_initial_owner[6] = {1,1,1,1,1,1};
 
-unsigned int tab_final_owner[6] = {1,1,1,1,1,2};
+static unsigned int tab_final_owner[6] = {1,1,1,1,1,2};
 
 void test_activate_building() {
     struct player_t *owner = NULL;

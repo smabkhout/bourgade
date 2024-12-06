@@ -11,9 +11,9 @@ struct position_t
     int init; // booléen qui dit si la position a déjà été initialisée ou pas
 };
 
-int type_plateau = 14;
+static int type_plateau = 14;
 
-struct position_t positions[MAX_X * MAX_Y + 1];
+static struct position_t positions[MAX_X * MAX_Y + 1];
 
 struct position_t *make_invalid_position()
 {

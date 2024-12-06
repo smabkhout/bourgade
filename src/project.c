@@ -13,7 +13,19 @@
 
 #define NUM_ROUNDS 4
 
-int affichage = 0;
+//definition des variables globales propres à ce fichier
+static int affichage = 0;
+
+static char* workers_names[MAX_WORKERS_PER_PLAYER] = {
+    "Franck",
+    "John",
+    "Francis",
+    "Walter",
+    "Hanck",
+    "Georges"
+};
+
+static unsigned int workers_costs[NUM_RESOURCES] = {0,1,1,1,1,0};
 
 int exists_a_player_with_free_workers(struct player_t **players, int taille)
 { // return 1 if there is a player with at least one worker available, and else 0

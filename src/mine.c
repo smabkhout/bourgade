@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
-#include "mine.h"
-#include "position.h"
-#include "cell.h"
 #include <assert.h>
 
-struct mine_t list_mines[4] = {
+#include "mine.h"
+
+
+
+static struct mine_t list_mines[4] = {
  {.name = "Field", .r=CORN},
  {.name = "Forest", .r=WOOD},
  {.name = "River", .r=FISH},
