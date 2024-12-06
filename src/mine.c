@@ -72,6 +72,64 @@ void free_mine(struct mine_t *mine)
     free(mine);
 }
 
+void parcours_composante_connexe(struct position_t *pos_initial, int *indices_composantes_connexes, int longueur, struct board_t *board)
+{
+    int index_pos_initial = PY(pos_initial) * MAX_X + PX(pos_initial);
+    for (int j = 0; j < longueur; ++j)
+    {
+        if (indices_composantes_connexes[j] == index_pos_initial)
+        {
+            return; // si notre position existe déjà dans une composante connexe, on sort de la fonction
+        }
+    }
+    indices_composantes_connexes[longueur] = index_pos_initial;
+    ++longueur; // on stock cette position et on incrémente l'indice actuel (longueur) de notre tableau indices_composantes_connexes
+    struct position_t **neighbors = malloc(sizeof(struct position_t *) * 8);
+    for (int i = 0; i < 8; ++i)
+    {
+        neighbors[i] = make_invalid_position();
+    }
+    list_neighbors(pos_initial, neighbors);
+    for (int i = 0; i < 8; ++i)
+    {
+        int neighbor_index = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
+        int appartient_autre_composante = 0;
+        for (int j = 0; j < longueur; ++j)
+        {
+            if (indices_composantes_connexes[j] == neighbor_index)
+            {
+                appartient_autre_composante = 1;
+                break;
+            }
+        }
+        if (!appartient_autre_composante)
+        {
+            if (neighbors[i] != NULL && is_valid_position(neighbors[i]) && (board->tab[neighbor_index]->mine))
+            {
+                parcours_composante_connexe(neighbors[i], indices_composantes_connexes, longueur, board);
+            }
+        }
+    }
+    int est_pos_finale_composante_connexe = 0;
+    for (int i = 0; i < 8; ++i)
+    {
+        int neighbor_index = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
+        int appartient_autre_composante = 0;
+        for (int j = 0; j < longueur; ++j)
+        {
+            if (indices_composantes_connexes[j] == neighbor_index)
+            {
+                appartient_autre_composante = 1;
+                break;
+            }
+        }
+    }
+    free(neighbors);
+    // penser à mettre une condition d'arret pour le dernier element d'une composante;
+    // on parcoure tous les voisins, si tous ces voisins sont deja dans indices composantes connexes/invalides/pas des mines on s'arrete
+    // on met un -1 apres la fin de chaque composante;
+}
+
 int cost_of_mine_placement(struct board_t *board)
 {
     int longueur = 0;
