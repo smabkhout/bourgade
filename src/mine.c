@@ -5,34 +5,37 @@
 
 #include "mine.h"
 
-
-
 static struct mine_t list_mines[4] = {
- {.name = "Field", .r=CORN},
- {.name = "Forest", .r=WOOD},
- {.name = "River", .r=FISH},
- {.name = "Rock Mine", .r=STONE},
+    {.name = "Field", .r = CORN},
+    {.name = "Forest", .r = WOOD},
+    {.name = "River", .r = FISH},
+    {.name = "Rock Mine", .r = STONE},
 };
 
-struct mine_t* make_mine(enum resource_t r, char nom[12]){
-    struct mine_t* mine = NULL;
-    mine = (struct mine_t*)malloc(sizeof(struct mine_t));
+struct mine_t *make_mine(enum resource_t r, char nom[12])
+{
+    struct mine_t *mine = NULL;
+    mine = (struct mine_t *)malloc(sizeof(struct mine_t));
     mine->r = r;
     int i = 0;
-    while(i<12){
+    while (i < 12)
+    {
         mine->name[i] = nom[i];
         ++i;
     }
     return mine;
 }
 
-void place_mine(struct cell_t* cell, struct mine_t m) {
-    if (cell->mine == NULL) {
+void place_mine(struct cell_t *cell, struct mine_t m)
+{
+    if (cell->mine == NULL)
+    {
         cell->mine = malloc(sizeof(struct mine_t));
     }
     cell->mine->r = m.r;
     int i = 0;
-    while (m.name[i] != 0) {
+    while (m.name[i] != 0)
+    {
         cell->mine->name[i] = m.name[i];
         ++i;
     }
@@ -41,28 +44,88 @@ void place_mine(struct cell_t* cell, struct mine_t m) {
 
 int max(int a, int b)
 {
-    if (a>b)
+    if (a > b)
         return a;
     else
         return b;
 }
 
-void construct_mines(struct mine_t* present_mines){ //modifie le tableau present_mines pour avoir MAX_POSITIONS/4 mines aléatoires
-    int j=4;
-    for (int i =0; i< max(4, MAX_POSITIONS/4); i++)
+void construct_mines(struct mine_t *present_mines)
+{ // modifie le tableau present_mines pour avoir MAX_POSITIONS/4 mines aléatoires
+    int j = 4;
+    for (int i = 0; i < max(4, MAX_POSITIONS / 4); i++)
     {
         present_mines[i] = list_mines[i];
-         //on s'assure d'avoir au moins une mine de chaque type
-        //en remplissant à la main les 4 premières 
+        // on s'assure d'avoir au moins une mine de chaque type
+        // en remplissant à la main les 4 premières
     }
-    while (j<MAX_POSITIONS/4){
-        int a=rand()%4;
-        present_mines[j]=list_mines[a];
+    while (j < MAX_POSITIONS / 4)
+    {
+        int a = rand() % 4;
+        present_mines[j] = list_mines[a];
         ++j;
     }
 }
 
-void free_mine(struct mine_t* mine)
+void free_mine(struct mine_t *mine)
 {
     free(mine);
+}
+
+void parcours_composante_connexe(struct position_t *pos_initial, int *indices_composantes_connexes, int longueur, struct board_t *board)
+{
+    int index_pos_initial = PY(pos_initial) * MAX_X + PX(pos_initial);
+    for (int j = 0; j < longueur; ++j)
+    {
+        if (indices_composantes_connexes[j] == index_pos_initial)
+        {
+            return; // si notre position existe déjà dans une composante connexe, on sort de la fonction
+        }
+    }
+    indices_composantes_connexes[longueur] = index_pos_initial;
+    ++longueur; // on stock cette position et on incrémente l'indice actuel (longueur) de notre tableau indices_composantes_connexes
+    struct position_t **neighbors = malloc(sizeof(struct position_t *) * 8);
+    for (int i = 0; i < 8; ++i)
+    {
+        neighbors[i] = make_invalid_position();
+    }
+    list_neighbors(pos_initial, neighbors);
+    for (int i = 0; i < 8; ++i)
+    {
+        int neighbor_index = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
+        int appartient_autre_composante = 0;
+        for (int j = 0; j < longueur; ++j)
+        {
+            if (indices_composantes_connexes[j] == neighbor_index)
+            {
+                appartient_autre_composante = 1;
+                break;
+            }
+        }
+        if (!appartient_autre_composante)
+        {
+            if (neighbors[i] != NULL && is_valid_position(neighbors[i]) && (board->tab[neighbor_index]->mine))
+            {
+                parcours_composante_connexe(neighbors[i], indices_composantes_connexes, longueur, board);
+            }
+        }
+    }
+    int est_pos_finale_composante_connexe = 0;
+    for (int i = 0; i < 8; ++i)
+    {
+        int neighbor_index = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
+        int appartient_autre_composante = 0;
+        for (int j = 0; j < longueur; ++j)
+        {
+            if (indices_composantes_connexes[j] == neighbor_index)
+            {
+                appartient_autre_composante = 1;
+                break;
+            }
+        }
+    }
+    free(neighbors);
+    // penser à mettre une condition d'arret pour le dernier element d'une composante;
+    // on parcoure tous les voisins, si tous ces voisins sont deja dans indices composantes connexes/invalides/pas des mines on s'arrete
+    // on met un -1 apres la fin de chaque composante;
 }
