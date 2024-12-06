@@ -19,6 +19,7 @@ struct position_t *make_invalid_position()
 {
     positions[MAX_X * MAX_Y].x = MAX_X;
     positions[MAX_X * MAX_Y].y = MAX_Y;
+    positions[MAX_X * MAX_Y].init = 1;
     return &positions[MAX_X * MAX_Y];
 }
 
@@ -44,16 +45,16 @@ void init_positions(unsigned int seed)
 {
     switch (seed)
     {
-    case 1: //voisins distance 2
+    case 1: // voisins distance 2
         type_plateau = 1;
         break;
-    case 2: //géométrie torique
+    case 2: // géométrie torique
         type_plateau = 2;
         break;
-    case 3: //plateau infernal
+    case 3: // plateau infernal
         type_plateau = 3;
         break;
-    default: //jeu de base
+    default: // jeu de base
         type_plateau = 0;
         break;
     }
@@ -63,10 +64,16 @@ void init_positions(unsigned int seed)
         {
             for (int j = 0; j < MAX_Y; ++j)
             {
-                if ((i%2 == 0) || (j%2 == 0))
+                if ((i % 2 == 1) && (j % 2 == 1))
+                {
                     positions[j * MAX_X + i] = *make_invalid_position();
+                    puts("1");
+                }
                 else
+                {
                     positions[j * MAX_X + i] = *make_position(i, j);
+                    puts("2");
+                }
             }
         }
     }
@@ -80,7 +87,6 @@ void init_positions(unsigned int seed)
             }
         }
     }
-    
 }
 
 unsigned int position_x(const struct position_t *p)
@@ -151,10 +157,10 @@ void position_to_string(const struct position_t *p, char *buf)
 int is_valid_position(const struct position_t *p)
 {
     if (type_plateau == 0 || type_plateau == 1 || type_plateau == 2)
-        return (p && (p->x < MAX_X) && (p->y < MAX_Y) );
-    else //plateau infernal 
+        return (p && (p->x < MAX_X) && (p->y < MAX_Y));
+    else // plateau infernal
     {
-        return !(p == &positions[MAX_X*MAX_Y]);
+        return  (p&&(p->x != MAX_X)&&(p->y != MAX_Y));
     }
 }
 
@@ -163,7 +169,7 @@ int is_valid_position(const struct position_t *p)
 // pas valides, on utilise make_invalid_position
 void list_neighbors(const struct position_t *p, struct position_t **ns)
 {
-    if (type_plateau == 0 || type_plateau == 3) //jeu de base ou plateau de jeu infernal
+    if (type_plateau == 0 || type_plateau == 3) // jeu de base ou plateau de jeu infernal
     {
         int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1}; // Déplacements en x
         int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1}; // Déplacements en y
@@ -185,10 +191,10 @@ void list_neighbors(const struct position_t *p, struct position_t **ns)
             ns[count] = make_invalid_position();
         }
     }
-    else if (type_plateau == 1) //voisins distance 2 directions cardinales
+    else if (type_plateau == 1) // voisins distance 2 directions cardinales
     {
-        int dx[] = {-1,-2,1,2,0,0,0,0}; // Déplacements en x
-        int dy[] = {0,0,0,0,-1,-2,1,2}; // Déplacements en y
+        int dx[] = {-1, -2, 1, 2, 0, 0, 0, 0}; // Déplacements en x
+        int dy[] = {0, 0, 0, 0, -1, -2, 1, 2}; // Déplacements en y
 
         unsigned int count = 0;
         for (int i = 0; i < 8; i++)
@@ -207,7 +213,7 @@ void list_neighbors(const struct position_t *p, struct position_t **ns)
             ns[count] = make_invalid_position();
         }
     }
-    else if (type_plateau == 2) //géométrie torique
+    else if (type_plateau == 2) // géométrie torique
     {
         int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1}; // Déplacements en x
         int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1}; // Déplacements en y
@@ -222,15 +228,15 @@ void list_neighbors(const struct position_t *p, struct position_t **ns)
             {
                 ns[count++] = make_position(nx, ny);
             }
-            else 
+            else
             {
                 if (nx >= MAX_X)
-                    nx = nx%MAX_X;
+                    nx = nx % MAX_X;
                 else if (nx < 0)
                     nx += MAX_X;
-                if (ny >=MAX_Y)
-                    ny = ny%MAX_Y;
-                else if ( ny < 0)
+                if (ny >= MAX_Y)
+                    ny = ny % MAX_Y;
+                else if (ny < 0)
                     ny += MAX_Y;
             }
         }
