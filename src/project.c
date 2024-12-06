@@ -12,7 +12,6 @@
 #include "building.h"
 
 #define NUM_ROUNDS 4
-#define CELL_WIDTH 8
 
 int affichage = 0;
 
