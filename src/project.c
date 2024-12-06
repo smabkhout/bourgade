@@ -297,6 +297,8 @@ void game(int num_players, int init_param)
 
   struct board_t *board = NULL;
   board = init_board(); // initialisation du plateau sans les buildings
+  int cost = cost_of_mine_placement(board);
+  printf("Le cout de cette répartition de mines est : %d\n", cost);
   board->present_buildings = (struct building_t **)malloc(sizeof(struct building_t *) * MAX_BUILDINGS_PER_PLAYER * num_players);
   for (int i = 0; i < MAX_BUILDINGS_PER_PLAYER * num_players; ++i)
   {
