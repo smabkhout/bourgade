@@ -138,10 +138,12 @@ void parcours_composante_connexe(struct position_t *pos_initial, int *indices_co
     {
         ++*longueur;
         printf("C'est la fin du parcours de la composante connexe acuelle.\n");
+        free(neighbors);
         return;
     }
     else
     {
+        free(neighbors);
         return;
     }
 
