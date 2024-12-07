@@ -72,62 +72,85 @@ void free_mine(struct mine_t *mine)
     free(mine);
 }
 
-void parcours_composante_connexe(struct position_t *pos_initial, int *indices_composantes_connexes, int longueur, struct board_t *board)
+void parcours_composante_connexe(struct position_t *pos_initial, int *indices_composantes_connexes, int *longueur, struct board_t *board, int debut_composante)
 {
     // question : on prend composantes connexes aussi en diagonales ou uniquement dans les directions cardinales
     printf("La position courante est (%d,%d)\n", PY(pos_initial) + 1, PX(pos_initial) + 1);
     int index_pos_initial = PY(pos_initial) * MAX_X + PX(pos_initial);
-    for (int j = 0; j < longueur; ++j)
+    for (int j = 0; j < *longueur; ++j)
     {
         if (indices_composantes_connexes[j] == index_pos_initial)
         {
             return; // si notre position existe déjà dans une composante connexe, on sort de la fonction
         }
     }
-    indices_composantes_connexes[longueur] = index_pos_initial;
-    for (int i = 0; i < MAX_POSITIONS/2; ++i)
+    indices_composantes_connexes[*longueur] = index_pos_initial;
+    ++*longueur; // on stock cette position et on incrémente l'indice actuel (longueur) de notre tableau indices_composantes_connexes
+    printf("La position (%d,%d) est stocké\n", PY(pos_initial) + 1, PX(pos_initial) + 1);
+    for (int i = 0; i < MAX_POSITIONS / 2; ++i)
     {
         printf("%d__", indices_composantes_connexes[i]);
     }
     printf("\n");
-    ++longueur; // on stock cette position et on incrémente l'indice actuel (longueur) de notre tableau indices_composantes_connexes
     struct position_t **neighbors = malloc(sizeof(struct position_t *) * 8);
     for (int i = 0; i < 8; ++i)
     {
         neighbors[i] = make_invalid_position();
     }
     list_neighbors(pos_initial, neighbors);
-    for (int i = 0; i < 8; ++i)
+    int indices_voisins_a_parcourir[8] = {0};
+    int nb_voisins_a_parcourir = 0;
+    for (int i = 0; i < 8; ++i) // premierement stocker les mines voisines dans le tableau composante connexe
     {
         int neighbor_index = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
-        printf("Le voisin courant est (%d,%d)\n", PY(neighbors[i]) + 1, PX(neighbors[i]) + 1);
-        printf("%d\n", i);
+        if (is_valid_position(neighbors[i]))
+        {
+            printf("Le voisin courant est (%d,%d)\n", PY(neighbors[i]) + 1, PX(neighbors[i]) + 1);
+            printf("%d\n", i);
+        }
         int appartient_autre_composante = 0;
-        for (int j = 0; j < longueur; ++j)
+        for (int j = 0; j < *longueur; ++j)
         {
             if (indices_composantes_connexes[j] == neighbor_index)
             {
                 appartient_autre_composante = 1;
-                printf("La position (%d,%d) appartient à une composante\n", PY(neighbors[i]) + 1, PX(neighbors[i]) + 1);
                 break;
             }
         }
-        if (!appartient_autre_composante)
+        if (!appartient_autre_composante && neighbors[i] && is_valid_position(neighbors[i]) && (board->tab[neighbor_index]->mine))
         {
-            if (neighbors[i] != NULL && is_valid_position(neighbors[i]) && (board->tab[neighbor_index]->mine))
-            {
-                printf("Appel récursif de la position (%d,%d) à la position (%d,%d)\n", PY(neighbors[i]) + 1, PX(neighbors[i]) + 1, PY(pos_initial) + 1, PX(pos_initial) + 1);
-                parcours_composante_connexe(neighbors[i], indices_composantes_connexes, longueur, board);
-            }
+            indices_voisins_a_parcourir[nb_voisins_a_parcourir] = i;
+            ++nb_voisins_a_parcourir;
+            printf("Le voisin (%d,%d) est stocké afin qu'il soit parcouru\n", PY(neighbors[i]) + 1, PX(neighbors[i]) + 1);
         }
-        printf("%d\n", i);
     }
-    int est_pos_finale_composante_connexe = 1;
+    for (int j = 0; j < nb_voisins_a_parcourir; ++j) // appeler la fonction recursivement sur ceux qui ne sont pas déjà dans le tableau
+    {
+        int neighbor_index = PY(neighbors[indices_voisins_a_parcourir[j]]) * MAX_X + PX(neighbors[indices_voisins_a_parcourir[j]]);
+        if (neighbors[indices_voisins_a_parcourir[j]] && is_valid_position(neighbors[indices_voisins_a_parcourir[j]]) && (board->tab[neighbor_index]->mine))
+        {
+            printf("Appel récursif de la position (%d,%d) à la position (%d,%d)\n", PY(neighbors[indices_voisins_a_parcourir[j]]) + 1, PX(neighbors[indices_voisins_a_parcourir[j]]) + 1, PY(pos_initial) + 1, PX(pos_initial) + 1);
+            parcours_composante_connexe(neighbors[indices_voisins_a_parcourir[j]], indices_composantes_connexes, longueur, board, 0);
+        }
+    }
+
+    if (debut_composante)
+    {
+        ++*longueur;
+        printf("C'est la fin du parcours de la composante connexe acuelle.\n");
+        return;
+    }
+    else
+    {
+        return;
+    }
+
+    /*
     for (int i = 0; i < 8; ++i)
     {
         int neighbor_index = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
         int appartient_autre_composante = 0;
-        for (int j = 0; j < longueur; ++j)
+        for (int j = 0; j < *longueur; ++j)
         {
             if (indices_composantes_connexes[j] == neighbor_index)
             {
@@ -151,25 +174,25 @@ void parcours_composante_connexe(struct position_t *pos_initial, int *indices_co
     if (est_pos_finale_composante_connexe)
     {
         printf("La position (%d,%d) est la dernière de cette composante\n", PY(pos_initial) + 1, PX(pos_initial) + 1);
-        ++longueur; //la variable longueur ne se modifie pas après le return, il faut une autre solution
-                    //solution possible est de stocker la variable longueur et passer en paramètre un pointeur
-                    //vers cette variable afin dde le modifier à chaque fois qu'on le veut
+        ++*longueur; // la variable longueur ne se modifie pas après le return, il faut une autre solution
+                    // solution possible est de stocker la variable longueur et passer en paramètre un pointeur
+                    // vers cette variable afin dde le modifier à chaque fois qu'on le veut
         free(neighbors);
         return; // si notre case est la derniere de la composante, il suffit d'incrémenter longueur vers l'indice suivant et s'arreter
     }
     free(neighbors);
-    // penser à mettre une condition d'arret pour le dernier element d'une composante;
-    // on parcoure tous les voisins, si tous ces voisins sont deja dans indices composantes connexes/invalides/pas des mines on s'arrete
-    // on met un -1 apres la fin de chaque composante;
+    */
 }
 
 int cost_of_mine_placement(struct board_t *board)
 {
-    int longueur = 0;
+    int *longueur = (int *)malloc(sizeof(int));
+    *longueur = 0;
     int indices_composantes[MAX_POSITIONS / 2];
-    for (int i = 0; i < MAX_POSITIONS/2; ++i)
+    int debut_composante = 1;
+    for (int i = 0; i < MAX_POSITIONS / 2; ++i)
     {
-        indices_composantes[i]=-1;
+        indices_composantes[i] = -1;
     }
     // contient les indices des positions
     // on a MAX_POS/4 mines, au pire on a
@@ -194,7 +217,7 @@ int cost_of_mine_placement(struct board_t *board)
                 parcours_composante_connexe(neighbors[i], indices_composantes, longueur, board);
             }
             free(neighbors);*/
-            parcours_composante_connexe(POS(x, y), indices_composantes, longueur, board);
+            parcours_composante_connexe(POS(x, y), indices_composantes, longueur, board, debut_composante);
         }
     }
 
@@ -214,10 +237,11 @@ int cost_of_mine_placement(struct board_t *board)
         }
         ++i;
     }
-    for (int i = 0; i < MAX_POSITIONS/2; ++i)
+    for (int i = 0; i < MAX_POSITIONS / 2; ++i)
     {
         printf("%d__", indices_composantes[i]);
     }
     printf("\n");
+    free(longueur);
     return cost;
 }
