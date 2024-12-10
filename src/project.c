@@ -330,11 +330,14 @@ void game(int num_players, int init_param, int seed)
     int current_player = 0; // indice pour repérer le joueur actuel dans players
     while (exists_a_player_with_free_workers(players, num_players) && exists_an_empty_cell(board) && exists_a_player(players, num_players))
     {
-
+      // printf("%d %d %d \n",exists_a_player_with_free_workers(players, num_players), exists_an_empty_cell(board), exists_a_player(players, num_players));
       if (players[current_player] != NULL)
       {
+        printf("%d %d \n", players[current_player]->number_of_workers, players[current_player]->eliminated);
+        printf("current player %d\n", current_player);
         if (players[current_player]->number_of_workers > 0 && players[current_player]->eliminated == 0)
         {
+          puts("1");
           struct cell_t *current_cell;
           struct position_t *a_pos = choose_optimal_pos(board);
           int a_pos_index = 0;
@@ -394,6 +397,8 @@ void game(int num_players, int init_param, int seed)
           }
         }
       }
+      
+      current_player = (current_player + 1) % num_players;
 
       if (affichage)
       {
@@ -469,6 +474,6 @@ int main(int argc, char *argv[])
       break;
     }
   }
-  game(num_players, init_param,seed);
+  game(num_players, init_param, seed);
   return 0;
 }
