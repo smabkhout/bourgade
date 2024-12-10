@@ -284,7 +284,7 @@ void display_remaining_players(int num_players, struct player_t **players)
   printf("\n");
 }
 
-void game(int num_players, int init_param)
+void game(int num_players, int init_param, int seed)
 {
   init_positions(init_param); // initialisation des positions
   int count_valide = 0;
@@ -298,7 +298,7 @@ void game(int num_players, int init_param)
   printf("nb de pos valides : %d\n", count_valide);
 
   struct board_t *board = NULL;
-  board = init_board(); // initialisation du plateau sans les buildings
+  board = init_best_board(seed); // initialisation du plateau sans les buildings
   int cost = cost_of_mine_placement(board);
   printf("Le cout de cette répartition de mines est : %d\n", cost);
   board->present_buildings = (struct building_t **)malloc(sizeof(struct building_t *) * MAX_BUILDINGS_PER_PLAYER * num_players);
@@ -469,7 +469,6 @@ int main(int argc, char *argv[])
       break;
     }
   }
-  (void)seed;
-  game(num_players, init_param);
+  game(num_players, init_param,seed);
   return 0;
 }

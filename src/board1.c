@@ -19,10 +19,11 @@ int occurrences(struct mine_t *tab)
     return (occ1 * occ2 * occ3 * occ4); // retourne 0 si une occurrence est nulle et un entier non nul sinon
 }
 
-struct board_t *init_board()
+struct board_t *init_board(int seed)
 { // pour initialiser le board, on place N/4 mines de ressources où N est le nombre
     // de positions valides (N>=16). Il faut aussi qu'il y au moins une mine de chaque type sur le board (Field, Forest, River, Rock
     // mine). De plus, le nombre d'emplacement valide parmi les voisins de chaque mine est >= 1.
+    (void ) seed;
     struct board_t *board;
     board = (struct board_t *)malloc(sizeof(struct board_t));
     board->tab = (struct cell_t **)malloc(sizeof(struct cell_t *) * MAX_POSITIONS);
@@ -94,6 +95,28 @@ struct board_t *init_board()
     } while (nb_of_mines < MAX_POSITIONS / 4);
     // nb_of_mines vaut (N/4)-1 à la fin du prgramme mais c'est normal car initialisée à 0
     //  deuxième condition : chaque mine a au moins 1 position valide dans ses voisins sinon => on refait une génération
+    return board;
+}
+
+struct board_t* init_best_board(int seed){
+    srand(seed);
+    struct board_t *board;
+    board = (struct board_t *)malloc(sizeof(struct board_t));
+    board->tab = (struct cell_t **)malloc(sizeof(struct cell_t *) * MAX_POSITIONS);
+    board->present_mines = (struct mine_t *)malloc(sizeof(struct mine_t) * MAX_POSITIONS / 4);
+    construct_mines(board->present_mines);
+    for (int i = 0; i < MAX_X * MAX_Y; i++)
+    {
+        board->tab[i] = init_cell();
+    }
+    int* repartition = best_mine_placement();
+    for (int i = 0 ; i< MAX_POSITIONS/4;++i)
+    {
+        printf("%d \n",repartition[i]);
+        
+        place_mine(board->tab[repartition[i]],board->present_mines[i]);
+    }
+    free(repartition);
     return board;
 }
 

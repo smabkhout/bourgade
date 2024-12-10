@@ -28,4 +28,6 @@ void parcours_composante_connexe(struct position_t* pos_initial, int* indices_co
 
 int cost_of_mine_placement(struct board_t* board);
 
+int* best_mine_placement();
+
 #endif

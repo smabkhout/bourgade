@@ -176,3 +176,44 @@ int cost_of_mine_placement(struct board_t *board)
     free(longueur);
     return cost;
 }
+
+int *best_mine_placement()
+{
+    int *tab = (int *)malloc(sizeof(int) * MAX_POSITIONS / 4); // renvoyer un tableau contenant les indices des mines sur le plateau
+    int *repartitions = (int *)malloc(sizeof(int) * (MAX_POSITIONS / 4) * 100);
+    int *costs = (int *)malloc(sizeof(int) * 100);
+    struct board_t* board;
+    for (int j = 0; j < 100; ++j) // sur 100 itérations, on garde la meilleure répartition
+    {
+        int nb_of_mines = 0;
+        board = init_board(j);
+        costs[j] = cost_of_mine_placement(board);
+        for (int i = 0; i < MAX_POSITIONS; ++i)
+        {
+            if (board->tab[i]->mine)
+            {
+                repartitions[j * (MAX_POSITIONS / 4) + nb_of_mines] = i;
+                nb_of_mines++;
+            }
+        }
+        free(board);
+    }
+
+    int indice_min = 0;
+    int min = costs[0];
+    for (int i = 1; i< 100;++i)
+    {
+        if (costs[i] < min){
+            min = costs[i];
+            indice_min = i;
+        }
+    }
+
+    for (int k = 0 ; k < MAX_POSITIONS/4 ; ++k)
+    {
+        tab[k] = repartitions[indice_min * (MAX_POSITIONS/4) + k];
+    }
+    free(repartitions);
+    free(costs);
+    return tab;
+}

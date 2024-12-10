@@ -12,8 +12,12 @@ struct board_t {
 
 int occurrences(struct mine_t* tab);
 
-struct board_t* init_board();
+struct board_t* init_board(int seed);
+
+struct board_t* init_best_board(int seed);
 
 void free_board(struct board_t* board);
+
+
 
 #endif
