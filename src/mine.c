@@ -196,7 +196,7 @@ int *best_mine_placement()
                 nb_of_mines++;
             }
         }
-        free(board);
+        free_board(board);
     }
 
     int indice_min = 0;
