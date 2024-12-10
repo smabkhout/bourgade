@@ -13,19 +13,18 @@
 
 #define NUM_ROUNDS 4
 
-//definition des variables globales propres à ce fichier
+// definition des variables globales propres à ce fichier
 static int affichage = 0;
 
-static char* workers_names[MAX_WORKERS_PER_PLAYER] = {
+static char *workers_names[MAX_WORKERS_PER_PLAYER] = {
     "Franck",
     "John",
     "Francis",
     "Walter",
     "Hanck",
-    "Georges"
-};
+    "Georges"};
 
-static unsigned int workers_costs[NUM_RESOURCES] = {0,1,1,1,1,0};
+static unsigned int workers_costs[NUM_RESOURCES] = {0, 1, 1, 1, 1, 0};
 
 int exists_a_player_with_free_workers(struct player_t **players, int taille)
 { // return 1 if there is a player with at least one worker available, and else 0
@@ -43,8 +42,8 @@ int exists_an_empty_cell(struct board_t *board) // return 1 if there is at least
   for (int i = 0; i < MAX_X * MAX_Y; ++i)
   {
     unsigned int x = i % MAX_X;
-    unsigned int y = (i-x)/MAX_X;
-    if (is_free_cell(board->tab[i]) && is_valid_position(POS(x,y)))
+    unsigned int y = (i - x) / MAX_X;
+    if (is_free_cell(board->tab[i]) && is_valid_position(POS(x, y)))
       return 1;
   }
   return 0;
@@ -113,7 +112,8 @@ void print_board(struct board_t *board)
 
       if (!is_valid_position(POS(x, y)))
       {
-        printf("%sxxxxxxxx%s",color_start(ORANGE),color_stop());
+        // printf("%sxxxxxxxx%s",color_start(ORANGE),color_stop());
+        printf("  %sxxxx%s  ", color_start(RED), color_stop());
       }
       else
       {
@@ -152,7 +152,8 @@ void print_board(struct board_t *board)
 
       if (!is_valid_position(POS(x, y)))
       {
-        printf("%sxxxxxxxx%s",color_start(ORANGE),color_stop());
+        // printf("%sxxxxxxxx%s",color_start(ORANGE),color_stop());
+        printf(" %sx%s%sxxxx%s%sx%s ", color_start(RED), color_stop(), color_start(ORANGE), color_stop(), color_start(RED), color_stop());
       }
       else
       {
@@ -184,7 +185,8 @@ void print_board(struct board_t *board)
       printf("|");
       if (!is_valid_position(POS(x, y)))
       {
-        printf("%sxxxxxxxx%s",color_start(ORANGE),color_stop());
+        //printf("%sxxxxxxxx%s", color_start(ORANGE), color_stop());
+        printf(" %sx%s%sx%s%sxx%s%sx%s%sx%s ", color_start(RED), color_stop(), color_start(ORANGE), color_stop(), color_start(YELLOW), color_stop(), color_start(ORANGE), color_stop(), color_start(RED), color_stop());
       }
       else
       {
@@ -286,14 +288,14 @@ void game(int num_players, int init_param)
 {
   init_positions(init_param); // initialisation des positions
   int count_valide = 0;
-  for (int i = 0; i<MAX_POSITIONS; ++i)
+  for (int i = 0; i < MAX_POSITIONS; ++i)
   {
-    unsigned int x = i%MAX_X;
-    unsigned int y = (i-x)/MAX_X;
-    if (is_valid_position(POS(x,y)))
+    unsigned int x = i % MAX_X;
+    unsigned int y = (i - x) / MAX_X;
+    if (is_valid_position(POS(x, y)))
       ++count_valide;
   }
-  printf("nb de pos valides : %d\n",count_valide);
+  printf("nb de pos valides : %d\n", count_valide);
 
   struct board_t *board = NULL;
   board = init_board(); // initialisation du plateau sans les buildings
@@ -308,7 +310,6 @@ void game(int num_players, int init_param)
       board->present_buildings[i]->nom[j] = '-';
     }
   } // initialisation des batiments du plateau
-  
 
   print_board(board);
 
