@@ -75,7 +75,6 @@ void free_mine(struct mine_t *mine)
 void parcours_composante_connexe(struct position_t *pos_initial, int *indices_composantes_connexes, int *longueur, struct board_t *board, int debut_composante)
 {
     // question : on prend composantes connexes aussi en diagonales ou uniquement dans les directions cardinales
-    printf("La position courante est (%d,%d)\n", PY(pos_initial) + 1, PX(pos_initial) + 1);
     int index_pos_initial = PY(pos_initial) * MAX_X + PX(pos_initial);
     for (int j = 0; j < *longueur; ++j)
     {
@@ -86,12 +85,6 @@ void parcours_composante_connexe(struct position_t *pos_initial, int *indices_co
     }
     indices_composantes_connexes[*longueur] = index_pos_initial;
     ++*longueur; // on stock cette position et on incrémente l'indice actuel (longueur) de notre tableau indices_composantes_connexes
-    printf("La position (%d,%d) est stocké\n", PY(pos_initial) + 1, PX(pos_initial) + 1);
-    for (int i = 0; i < MAX_POSITIONS / 2; ++i)
-    {
-        printf("%d__", indices_composantes_connexes[i]);
-    }
-    printf("\n");
     struct position_t **neighbors = malloc(sizeof(struct position_t *) * 8);
     for (int i = 0; i < 8; ++i)
     {
@@ -103,11 +96,6 @@ void parcours_composante_connexe(struct position_t *pos_initial, int *indices_co
     for (int i = 0; i < 8; ++i) // premierement stocker les mines voisines dans le tableau composante connexe
     {
         int neighbor_index = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
-        if (is_valid_position(neighbors[i]))
-        {
-            printf("Le voisin courant est (%d,%d)\n", PY(neighbors[i]) + 1, PX(neighbors[i]) + 1);
-            printf("%d\n", i);
-        }
         int appartient_autre_composante = 0;
         for (int j = 0; j < *longueur; ++j)
         {
@@ -121,7 +109,6 @@ void parcours_composante_connexe(struct position_t *pos_initial, int *indices_co
         {
             indices_voisins_a_parcourir[nb_voisins_a_parcourir] = i;
             ++nb_voisins_a_parcourir;
-            printf("Le voisin (%d,%d) est stocké afin qu'il soit parcouru\n", PY(neighbors[i]) + 1, PX(neighbors[i]) + 1);
         }
     }
     for (int j = 0; j < nb_voisins_a_parcourir; ++j) // appeler la fonction recursivement sur ceux qui ne sont pas déjà dans le tableau
@@ -129,7 +116,6 @@ void parcours_composante_connexe(struct position_t *pos_initial, int *indices_co
         int neighbor_index = PY(neighbors[indices_voisins_a_parcourir[j]]) * MAX_X + PX(neighbors[indices_voisins_a_parcourir[j]]);
         if (neighbors[indices_voisins_a_parcourir[j]] && is_valid_position(neighbors[indices_voisins_a_parcourir[j]]) && (board->tab[neighbor_index]->mine))
         {
-            printf("Appel récursif de la position (%d,%d) à la position (%d,%d)\n", PY(neighbors[indices_voisins_a_parcourir[j]]) + 1, PX(neighbors[indices_voisins_a_parcourir[j]]) + 1, PY(pos_initial) + 1, PX(pos_initial) + 1);
             parcours_composante_connexe(neighbors[indices_voisins_a_parcourir[j]], indices_composantes_connexes, longueur, board, 0);
         }
     }
@@ -137,7 +123,6 @@ void parcours_composante_connexe(struct position_t *pos_initial, int *indices_co
     if (debut_composante)
     {
         ++*longueur;
-        printf("C'est la fin du parcours de la composante connexe acuelle.\n");
         free(neighbors);
         return;
     }
@@ -188,11 +173,6 @@ int cost_of_mine_placement(struct board_t *board)
         }
         ++i;
     }
-    for (int i = 0; i < MAX_POSITIONS / 2; ++i)
-    {
-        printf("%d__", indices_composantes[i]);
-    }
-    printf("\n");
     free(longueur);
     return cost;
 }

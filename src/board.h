@@ -14,6 +14,8 @@ int occurrences(struct mine_t* tab);
 
 struct board_t* init_board();
 
+struct board_t* init_board_lower_cost();
+
 void free_board(struct board_t* board);
 
 #endif

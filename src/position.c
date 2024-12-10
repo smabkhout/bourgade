@@ -67,12 +67,10 @@ void init_positions(unsigned int seed)
                 if ((i % 2 == 1) && (j % 2 == 1))
                 {
                     positions[j * MAX_X + i] = *make_invalid_position();
-                    puts("1");
                 }
                 else
                 {
                     positions[j * MAX_X + i] = *make_position(i, j);
-                    puts("2");
                 }
             }
         }

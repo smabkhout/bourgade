@@ -185,7 +185,7 @@ void print_board(struct board_t *board)
       printf("|");
       if (!is_valid_position(POS(x, y)))
       {
-        //printf("%sxxxxxxxx%s", color_start(ORANGE), color_stop());
+        // printf("%sxxxxxxxx%s", color_start(ORANGE), color_stop());
         printf(" %sx%s%sx%s%sxx%s%sx%s%sx%s ", color_start(RED), color_stop(), color_start(ORANGE), color_stop(), color_start(YELLOW), color_stop(), color_start(ORANGE), color_stop(), color_start(RED), color_stop());
       }
       else
@@ -330,6 +330,7 @@ void game(int num_players, int init_param)
     int current_player = 0; // indice pour repérer le joueur actuel dans players
     while (exists_a_player_with_free_workers(players, num_players) && exists_an_empty_cell(board) && exists_a_player(players, num_players))
     {
+
       if (players[current_player] != NULL)
       {
         if (players[current_player]->number_of_workers > 0 && players[current_player]->eliminated == 0)

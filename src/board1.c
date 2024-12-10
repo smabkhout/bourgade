@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include "board.h"
 
-
-int occurrences(struct mine_t* tab)
+int occurrences(struct mine_t *tab)
 { // fonction qui vérifie si on a au moins une mine de chaque ressource
     int occ1, occ2, occ3, occ4 = 0;
     for (int i = 0; i < MAX_POSITIONS / 4; ++i)
@@ -20,23 +19,23 @@ int occurrences(struct mine_t* tab)
     return (occ1 * occ2 * occ3 * occ4); // retourne 0 si une occurrence est nulle et un entier non nul sinon
 }
 
-struct board_t* init_board()
+struct board_t *init_board()
 { // pour initialiser le board, on place N/4 mines de ressources où N est le nombre
     // de positions valides (N>=16). Il faut aussi qu'il y au moins une mine de chaque type sur le board (Field, Forest, River, Rock
     // mine). De plus, le nombre d'emplacement valide parmi les voisins de chaque mine est >= 1.
-    struct board_t* board;
-    board = (struct board_t*)malloc(sizeof(struct board_t));
-    board->tab = (struct cell_t**)malloc(sizeof(struct cell_t*)*MAX_POSITIONS);
-    board->present_mines = (struct mine_t*)malloc(sizeof(struct mine_t)*MAX_POSITIONS/4);
+    struct board_t *board;
+    board = (struct board_t *)malloc(sizeof(struct board_t));
+    board->tab = (struct cell_t **)malloc(sizeof(struct cell_t *) * MAX_POSITIONS);
+    board->present_mines = (struct mine_t *)malloc(sizeof(struct mine_t) * MAX_POSITIONS / 4);
     int nb_of_mines = 0;
     for (int i = 0; i < MAX_X * MAX_Y; i++)
     {
         board->tab[i] = init_cell();
     }
-    construct_mines(board->present_mines); //construct mines s'occupe d'avoir au moins une mine de chaque type
+    construct_mines(board->present_mines);         // construct mines s'occupe d'avoir au moins une mine de chaque type
     int temp_invalid_pos[MAX_POSITIONS / 2] = {0}; // à chaque fois qu'on place une mine, on résérve une position voisine à ne pas
-                                             // utiliser lors du placement des autres mines afin de garantir qu'on toujours au moins
-                                             // une position voisine valide.
+                                                   // utiliser lors du placement des autres mines afin de garantir qu'on toujours au moins
+                                                   // une position voisine valide.
     do
     {
         int i = rand() % (MAX_X * MAX_Y);
@@ -46,20 +45,21 @@ struct board_t* init_board()
         unsigned int y = (i - x) / MAX_X;
         for (int k = 0; k < MAX_POSITIONS / 4; k++)
         {
-            if (temp_invalid_pos[k] == i || !is_free_cell(board->tab[i]) || !is_valid_position(POS(x,y)))
+            if (temp_invalid_pos[k] == i || !is_free_cell(board->tab[i]) || !is_valid_position(POS(x, y)))
                 is_free_position = 0;
-        } // verifier si la position est libre        
+        } // verifier si la position est libre
         struct position_t **neighbors = NULL;
-        neighbors = (struct position_t **)malloc(sizeof(struct position_t *)*8);
-        for (int i = 0; i<8;i++)
+        neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
+        for (int i = 0; i < 8; i++)
         {
             neighbors[i] = make_invalid_position();
         }
-        list_neighbors(POS(x,y), neighbors);
-        for (int i = 0; i<8;++i){
+        list_neighbors(POS(x, y), neighbors);
+        for (int i = 0; i < 8; ++i)
+        {
             if (is_valid_position(neighbors[i]))
             {
-                int a = PY(neighbors[i])*MAX_X + PX(neighbors[i]);
+                int a = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
                 for (int k = 0; k < MAX_POSITIONS / 4; k++)
                 {
                     if (temp_invalid_pos[k] == a)
@@ -67,14 +67,122 @@ struct board_t* init_board()
                 }
             }
         }
-        if (is_free_position && is_free_neighbor){
+        if (is_free_position && is_free_neighbor)
+        {
             place_mine(board->tab[i], board->present_mines[nb_of_mines]);
             nb_of_mines += 1;
         }
         free(neighbors);
-    } while (nb_of_mines < MAX_POSITIONS/4);
-    //nb_of_mines vaut (N/4)-1 à la fin du prgramme mais c'est normal car initialisée à 0
-    // deuxième condition : chaque mine a au moins 1 position valide dans ses voisins sinon => on refait une génération
+    } while (nb_of_mines < MAX_POSITIONS / 4);
+    for (int i = 0; i< MAX_POSITIONS/2; ++i)
+    {
+        printf("%d\n", temp_invalid_pos[i]);
+    }
+    // nb_of_mines vaut (N/4)-1 à la fin du prgramme mais c'est normal car initialisée à 0
+    //  deuxième condition : chaque mine a au moins 1 position valide dans ses voisins sinon => on refait une génération
+    return board;
+}
+
+struct board_t *init_board_lower_cost()
+{ // pour initialiser le board, on place N/4 mines de ressources où N est le nombre
+    // de positions valides (N>=16). Il faut aussi qu'il y au moins une mine de chaque type sur le board (Field, Forest, River, Rock
+    // mine). De plus, le nombre d'emplacement valide parmi les voisins de chaque mine est >= 1.
+    struct board_t *board;
+    board = (struct board_t *)malloc(sizeof(struct board_t));
+    board->tab = (struct cell_t **)malloc(sizeof(struct cell_t *) * MAX_POSITIONS);
+    board->present_mines = (struct mine_t *)malloc(sizeof(struct mine_t) * MAX_POSITIONS / 4);
+    int nb_of_mines = 0;
+    for (int i = 0; i < MAX_X * MAX_Y; i++)
+    {
+        board->tab[i] = init_cell();
+    }
+    construct_mines(board->present_mines);     // construct mines s'occupe d'avoir au moins une mine de chaque type
+    int temp_invalid_pos[MAX_POSITIONS] = {0}; // à chaque fois qu'on place une mine, on résérve maintenant 3 positions voisines à ne pas
+                                               // utiliser lors du placement des autres mines afin de garantir qu'on toujours au moins
+                                               // une position voisine valide et que les composantes connexes soient petites.
+    do
+    {
+        int i = rand() % (MAX_X * MAX_Y);
+        int is_free_position = 1;
+        int nb_free_neighbor = 0;
+        unsigned int x = i % MAX_X;
+        unsigned int y = (i - x) / MAX_X;
+        for (int k = 0; k < MAX_POSITIONS / 4; k++)
+        {
+            if (temp_invalid_pos[k] == i || !is_free_cell(board->tab[i]) || !is_valid_position(POS(x, y)))
+                is_free_position = 0;
+        } // verifier si la position est libre
+        struct position_t **neighbors = NULL;
+        neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
+        for (int i = 0; i < 8; i++)
+        {
+            neighbors[i] = make_invalid_position();
+        }
+        list_neighbors(POS(x, y), neighbors);
+        for (int i = 0; i < 8; ++i)
+        {
+            if (is_valid_position(neighbors[i]))
+            {
+                int a = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
+                for (int k = 0; k < MAX_POSITIONS; k++)
+                {
+                    if (temp_invalid_pos[k] != a)
+                        ++nb_free_neighbor; // vérifie maintenant si au moins 3 voisin de la position i sont libres
+                }
+            }
+        }
+
+        if (is_free_position && (nb_free_neighbor >= 3))
+        {
+            place_mine(board->tab[i], board->present_mines[nb_of_mines]);
+            printf("%s\n",board->tab[i]->mine->name);
+            nb_of_mines += 1;
+        }
+        free(neighbors);
+
+        if (nb_of_mines == MAX_POSITIONS / 4 - 1)
+        {
+            for (int i = 0; i < MAX_POSITIONS; ++i)
+            {
+                unsigned int x = i % MAX_X;
+                unsigned int y = (i - x) / MAX_X;
+                int is_free_temp_pos = 1;
+                if (is_valid_position(POS(x, y)) && (nb_of_mines != MAX_POSITIONS/4))
+                {
+                    for (int k = 0; k < MAX_POSITIONS; k++)
+                    {
+                        if (temp_invalid_pos[k] == i || !is_free_cell(board->tab[i]) || !is_valid_position(POS(x, y)))
+                            is_free_temp_pos = 0;
+                    }
+                    if (is_free_temp_pos)
+                    {
+                        puts("2");
+                        place_mine(board->tab[i], board->present_mines[nb_of_mines]);
+                        printf("%s\n",board->tab[i]->mine->name);
+                        nb_of_mines += 1;
+                    }
+                }
+            }
+            if (nb_of_mines != MAX_POSITIONS/4)
+            {
+                for (int i = 0;i< MAX_POSITIONS/2;++i)
+                {
+                    temp_invalid_pos[i] = 0;
+                }
+                nb_of_mines = 0;
+                for (int i = 0; i< MAX_POSITIONS;++i)
+                {
+                    if (board->tab[i]->mine)
+                    {
+                        puts("freee");
+                        free(board->tab[i]->mine);
+                    }
+                }
+            }
+        }
+    } while (nb_of_mines < MAX_POSITIONS / 4);
+    // nb_of_mines vaut (N/4)-1 à la fin du prgramme mais c'est normal car initialisée à 0
+    //  deuxième condition : chaque mine a au moins 1 position valide dans ses voisins sinon => on refait une génération
     return board;
 }
 
