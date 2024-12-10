@@ -238,6 +238,7 @@ void list_neighbors(const struct position_t *p, struct position_t **ns)
                     ny = ny % MAX_Y;
                 else if (ny < 0)
                     ny += MAX_Y;
+                ns[count++] = make_position(nx,ny);
             }
         }
         // Remplir le reste avec des positions invalides si moins de MAX_NEIGHBORS voisins
