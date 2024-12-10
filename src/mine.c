@@ -146,44 +146,6 @@ void parcours_composante_connexe(struct position_t *pos_initial, int *indices_co
         free(neighbors);
         return;
     }
-
-    /*
-    for (int i = 0; i < 8; ++i)
-    {
-        int neighbor_index = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
-        int appartient_autre_composante = 0;
-        for (int j = 0; j < *longueur; ++j)
-        {
-            if (indices_composantes_connexes[j] == neighbor_index)
-            {
-                appartient_autre_composante = 1;
-                break;
-            }
-        }
-        if (is_valid_position(neighbors[i]))
-        {
-            if (board->tab[neighbor_index]->mine)
-            {
-                if (!appartient_autre_composante)
-                {
-                    est_pos_finale_composante_connexe = 0; // si l'un des voisins est une mine qui n'est dans aucune des composantes alors on n'a pas encore finit notre composante connexe
-                    break;                                 // il se peut qu'on est deja sur à cette etape qu'on est dans la derniere case puisqu'on a sortit de l'appel recursif
-                                                           // tester sans tous ces boucles là
-                }
-            }
-        }
-    }
-    if (est_pos_finale_composante_connexe)
-    {
-        printf("La position (%d,%d) est la dernière de cette composante\n", PY(pos_initial) + 1, PX(pos_initial) + 1);
-        ++*longueur; // la variable longueur ne se modifie pas après le return, il faut une autre solution
-                    // solution possible est de stocker la variable longueur et passer en paramètre un pointeur
-                    // vers cette variable afin dde le modifier à chaque fois qu'on le veut
-        free(neighbors);
-        return; // si notre case est la derniere de la composante, il suffit d'incrémenter longueur vers l'indice suivant et s'arreter
-    }
-    free(neighbors);
-    */
 }
 
 int cost_of_mine_placement(struct board_t *board)
@@ -206,19 +168,6 @@ int cost_of_mine_placement(struct board_t *board)
         {
             unsigned int x = i % MAX_X;
             unsigned int y = (i - x) / MAX_X;
-            /*
-            struct position_t **neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
-            for (int j = 0; j < 8; ++j)
-            {
-                neighbors[i] = make_invalid_position();
-            }
-            list_neighbors(POS(x, y), neighbors);
-
-            for (int k = 0; k < 8; ++k)
-            {
-                parcours_composante_connexe(neighbors[i], indices_composantes, longueur, board);
-            }
-            free(neighbors);*/
             parcours_composante_connexe(POS(x, y), indices_composantes, longueur, board, debut_composante);
         }
     }
