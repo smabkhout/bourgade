@@ -112,8 +112,6 @@ struct board_t* init_best_board(int seed){
     int* repartition = best_mine_placement();
     for (int i = 0 ; i< MAX_POSITIONS/4;++i)
     {
-        printf("%d \n",repartition[i]);
-        
         place_mine(board->tab[repartition[i]],board->present_mines[i]);
     }
     free(repartition);
