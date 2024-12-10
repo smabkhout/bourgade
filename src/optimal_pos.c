@@ -11,12 +11,13 @@ struct position_t *choose_optimal_pos(struct board_t *board)
     }
     int max_resources = 0; // Nombre maximum de ressources autour d'une position
     struct position_t *optimal_pos = NULL;
+
     // Parcourir chaque position du plateau
     for (int y = 0; y < MAX_Y; ++y)
     {
         for (int x = 0; x < MAX_X; ++x)
         {
-            if (x >= 0 && x < MAX_X && y >=0 && y < MAX_Y)
+            if (x >= 0 && x < MAX_X && y >= 0 && y < MAX_Y)
             {
                 int current_index = y * MAX_X + x;
                 if (board->tab[current_index] != NULL)
@@ -28,7 +29,7 @@ struct position_t *choose_optimal_pos(struct board_t *board)
                         int resource_count = 0;
                         // Vérifier les voisins de la position courante
                         struct position_t **neighbors = malloc(sizeof(struct position_t *) * 8);
-                        for (int i = 0; i< 8; ++i)
+                        for (int i = 0; i < 8; ++i)
                         {
                             neighbors[i] = make_invalid_position();
                         }
@@ -57,17 +58,23 @@ struct position_t *choose_optimal_pos(struct board_t *board)
         }
     }
     if (is_valid_position(optimal_pos))
+    {
         return optimal_pos; // Retourne la position optimale si elle est valide
-    else {
-        //retourne tout autre position aléatoire sinon, tant que celle-ci est valide
-        for (unsigned int x = 0;x<MAX_X;++x)
+    }
+    else
+    {
+        // retourne tout autre position aléatoire sinon, tant que celle-ci est valide
+        for (unsigned int x = 0; x < MAX_X; ++x)
         {
-            for (unsigned int y= 0;y<MAX_Y;++y)
+            for (unsigned int y = 0; y < MAX_Y; ++y)
             {
-                struct position_t* pos = POS(x,y);
-                int index = y*MAX_X+x;
-                if (is_free_cell(board->tab[index]))
+                struct position_t *pos = POS(x, y);
+                int index = y * MAX_X + x;
+                if (is_free_cell(board->tab[index]) && is_valid_position(pos))
+                {
                     return pos;
+                }
+                    //return pos;
             }
         }
         printf("Plus de positions valides sur le plateau !");

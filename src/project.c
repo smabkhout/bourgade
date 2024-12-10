@@ -31,8 +31,8 @@ int exists_a_player_with_free_workers(struct player_t **players, int taille)
   int result = 0;
   for (int i = 0; i < taille; ++i)
   {
-    if (players[i]->number_of_workers > 0 && players[i]->eliminated == 0) //il faut que les joueurs qui vérifient
-                                                                          //la condition ne soient pas éliminés
+    if (players[i]->number_of_workers > 0 && players[i]->eliminated == 0) // il faut que les joueurs qui vérifient
+                                                                          // la condition ne soient pas éliminés
       result = 1;
   }
   return result;
@@ -387,14 +387,20 @@ void game(int num_players, int init_param, int seed)
             free(neighbors);
           }
           free_affordable_buildings(affordable_buildings);
-          current_player = (current_player + 1) % num_players;
+          // current_player = (current_player + 1) % num_players;
           if (affichage)
           {
             print_board(board);
           }
         }
+        else
+        {
+          // puts("1");
+          // current_player = (current_player + 1) % num_players; //le probleme lors de l'execution de ./project -c 3 si cette ligne n'etait pas
+          // autre probleme lors de l'execution de ./project -c 3 pour MAX_X=7 MAX_Y=7
+        }
       }
-      
+
       current_player = (current_player + 1) % num_players;
 
       if (affichage)
