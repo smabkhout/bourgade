@@ -296,7 +296,7 @@ void game(int num_players, int init_param, int seed)
     if (is_valid_position(POS(x, y)))
       ++count_valide;
   }
-  printf("nb de pos valides : %d\n", count_valide);
+  printf("Nombre de positions valides est : %d\n", count_valide);
 
   struct board_t *board = NULL;
   board = init_best_board(seed); // initialisation du plateau sans les buildings
