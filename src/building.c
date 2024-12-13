@@ -60,9 +60,9 @@ struct building_t **list_buildings_costing_less_than(struct player_t *player)
   return affordable_buildings;
 }
 
-int **resource_vectors(struct player_t *player)
+unsigned int **resource_vectors(struct player_t *player)
 {
-  int **resource_vectors = NULL;
+  unsigned int **resource_vectors = NULL;
   int count = 1;
   for (int i = 0; i < NUM_RESOURCES; ++i)
   {
@@ -73,10 +73,10 @@ int **resource_vectors(struct player_t *player)
   {
     return resource_vectors; // le joueur n'a pas de resources, on retourne un pointeur NULL
   }
-  resource_vectors = (int **)malloc(sizeof(int *) * count);
+  resource_vectors = (unsigned int **)malloc(sizeof(unsigned int *) * count);
   for (int i = 0; i < count; ++i)
   {
-    resource_vectors[i] = (int *)malloc(sizeof(int) * NUM_RESOURCES);
+    resource_vectors[i] = (unsigned int *)malloc(sizeof(unsigned int) * NUM_RESOURCES);
   }
   int index_nb_of_vectors = 0;
   for (int j = 0; j < NUM_RESOURCES; ++j)
@@ -86,7 +86,7 @@ int **resource_vectors(struct player_t *player)
       if (index_nb_of_vectors == 0) // si on n'a pas encore commencer à remplir resource_vectors, on aura donc besoin juste de
                                     //  copier les resources du joueurs en ne changeant qu'une seule resource
       {
-        for (int i = 0; i < (player->stockage[j] + 1); ++i)
+        for (unsigned int i = 0; i < (player->stockage[j] + 1); ++i)
         {
           for (int resource = 0; resource < NUM_RESOURCES; ++resource)
           {
@@ -101,9 +101,9 @@ int **resource_vectors(struct player_t *player)
       else // on doit pour chacun des vecteurs déjà presents refaire la meme chose on remplacant à chaque fois uniquement une resource
       {
         int current_nb_of_vectors = index_nb_of_vectors;
-        for (int vector = 0; vector < current_nb_of_vectors; ++vector)
+        for (unsigned int vector = 0; vector < current_nb_of_vectors; ++vector)
         {
-          for (int i = 0; i < (player->stockage[j] + 1); ++i)
+          for (unsigned int i = 0; i < (player->stockage[j] + 1); ++i)
           {
             for (int resource = 0; resource < NUM_RESOURCES; ++resource)
             {
@@ -121,7 +121,7 @@ int **resource_vectors(struct player_t *player)
   return resource_vectors;
 }
 
-void free_resource_vectors(int **resource_vectors, struct player_t *player)
+void free_resource_vectors(unsigned int **resource_vectors, struct player_t *player)
 {
   int count = 1;
   for (int i = 0; i < NUM_RESOURCES; ++i)
@@ -131,7 +131,7 @@ void free_resource_vectors(int **resource_vectors, struct player_t *player)
   }
   if (count != 1) // afin de s'assurer que resource_vectors n'est pas un pointeur NULL;
   {
-    for (int i = 0; i < count; ++i)
+    for (unsigned int i = 0; i < count; ++i)
     {
       free(resource_vectors[i]);
     }
@@ -139,7 +139,7 @@ void free_resource_vectors(int **resource_vectors, struct player_t *player)
   }
 }
 
-int building_in_resource_vectors(struct building_t *building, int **resource_vectors, struct player_t *player) // retourne 0 si n'appartient pas, sinon retourne son indice dans resource_vectors
+int building_in_resource_vectors(struct building_t *building, unsigned int **resource_vectors, struct player_t *player) // retourne 0 si n'appartient pas, sinon retourne son indice dans resource_vectors
 {
   int count = 1;
   for (int i = 0; i < NUM_RESOURCES; ++i)
@@ -147,7 +147,7 @@ int building_in_resource_vectors(struct building_t *building, int **resource_vec
     if (player->stockage[i] != 0)
       count *= player->stockage[i] + 1; // nombre de vecteurs resource inférieurs au vecteur stockage du joueur
   }
-  for (int vector = 0; vector<count; ++vector)
+  for (unsigned int vector = 0; vector<count; ++vector)
   {
     int appartient = 1;
     for (int resource = 0; resource<NUM_RESOURCES; ++resource)
