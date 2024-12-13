@@ -79,7 +79,7 @@ unsigned int **resource_vectors(struct player_t *player)
     resource_vectors[i] = (unsigned int *)malloc(sizeof(unsigned int) * NUM_RESOURCES);
   }
   int index_nb_of_vectors = 0;
-  for (int j = 0; j < NUM_RESOURCES; ++j)
+  for (unsigned int j = 0; j < NUM_RESOURCES; ++j)
   {
     if (player->stockage[j])
     {
@@ -100,7 +100,7 @@ unsigned int **resource_vectors(struct player_t *player)
       }
       else // on doit pour chacun des vecteurs déjà presents refaire la meme chose on remplacant à chaque fois uniquement une resource
       {
-        int current_nb_of_vectors = index_nb_of_vectors;
+        unsigned int current_nb_of_vectors = index_nb_of_vectors;
         for (unsigned int vector = 0; vector < current_nb_of_vectors; ++vector)
         {
           for (unsigned int i = 0; i < (player->stockage[j] + 1); ++i)
@@ -123,7 +123,7 @@ unsigned int **resource_vectors(struct player_t *player)
 
 void free_resource_vectors(unsigned int **resource_vectors, struct player_t *player)
 {
-  int count = 1;
+  unsigned int count = 1;
   for (int i = 0; i < NUM_RESOURCES; ++i)
   {
     if (player->stockage[i] != 0)
@@ -139,9 +139,9 @@ void free_resource_vectors(unsigned int **resource_vectors, struct player_t *pla
   }
 }
 
-int building_in_resource_vectors(struct building_t *building, unsigned int **resource_vectors, struct player_t *player) // retourne 0 si n'appartient pas, sinon retourne son indice dans resource_vectors
+unsigned int building_in_resource_vectors(struct building_t *building, unsigned int **resource_vectors, struct player_t *player) // retourne 0 si n'appartient pas, sinon retourne son indice dans resource_vectors
 {
-  int count = 1;
+  unsigned int count = 1;
   for (int i = 0; i < NUM_RESOURCES; ++i)
   {
     if (player->stockage[i] != 0)

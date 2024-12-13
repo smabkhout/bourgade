@@ -29,9 +29,9 @@ void activate_building(struct player_t *owner, struct player_t *user, struct bui
 
 struct building_t** list_buildings_costing_less_than();
 
-int **resource_vectors(struct player_t *player);
+unsigned int **resource_vectors(struct player_t *player);
 
-unsigned int building_in_resource_vectors(struct building_t *building, int **resource_vectors, struct player_t *player);
+unsigned int building_in_resource_vectors(struct building_t *building, unsigned int **resource_vectors, struct player_t *player);
 
 void free_resource_vectors(unsigned int **resource_vectors, struct player_t *player);
 
