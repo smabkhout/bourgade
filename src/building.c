@@ -59,7 +59,7 @@ struct building_t **list_buildings_costing_less_than(struct player_t *player)
   }
   return affordable_buildings;
 }
-
+/*
 unsigned int **resource_vectors(struct player_t *player)
 {
   unsigned int **resource_vectors = NULL;
@@ -137,7 +137,7 @@ void free_resource_vectors(unsigned int **resource_vectors, struct player_t *pla
     }
     free(resource_vectors);
   }
-}
+}*/
 
 unsigned int building_in_resource_vectors(struct building_t *building, unsigned int **resource_vectors, struct player_t *player) // retourne 0 si n'appartient pas, sinon retourne son indice dans resource_vectors
 {
