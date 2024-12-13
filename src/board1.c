@@ -130,12 +130,10 @@ void free_board(struct board_t *board)
         { // free workers
             free_worker(board->tab[i]->worker);
         }
-        /*
         if (board->tab[i]->building != NULL)
         { // free buildings
             free_building(board->tab[i]->building);
         }
-        */
         free_cell(board->tab[i]);
     }
     free(board->tab);

@@ -105,6 +105,7 @@ void parcours_composante_connexe(struct position_t *pos_initial, int *indices_co
                 break;
             }
         }
+        //printf("%d : is valid position, %d : is mine, %d : neighbor index\n",is_valid_position(neighbors[i]),(board->tab[neighbor_index]->mine!=NULL), neighbor_index);
         if (!appartient_autre_composante && neighbors[i] && is_valid_position(neighbors[i]) && (board->tab[neighbor_index]->mine))
         {
             indices_voisins_a_parcourir[nb_voisins_a_parcourir] = i;
@@ -145,7 +146,7 @@ int cost_of_mine_placement(struct board_t *board)
     }
     // contient les indices des positions
     // on a MAX_POS/4 mines, au pire on a
-    // MAX_POS/4 amas différents et MAX_POS/4 0 entre chaque donc MAX_POS/2 au total
+    // MAX_POS/4 amas différents et MAX_POS/4 -1 entre chaque donc MAX_POS/2 au total
     for (int i = 0; i < MAX_POSITIONS; ++i)
     {
 
