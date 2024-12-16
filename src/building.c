@@ -59,7 +59,7 @@ struct building_t **list_buildings_costing_less_than(struct player_t *player)
   }
   return affordable_buildings;
 }
-/*
+
 unsigned int **resource_vectors(struct player_t *player)
 {
   unsigned int **resource_vectors = NULL;
@@ -88,12 +88,16 @@ unsigned int **resource_vectors(struct player_t *player)
       {
         for (unsigned int i = 0; i < (player->stockage[j] + 1); ++i)
         {
-          for (int resource = 0; resource < NUM_RESOURCES; ++resource)
+          for (unsigned int resource = 0; resource < NUM_RESOURCES; ++resource)
           {
-            if (i != j)
+            if (resource != j)
+            {
               resource_vectors[index_nb_of_vectors][resource] = player->stockage[resource];
+            }
             else
+            {
               resource_vectors[index_nb_of_vectors][resource] = player->stockage[resource] - i;
+            }
           }
           ++index_nb_of_vectors;
         }
@@ -103,14 +107,18 @@ unsigned int **resource_vectors(struct player_t *player)
         unsigned int current_nb_of_vectors = index_nb_of_vectors;
         for (unsigned int vector = 0; vector < current_nb_of_vectors; ++vector)
         {
-          for (unsigned int i = 0; i < (player->stockage[j] + 1); ++i)
+          for (unsigned int i = 1; i < (player->stockage[j]+1); ++i)
           {
-            for (int resource = 0; resource < NUM_RESOURCES; ++resource)
+            for (unsigned int resource = 0; resource < NUM_RESOURCES; ++resource)
             {
-              if (i != j)
+              if (resource != j)
+              {
                 resource_vectors[index_nb_of_vectors][resource] = resource_vectors[vector][resource];
+              }
               else
+              {
                 resource_vectors[index_nb_of_vectors][resource] = resource_vectors[vector][resource] - i;
+              }
             }
             ++index_nb_of_vectors;
           }
@@ -137,7 +145,7 @@ void free_resource_vectors(unsigned int **resource_vectors, struct player_t *pla
     }
     free(resource_vectors);
   }
-}*/
+}
 
 unsigned int building_in_resource_vectors(struct building_t *building, unsigned int **resource_vectors, struct player_t *player) // retourne 0 si n'appartient pas, sinon retourne son indice dans resource_vectors
 {
@@ -147,12 +155,12 @@ unsigned int building_in_resource_vectors(struct building_t *building, unsigned 
     if (player->stockage[i] != 0)
       count *= player->stockage[i] + 1; // nombre de vecteurs resource inférieurs au vecteur stockage du joueur
   }
-  for (unsigned int vector = 0; vector<count; ++vector)
+  for (unsigned int vector = 0; vector < count; ++vector)
   {
     int appartient = 1;
-    for (int resource = 0; resource<NUM_RESOURCES; ++resource)
+    for (int resource = 0; resource < NUM_RESOURCES; ++resource)
     {
-      appartient *= resource_vectors[vector][resource] == building->value[resource]; //si au moins une resource est differente alors ce n'est pas ce vecteur
+      appartient *= (resource_vectors[vector][resource] == building->value[resource]); // si au moins une resource est differente alors ce n'est pas ce vecteur
     }
     if (appartient)
       return vector;

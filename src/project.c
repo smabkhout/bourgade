@@ -323,7 +323,40 @@ void game(int num_players, int init_param, int seed)
     players[i] = initialize_player(random_color % MAX_COLORS);
     ++random_color;
   } // fin de l'initialisation des joueurs
+  /* ************************************************************************* */
+  struct player_t *test_player = initialize_player(random_color % MAX_COLORS);
 
+  for (int i = 0; i < NUM_RESOURCES; ++i)
+  {
+    test_player->stockage[i] += 1;
+    printf("%d-", test_player->stockage[i]);
+  }
+  printf("\n");
+
+  test_player->stockage[3 ] += 1;
+
+  unsigned int **resources_vectors = resource_vectors(test_player);
+  // tester avec des buildings
+  static struct building_t list_buildings_test[MAX_BUILDINGS_PER_PLAYER] = {
+      {.nom = "Farm", .costs = {0, 0, 0, 0, 0, 1}, .earns = {0, 0, 0, 0, 0, 3}, .supplies = {0, 1, 0, 0, 0, 0}, .value = {0, 0, 0, 1, 0, 0}, .joueur = 0},
+      {.nom = "Samwill", .costs = {0, 0, 0, 0, 0, 1}, .earns = {0, 0, 0, 0, 0, 4}, .supplies = {0, 0, 0, 3, 0, 0}, .value = {0, 0, 0, 2, 0, 0}, .joueur = 0},
+      {.nom = "Pontoon", .costs = {0, 0, 0, 0, 0, 1}, .earns = {0, 0, 0, 0, 0, 5}, .supplies = {0, 0, 2, 0, 0, 0}, .value = {0, 0, 0, 3, 0, 0}, .joueur = 0},
+      {.nom = "Quarry", .costs = {0, 0, 0, 0, 0, 2}, .earns = {0, 0, 0, 0, 0, 5}, .supplies = {0, 0, 0, 2, 0, 0}, .value = {0, 0, 0, 3, 0, 0}, .joueur = 0},
+      {.nom = "Market", .costs = {0, 0, 0, 0, 0, 3}, .earns = {0, 0, 0, 0, 0, 3}, .supplies = {1, 1, 1, 0, 1, 0}, .value = {0, 0, 0, 0, 0, 6}, .joueur = 0},
+      {.nom = "Bakery", .costs = {0, 0, 0, 0, 0, 1}, .earns = {0, 0, 0, 0, 0, 2}, .supplies = {0, 3, 0, 0, 0, 0}, .value = {0, 0, 0, 1, 1, 0}, .joueur = 0},
+      {.nom = "Factory", .costs = {0, 0, 0, 1, 1, 1}, .earns = {0, 1, 0, 0, 0, 2}, .supplies = {0, 3, 0, 1, 1, 0}, .value = {0, 1, 1, 1, 1, 0}, .joueur = 0}};
+
+  for (int i = 0; i < MAX_BUILDINGS_PER_PLAYER; ++i)
+  {
+    if (building_in_resource_vectors(&list_buildings_test[i], resources_vectors, test_player))
+    {
+      printf("The building %s is affordable.\n", list_buildings_test[i].nom);
+    }
+  }
+
+  free_resource_vectors(resources_vectors, test_player);
+  free_player(test_player);
+  /* ************************************************************************* */
   int nb_batiments_construits = 0;
   for (int j = 0; j < NUM_ROUNDS; ++j)
   {
