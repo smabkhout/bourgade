@@ -11,7 +11,7 @@ struct position_t
     int init; // booléen qui dit si la position a déjà été initialisée ou pas
 };
 
-static int type_plateau = 14;
+static int type_plateau = 0;
 
 static struct position_t positions[MAX_X * MAX_Y + 1];
 

@@ -452,7 +452,7 @@ int main(int argc, char *argv[])
 {
   int seed = 156;
   int num_players = 4;
-  unsigned int init_param = 2;
+  unsigned int init_param = 0;
   int opt;
   while ((opt = getopt(argc, argv, "s:p:c:v")) != -1)
   {
@@ -473,7 +473,7 @@ int main(int argc, char *argv[])
     default:
       num_players = 4;
       seed = 156;
-      init_param = 2;
+      init_param = 0;
       break;
     }
   }
