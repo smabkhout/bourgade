@@ -1,0 +1,31 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\graphicspath{{./img/}}
+\usepackage{amsmath, amssymb}
+\usepackage[left=3cm,right=3cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{url}
+\usepackage[french]{babel} 
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,shapes}
+
+\newcommand{\pgflogo}{\textsc{Pgf}}
+\newcommand{\tikzlogo}{Ti\emph{k}Z}
+\newcommand{\pgftikz}{\pgflogo\slash\tikzlogo}
+
+\begin{document} 
+
+\begin{center}
+  {\LARGE \pgftikz}
+\end{center}
+
+\newpage 
+\section{Automate}
+
+\input{tikz-automata}
+\input{tikz-automata-bis}
+
+\end{document}

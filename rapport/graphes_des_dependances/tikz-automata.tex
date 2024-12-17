@@ -1,0 +1,45 @@
+%\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
+%                    semithick]
+\begin{tikzpicture}[->,>=stealth, shorten >=1pt,auto,node distance=2.7cm,
+                    semithick]
+% -> : une fleche, >=stealth : le style du bout de la flèche,
+% shorten>=1pt : distance au bout de la fleche, auto : placement
+% automatique, node distance = 3cm : distance antre les noeuds
+  \tikzstyle{every state}=[fill=yellow!35, draw=black, text=black, minimum size=1.8cm, inner sep=0pt]
+% chaque noeud, remplissage a 50% de transparence, pas de bord, le
+% texte de couleur noir 
+
+  \node[state]  (board)                    {$board.h$};
+  \node[state]  (optimal) [right of=board] {$opt\_pos.h$};
+  \node[state]  (project) [above of=board] {$project.c$};
+  \node[state]  (building) [right of=optimal] {$building.h$};
+  \node[state]  (cell) [below of=board] {$cell.h$};
+  \node[state]  (mine) [below right of=cell] {$mine.h$};
+  \node[state]  (worker) [below left of=cell] {$worker.h$};
+  \node[state]  (position) [below of=mine] {$position.h$};
+  \node[state]  (player) [below of=worker] {$player.h$};
+  \node[state]  (resource) [below right of=player] {$resource.h$};
+  \node[state]  (color) [below left of=player] {$color.h$};
+
+  \path (project) edge              node {} (board)
+            edge              node {} (optimal)
+            edge              node {} (building);
+        %(project) edge [loop above] node {} (project)
+         %   edge [bend left]  node {} (optimal)
+          %  edge   node {} (optimal);
+  \path (board) edge              node {} (cell);
+  \path [->, draw=green] (optimal) edge              node {} (board); %uniquement lors de la compilation
+  \path (cell) edge              node {} (worker)
+          edge              node {} (mine);
+  \path (mine) edge              node {} (position);
+  \path [->, draw=green, bend right] (mine) edge node {} (board); %uniquement lors de la compilation
+  \path (worker) edge              node {} (player);
+  \path [->, draw=green, bend left] (worker) edge node {} (board); %uniquement lors de la compilation
+  \path (player) edge              node {} (color)
+          edge              node {} (resource);
+                  %(project) edge [loop above] node {} (project)
+         %   edge [bend left]  node {} (optimal)
+          %  edge   node {} (optimal);
+
+  \tikzset{every path/.append style={-stealth, line width=1pt}}
+\end{tikzpicture}

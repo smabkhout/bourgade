@@ -1,0 +1,101 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\graphicspath{{./img/}}
+\usepackage{amsmath, amssymb}
+\usepackage[left=3cm,right=3cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{url}
+\usepackage[french]{babel} 
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,shapes}
+
+\newcommand{\pgflogo}{\textsc{Pgf}}
+\newcommand{\tikzlogo}{Ti\emph{k}Z}
+\newcommand{\pgftikz}{\pgflogo\slash\tikzlogo}
+
+\begin{document} 
+
+\begin{center}
+  {\LARGE \pgftikz}
+\end{center}
+ 
+\section{Le minimum à connaître}
+
+Une ligne
+\tikz \draw (0pt, 0pt) -- (20pt, 10pt);
+une boucle, 
+\tikz \draw (0, 0) -- (1, 0) -- (1, 1) -- cycle;  
+avec l'environnement \texttt{tikzpicture} 
+\begin{tikzpicture} 
+  \tikz \draw[thick,rounded corners=8pt]  
+  (0,0) -- (0,2) -- (1,3.25) -- 
+  (2,2) -- (2,0) -- (0,2) --  
+  (2,2) -- (0,0) -- (2,0);
+\end{tikzpicture} 
+mais comme il n'y a q'une seule instruction c'est équivalent à 
+\tikz \draw[red,thick,rounded corners=8pt] 
+(0,0) -- (0,2) -- (1,3.25) --   
+(2,2) -- (2,0) -- (0,2) --  
+(2,2) -- (0,0) -- (2,0);  
+sauf que là c'est rouge.  
+ 
+\section{Exemples plus complexes} 
+  
+\subsection{Lignes}  
+\begin{figure}[!htbp]
+  \centering 
+  \input{tikz-maze}
+  \caption{Un labyrinthe}
+\end{figure}
+
+\newpage 
+\subsection{Fonctions}
+\begin{figure}[!htbp]
+  \centering
+  \input{tikz-functions}
+  \caption{Des fonctions}
+\end{figure}
+
+
+\newpage 
+\section{Automate}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{cc}
+    \texttt{tikz-automata.tex}&
+    \texttt{tikz-automata-bis.tex}\\
+    \hline
+    \input{tikz-automata}&
+    \input{tikz-automata-bis} 
+  \end{tabular}
+  \caption{
+    \`A gauche: l'automate donné en exemple, à droite : la modification
+    demandée
+  }
+  \label{tab:tikz-automata}
+\end{table}
+
+\section{Arbre}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{cc}
+    \texttt{tikz-tree.tex}&
+    \texttt{tikz-tree-bis.tex}\\
+    \hline
+    \input{tikz-tree}&
+    \input{tikz-tree-bis} 
+  \end{tabular}
+  \caption{
+    \`A gauche: l'arbre donné en exemple, à droite : la modification
+    demandée
+  }
+  \label{tab:tikz-tree}
+\end{table}
+
+
+\end{document}

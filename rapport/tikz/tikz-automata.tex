@@ -1,0 +1,21 @@
+%\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
+%                    semithick]
+\begin{tikzpicture}[->,>=stealth, shorten >=1pt,auto,node distance=3cm,
+                    semithick]
+% -> : une fleche, >=stealth : le style du bout de la flèche,
+% shorten>=1pt : distance au bout de la fleche, auto : placement
+% automatique, node distance = 3cm : distance antre les noeuds
+  \tikzstyle{every state}=[fill=red!50, draw=none, text=black]
+% chaque noeud, remplissage a 50% de transparence, pas de bord, le
+% texte de couleur noir 
+
+  \node[initial,state] (A)                    {$q_a$};
+  \node[state]         (B) [above right of=A] {$q_b$};
+  \node[state]         (C) [below right of=B] {$q_c$};
+
+  \path (A) edge              node {0,1,L} (B)
+            edge              node {1,1,R} (C)
+        (B) edge [loop above] node {1,1,L} (B)
+            edge [bend left]  node {0,1,L} (C)
+            edge   node {0,1,L} (C);
+\end{tikzpicture}
