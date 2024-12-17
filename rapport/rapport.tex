@@ -1,0 +1,206 @@
+\documentclass[a4paper,12pt]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{hyperref}   
+\usepackage{titlesec}   
+\usepackage{xcolor}     
+\usepackage{tocloft}   
+\usepackage{graphicx}   
+\usepackage{titling}   
+
+\graphicspath{{img/}}
+
+%configuration des liens hypertexte
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+}
+
+%personnalisation de la table des matières
+\renewcommand{\cftchapfont}{\bfseries\color{blue}}
+\renewcommand{\cftsecfont}{\color{blue}}
+\renewcommand{\cftsubsecfont}{\color{blue}}
+
+
+
+
+\title{\textbf{Bourgade} \\ \large Projet de s5}
+\author{GUIOT Numa et MABKHOUT Salah-eddine}
+\date{\today}
+
+
+\begin{document}
+
+%page de présentation
+\begin{titlepage}
+    \begin{center}
+        \vspace*{2cm}
+        \includegraphics[width=0.2\textwidth]{Logo_ENSEIRB_MATMECA.svg}
+        
+        \vspace{1cm}
+        {\LARGE \textbf{Bourgade}} \\[0.5cm]
+        {\Large Projet de s5} \\[2cm]
+
+        \textbf{Présenté par :} \\
+        Numa GUIOT et Salah-eddine MABKHOUT \\[1cm]
+
+        \textbf{Date :} \\
+        \today \\[2cm]
+
+        \vfill
+        {\large \textbf{ENSEIRB-MATMECA}} \\
+
+        \vspace{0.5cm}
+        {\large Année académique 2024-2025}
+    \end{center}
+\end{titlepage}
+
+%sommaire
+\tableofcontents
+\newpage
+
+
+\chapter{Introduction}
+\section{Objectifs}
+\subsection{Objectifs théoriques}
+Dans un premier temps, nos objectifs théoriques avec ce projet étaient multiples. D'abord, améliorer nos compétences respectives 
+de programmation en langage C. Ensuite, utiliser des allocations dynamiques lorsque cela était autorisé et gérer correctement la mémoire.
+Enfin, trouver des solutions algorithmiques pour des problèmes rencontrés au fil de l'avancement du projet.  
+\subsection{Objectifs pratiques}
+Du côté des objectifs pratiques, le but était d'apprendre à utiliser un Makefile ainsi que de gérer un dépot git, étant donné qu'aucun
+de nous deux n'était familier avec ces notions. De plus, avoir une version fonctionnelle du jeu, à laquelle s'ajoute la réalisation de 
+quelques achievements supplémentaires étaient des objectifs que nous visions avant de commencer ce projet.
+
+\chapter{Implémentation}
+\section{Organisation des fichiers et dépendances circulaires}
+Notre projet est divisé en différents fichiers dans le dossier src/ : 
+\begin{itemize}
+    \item project.c
+    \item position.c et position.h
+    \item resource.c et resource.h 
+    \item worker.c et worker.h
+    \item cell.c et cell.h
+    \item board1.c et board.h
+    \item building.c et building.h
+    \item color.c et color.h
+    \item mine.c et mine.h
+    \item optimal\_pos.c et optimal\_pos.h
+    \item player.c et player.h
+\end{itemize}
+\par
+Ainsi que nos fichiers de test dans le dossier test/ : 
+\begin{itemize}
+    \item test\_board.c
+    \item test\_building.c
+    \item test\_cell.c
+    \item test\_color.c
+    \item test\_mine.c
+    \item test\_optimal\_pos.c
+    \item test\_player.c
+    \item test\_position.c
+    \item test\_resource.c
+    \item test\_worker.c
+
+
+\end{itemize}
+\section{Structure et initialisation des différentes entités du jeu}
+\subsection{Les jetons et les architectes}
+...ICI...
+
+\subsection{Les positions}
+...ICI...
+
+\subsection{Les couleurs}
+...ICI...
+
+\subsection{Les ressources}
+...ICI...
+
+\subsection{Les joueurs}
+...ICI...
+
+\subsection{Les employés}
+...ICI...
+
+\subsection{Les bâtiments}
+...ICI...
+
+\subsection{Les cellules et le plateau}
+...ICI...
+
+\subsection{Les mines}
+...ICI...
+
+
+\section{Interaction entre les différentes entités du jeu}
+\subsection{1}
+...ICI...
+
+\subsection{2}
+...ICI...
+
+\chapter{Boucle de jeu}
+\section{Déroulement d'une partie}
+\subsection{Initialisation}
+...ICI...
+
+\subsection{Les différentes options}
+...ICI...
+\subsection{Conditions de victoire}
+...ICI...
+
+\section{Les choix des joueurs}
+\subsection{Un peu de stratégie}
+...ICI...
+
+\subsection{Les pouvoirs}
+...ICI...
+
+\subsection{Les faveurs}
+...ICI...
+
+\section{Un peu de complexité}
+...ICI...
+
+\section{L'affichage des résultats}
+...ICI...
+
+\chapter{Outils de travail}
+\section{Makefile}
+...ICI...
+
+\section{Valgrind et GDB}
+...ICI...
+
+\section{Utilisation des tests}
+...ICI...
+
+\chapter{Difficultés rencontrées et solutions}
+\section{Les erreurs de segmentation}
+\subsection{Dépassements de tableaux}
+...ICI...
+
+\subsection{Les tests de vérification de pointeurs}
+...ICI...
+
+\section{Erreurs en lien avec la forge}
+...ICI...
+
+\section{Implémentation des pouvoirs}
+...ICI...
+
+\section{Exportation et manipulation de notre guilde}
+...ICI...
+
+\section{Travail de groupe}
+...ICI...
+
+\chapter{Conclusion}
+...ICI...
+
+\end{document}
