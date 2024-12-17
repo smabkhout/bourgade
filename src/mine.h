@@ -1,13 +1,13 @@
 #ifndef __MINE_H__
 #define __MINE_H__
 
-#include "resource.h"
 #include "position.h"
-#include "cell.h"
+#include "board.h"
 
 struct cell_t;
 
 struct board_t;
+
 
 struct mine_t {
     char name[12];

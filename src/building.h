@@ -2,7 +2,6 @@
 #define __BUILDING_H__
 
 
-#include "position.h"
 #include "player.h"
 #include "cell.h"
 

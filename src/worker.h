@@ -1,11 +1,7 @@
 #ifndef __WORKER_H__
 #define __WORKER_H__
 
-#include "resource.h"
-#include "color.h"
-#include "position.h"
 #include "player.h"
-#include "cell.h"
 #include "board.h"
 
 #ifndef MAX_WORKERS_PER_PLAYER

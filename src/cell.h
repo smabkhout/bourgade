@@ -1,9 +1,10 @@
 #ifndef __CELL_H__
 #define __CELL_H__
 
-#include "building.h"
 #include "worker.h"
 #include "mine.h"
+
+struct building_t;
 
 struct cell_t {
     struct building_t* building;

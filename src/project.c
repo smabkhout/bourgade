@@ -5,9 +5,7 @@
 #include <getopt.h>
 #include <string.h>
 
-#include "position.h"
 #include "board.h"
-#include "player.h"
 #include "optimal_pos.h"
 #include "building.h"
 
@@ -323,7 +321,7 @@ void game(int num_players, int init_param, int seed)
     players[i] = initialize_player(random_color % MAX_COLORS);
     ++random_color;
   } // fin de l'initialisation des joueurs
-  /* ************************************************************************* */
+  /* *************************************************************************
   struct player_t *test_player = initialize_player(random_color % MAX_COLORS);
 
   for (int i = 0; i < NUM_RESOURCES; ++i)
@@ -356,7 +354,7 @@ void game(int num_players, int init_param, int seed)
 
   free_resource_vectors(resources_vectors, test_player);
   free_player(test_player);
-  /* ************************************************************************* */
+  ************************************************************************* */
   int nb_batiments_construits = 0;
   for (int j = 0; j < NUM_ROUNDS; ++j)
   {

@@ -2,6 +2,7 @@
 #include "cell.h"
 #include "position.h"
 #include "board.h"
+#include "building.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
