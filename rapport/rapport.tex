@@ -10,6 +10,7 @@
 \usepackage{tocloft}   
 \usepackage{graphicx}   
 \usepackage{titling}   
+\usepackage{float}
 
 \graphicspath{{img/}}
 
@@ -92,7 +93,7 @@ Notre projet est divisé en différents fichiers dans le dossier src/ :
     \item optimal\_pos.c et optimal\_pos.h
     \item player.c et player.h
 \end{itemize}
-\par
+\vspace{0.5cm}
 Ainsi que nos fichiers de test dans le dossier test/ : 
 \begin{itemize}
     \item test\_board.c
@@ -105,12 +106,24 @@ Ainsi que nos fichiers de test dans le dossier test/ :
     \item test\_position.c
     \item test\_resource.c
     \item test\_worker.c
-
-
 \end{itemize}
+\vspace{0.5cm}
+Certains fichiers ont besoin de structures de données définies dans d'autres. Nous avons donc des dépendances circulaires 
+inévitables. Voici le graphe des inclusions : 
+\begin{figure}[H]
+    \begin{center}
+    \includegraphics[width=0.7\textwidth]{dependances}
+    \end{center}
+    \caption{Graphe des dépendances circulaires des fichiers de notre projet.}
+    \label{fig:dependances}
+\end{figure}
+Le graphe de la \autoref{fig:dependances} montre les différentes inclusions de fichiers de notre projet. S'il existe une flèche du noeud A vers 
+le noeud B, cela signifie que le fichier B est inclus dans l'entête du fichier A. Les flèches vertes représentent les dépendances circulaires.
+Toutefois, ces inclusions se font uniquement au moment de la compilation car lorsque le compilateur recopie les fichiers, 
+il remarque les marqueurs \#ifndef \_\_FICHIER\_H\_\_ et nous n'avons donc pas de redéfinitions éventuelles.
+
+
 \section{Structure et initialisation des différentes entités du jeu}
-\subsection{Les jetons et les architectes}
-...ICI...
 
 \subsection{Les positions}
 ...ICI...
@@ -130,10 +143,10 @@ Ainsi que nos fichiers de test dans le dossier test/ :
 \subsection{Les bâtiments}
 ...ICI...
 
-\subsection{Les cellules et le plateau}
+\subsection{Les mines}
 ...ICI...
 
-\subsection{Les mines}
+\subsection{Les cellules et le plateau}
 ...ICI...
 
 
