@@ -14,9 +14,9 @@ static struct building_t list_buildings[MAX_BUILDINGS_PER_PLAYER] = {
     {.nom = "Samwill", .costs = {0, 0, 0, 0, 0, 1}, .earns = {0, 0, 0, 0, 0, 4}, .supplies = {0, 0, 0, 3, 0, 0}, .value = {0, 0, 0, 2, 0, 0}, .joueur = 0},
     {.nom = "Pontoon", .costs = {0, 0, 0, 0, 0, 1}, .earns = {0, 0, 0, 0, 0, 5}, .supplies = {0, 0, 2, 0, 0, 0}, .value = {0, 0, 0, 3, 0, 0}, .joueur = 0},
     {.nom = "Quarry", .costs = {0, 0, 0, 0, 0, 2}, .earns = {0, 0, 0, 0, 0, 5}, .supplies = {0, 0, 0, 2, 0, 0}, .value = {0, 0, 0, 3, 0, 0}, .joueur = 0},
-    {.nom = "Market", .costs = {0, 0, 0, 0, 0, 3}, .earns = {0, 0, 0, 0, 0, 3}, .supplies = {1, 1, 1, 0, 1, 0}, .value = {0, 0, 0, 0, 0, 6}, .joueur = 0},
-    {.nom = "Bakery", .costs = {0, 0, 0, 0, 0, 1}, .earns = {0, 0, 0, 0, 0, 2}, .supplies = {0, 3, 0, 0, 0, 0}, .value = {0, 0, 0, 1, 1, 0}, .joueur = 0},
-    {.nom = "Factory", .costs = {0, 0, 0, 1, 1, 1}, .earns = {0, 1, 0, 0, 0, 2}, .supplies = {0, 3, 0, 1, 1, 0}, .value = {0, 1, 1, 1, 1, 0}, .joueur = 0}};
+    {.nom = "Cathedral", .costs = {0, 0, 0, 0, 0, 3}, .earns = {0, 0, 0, 0, 0, 3}, .supplies = {1, 1, 1, 0, 1, 0}, .value = {0, 0, 0, 0, 0, 6}, .joueur = 0},
+    {.nom = "Tower", .costs = {0, 0, 0, 0, 0, 1}, .earns = {0, 0, 0, 0, 0, 2}, .supplies = {0, 3, 0, 0, 0, 0}, .value = {0, 0, 0, 1, 1, 0}, .joueur = 0},
+    {.nom = "Castle", .costs = {0, 0, 0, 1, 1, 1}, .earns = {0, 1, 0, 0, 0, 2}, .supplies = {0, 3, 0, 1, 1, 0}, .value = {0, 1, 1, 1, 1, 0}, .joueur = 0}};
 
 void place_building(struct player_t *player, struct cell_t *cell, struct building_t *building)
 {                                                                    // acheter un batiment
@@ -196,6 +196,26 @@ void copy_building(struct building_t *b2, struct building_t *b1)
   }
 }
 
+// achivement 4 (pouvoirs de certains batiments)
+int reward_cathedral(struct building_t *cathedral, struct board_t *board, struct position_t *position)
+{
+  struct position_t **neighbors = NULL;
+  neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
+  list_neighbors(position, neighbors);
+  int count = 0;
+  for (int i = 0; i < 8; ++i)
+  {
+    int indice = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
+    if ((board->tab[indice]->worker) && (board->tab[indice]->building == NULL))
+    {
+      ++count;
+    }
+  }
+  free(neighbors);
+  return count;
+}
+
+
 int reward_castle(struct building_t *castle, struct board_t *board, struct position_t *position)
 {
   int longueur = 0;
@@ -221,4 +241,45 @@ int reward_castle(struct building_t *castle, struct board_t *board, struct posit
     }
   }
   return gold_power;
+}
+
+
+int reward_tower(struct building_t *tower, struct board_t *board, struct position_t *position)
+{
+  struct position_t **neighbors = NULL;
+  neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
+  list_neighbors(position, neighbors);
+  int count = 0;
+  for (int i = 0; i < 8; ++i)
+  {
+    int indice = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
+    if ((board->tab[indice]->worker == NULL) && (board->tab[indice]->building == NULL))
+    {
+      ++count;
+    }
+  }
+  free(neighbors);
+  return count;
+}
+
+// on imagine que la ferme gagne 2 gold si la ferme est construite a cote d'un field (mine de ressources)
+int reward_farm(struct building_t *farm, struct board_t *board, struct position_t *position)
+{
+  struct position_t **neighbors = NULL;
+  neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
+  list_neighbors(position, neighbors);
+  for (int i = 0; i < 8; ++i)
+  {
+    int indice = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
+    if (board->tab[indice]->mine)
+    {
+      if (board->tab[indice]->mine->r == CORN)
+      {
+        free(neighbors);
+        return 2;
+      }
+    }
+  }
+  free(neighbors);
+  return 0;
 }
