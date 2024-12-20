@@ -340,9 +340,22 @@ void all_rewards(struct board_t *board, struct player_t **players, int num_playe
 // fonction qui check si des joueurs ont atteint des objectifs de l'achievement 4
 void check_objectives(struct board_t *board, struct player_t **players, int num_players)
 {
-  // check objective1 : avoir plus de batiments que d'employés
+  check_objective1(players,num_players);
   // check objective2 : avoir construit 2 batiments qui produisent du CORN
   // check objective3 : avoir 3 batiments qui forment une composante connexe
+}
+
+
+//avoir construit plus de batiments que MAX_WORKER_PER_PLAYER
+void check_objective1(struct player_t** players, int num_players)
+{
+  for (int i = 0; i<num_players; ++i)
+  {
+    if (players[i]->nb_of_buildings_placed >= MAX_WORKERS_PER_PLAYER) //objectif atteint
+    {
+      players[i]->stockage[GOLD] += 3;
+    }
+  }
 }
 
 void game(int num_players, int init_param, int seed)

@@ -23,6 +23,7 @@ void place_building(struct player_t *player, struct cell_t *cell, struct buildin
   resource_sub(player->stockage, building->value, player->stockage); // achat du batiment
   resource_add(player->stockage, building->earns, player->stockage); // recompense immédiate à l'achat
   cell->building = building;                                         // on place le batiment au bon endroit
+  ++player->nb_of_buildings_placed;                                  // on augmente le nombre de batiments construits par le joueur
   building->joueur = player->color;                                  // on colore le batiment de la couleur de son propriétaire
 }
 
