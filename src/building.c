@@ -197,7 +197,7 @@ void copy_building(struct building_t *b2, struct building_t *b1)
 }
 
 // achivement 4 (pouvoirs de certains batiments)
-int reward_cathedral(struct building_t *cathedral, struct board_t *board, struct position_t *position)
+int reward_cathedral(struct board_t *board, struct position_t *position)
 {
   struct position_t **neighbors = NULL;
   neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
@@ -205,20 +205,24 @@ int reward_cathedral(struct building_t *cathedral, struct board_t *board, struct
   int count = 0;
   for (int i = 0; i < 8; ++i)
   {
-    int indice = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
-    if ((board->tab[indice]->worker) && (board->tab[indice]->building == NULL))
+    if (is_valid_position(neighbors[i]))
     {
-      ++count;
+      int indice = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
+      if ((board->tab[indice]->worker) && (board->tab[indice]->building == NULL))
+      {
+        ++count;
+      }
     }
   }
   free(neighbors);
   return count;
 }
 
-
-int reward_castle(struct building_t *castle, struct board_t *board, struct position_t *position)
+int reward_castle(struct board_t *board, struct position_t *position)
 {
-  int longueur = 0;
+  int *longueur = NULL;
+  longueur = (int *)malloc(sizeof(int));
+  *longueur = 0;
   int indices_composantes[MAX_POSITIONS / 2];
   int gold_power = 0;
   for (int i = 0; i < MAX_POSITIONS / 2; ++i)
@@ -226,7 +230,7 @@ int reward_castle(struct building_t *castle, struct board_t *board, struct posit
     indices_composantes[i] = -1;
   }
   parcours_composante_connexe(position, indices_composantes, longueur, board, 1);
-  for (int i = 0; i<MAX_POSITIONS/2; ++i)
+  for (int i = 0; i < MAX_POSITIONS / 2; ++i)
   {
     if (indices_composantes[i] != -1)
     {
@@ -243,8 +247,7 @@ int reward_castle(struct building_t *castle, struct board_t *board, struct posit
   return gold_power;
 }
 
-
-int reward_tower(struct building_t *tower, struct board_t *board, struct position_t *position)
+int reward_tower(struct board_t *board, struct position_t *position)
 {
   struct position_t **neighbors = NULL;
   neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
@@ -252,10 +255,13 @@ int reward_tower(struct building_t *tower, struct board_t *board, struct positio
   int count = 0;
   for (int i = 0; i < 8; ++i)
   {
-    int indice = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
-    if ((board->tab[indice]->worker == NULL) && (board->tab[indice]->building == NULL))
+    if (is_valid_position(neighbors[i]))
     {
-      ++count;
+      int indice = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
+      if ((board->tab[indice]->worker == NULL) && (board->tab[indice]->building == NULL))
+      {
+        ++count;
+      }
     }
   }
   free(neighbors);
@@ -263,20 +269,23 @@ int reward_tower(struct building_t *tower, struct board_t *board, struct positio
 }
 
 // on imagine que la ferme gagne 2 gold si la ferme est construite a cote d'un field (mine de ressources)
-int reward_farm(struct building_t *farm, struct board_t *board, struct position_t *position)
+int reward_farm(struct board_t *board, struct position_t *position)
 {
   struct position_t **neighbors = NULL;
   neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
   list_neighbors(position, neighbors);
   for (int i = 0; i < 8; ++i)
   {
-    int indice = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
-    if (board->tab[indice]->mine)
+    if (is_valid_position(neighbors[i]))
     {
-      if (board->tab[indice]->mine->r == CORN)
+      int indice = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
+      if (board->tab[indice]->mine)
       {
-        free(neighbors);
-        return 2;
+        if (board->tab[indice]->mine->r == CORN)
+        {
+          free(neighbors);
+          return 2;
+        }
       }
     }
   }

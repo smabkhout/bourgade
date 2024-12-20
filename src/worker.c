@@ -50,6 +50,9 @@ void pay_workers_on_board(struct board_t* board, int num_players, struct player_
                 if (resource_le_than(players[j]->stockage, board->tab[i]->worker->costs))
                 {
                     players[j]->eliminated = 1;
+                    free_worker(board->tab[i]->worker);//on supprime son worker et donc ses batiments
+                    board->tab[i]->worker = NULL;
+                    
                 }
                 else
                 {

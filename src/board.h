@@ -8,6 +8,7 @@ struct board_t {
     struct cell_t** tab;
     struct mine_t* present_mines;
     struct building_t** present_buildings;
+    int *indexes_present_buildings;
 };
 
 int occurrences(struct mine_t* tab);

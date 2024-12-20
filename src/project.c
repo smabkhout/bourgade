@@ -299,7 +299,7 @@ void all_rewards(struct board_t *board, struct player_t **players, int num_playe
         {
           if (players[k]->color == board->tab[i]->building->joueur)
           {
-            players[k]->stockage[GOLD] += reward_cathedral(board->tab[i]->building, board, POS(x, y));
+            players[k]->stockage[GOLD] += reward_cathedral(board, POS(x, y));
           }
         }
       }
@@ -309,7 +309,7 @@ void all_rewards(struct board_t *board, struct player_t **players, int num_playe
         {
           if (players[k]->color == board->tab[i]->building->joueur)
           {
-            players[k]->stockage[GOLD] += reward_castle(board->tab[i]->building, board, POS(x, y));
+            players[k]->stockage[GOLD] += reward_castle(board, POS(x, y));
           }
         }
       }
@@ -319,7 +319,7 @@ void all_rewards(struct board_t *board, struct player_t **players, int num_playe
         {
           if (players[k]->color == board->tab[i]->building->joueur)
           {
-            players[k]->stockage[GOLD] += reward_tower(board->tab[i]->building, board, POS(x, y));
+            players[k]->stockage[GOLD] += reward_tower(board, POS(x, y));
           }
         }
       }
@@ -329,7 +329,7 @@ void all_rewards(struct board_t *board, struct player_t **players, int num_playe
         {
           if (players[k]->color == board->tab[i]->building->joueur)
           {
-            players[k]->stockage[GOLD] += reward_farm(board->tab[i]->building, board, POS(x, y));
+            players[k]->stockage[GOLD] += reward_farm(board, POS(x, y));
           }
         }
       }
@@ -363,6 +363,11 @@ void game(int num_players, int init_param, int seed)
       board->present_buildings[i]->nom[j] = '-';
     }
   } // initialisation des batiments du plateau
+  board->indexes_present_buildings = (int *)malloc(sizeof(int) * MAX_BUILDINGS_PER_PLAYER * num_players);
+  for (int i = 0; i < MAX_BUILDINGS_PER_PLAYER * num_players; ++i)
+  {
+    board->indexes_present_buildings[i] = -1;
+  }
 
   print_board(board);
 
@@ -432,10 +437,11 @@ void game(int num_players, int init_param, int seed)
           int build_choice = rand() % 2;
           if (length_of_affordable_buildings(affordable_buildings) > 0 && build_choice)
           {
-            int building_choice = rand() % length_of_affordable_buildings(affordable_buildings);                      // le batiment à construire est choisi aleatoirement pour l'instant
-            struct building_t *a_building = affordable_buildings[building_choice];                                    // on séléctionne ce batiment à construire
+            int building_choice = rand() % length_of_affordable_buildings(affordable_buildings); // le batiment à construire est choisi aleatoirement pour l'instant
+            struct building_t *a_building = affordable_buildings[building_choice];               // on séléctionne ce batiment à construire
             copy_building(board->present_buildings[nb_batiments_construits], a_building);
             place_building(players[current_player], current_cell, board->present_buildings[nb_batiments_construits]); // stocker les buildings dans un tableau present buildings
+            board->indexes_present_buildings[nb_batiments_construits] = a_pos_index;
             ++nb_batiments_construits;
             printf("Le joueur %s construit un batiment %s à la position (%d,%d)\n", color_to_string(players[current_player]->color), a_building->nom, PY(a_pos) + 1, PX(a_pos) + 1);
           }
@@ -472,17 +478,10 @@ void game(int num_players, int init_param, int seed)
             free(neighbors);
           }
           free_affordable_buildings(affordable_buildings);
-          // current_player = (current_player + 1) % num_players;
           if (affichage)
           {
             print_board(board);
           }
-        }
-        else
-        {
-          // puts("1");
-          // current_player = (current_player + 1) % num_players; //le probleme lors de l'execution de ./project -c 3 si cette ligne n'etait pas
-          // autre probleme lors de l'execution de ./project -c 3 pour MAX_X=7 MAX_Y=7
         }
       }
 
@@ -494,16 +493,42 @@ void game(int num_players, int init_param, int seed)
         print_board(board);
       }
     }
-
-    // printf("Player with free workers %d, empty cell %d, exists a player %d.\n", exists_a_player_with_free_workers(players, num_players), exists_an_empty_cell(board), exists_a_player(players, num_players));
-
     // payer les couts d'entretien et eliminer les joueurs qui ne peuvent pas le faire
     pay_workers_on_board(board, num_players, players);
+
+    // reset les buildings des joueurs éliminés
+    for (int k = 0; k < MAX_BUILDINGS_PER_PLAYER * num_players; k++)
+    {
+      enum color_t couleur = board->present_buildings[k]->joueur;
+      if (board->indexes_present_buildings[k] != -1)
+      {
+        for (int i = 0; i < num_players; ++i)
+        {
+
+          if ((players[i]->eliminated == 1) && (players[i]->color == couleur))
+          {
+            free_building(board->present_buildings[k]);
+
+            board->present_buildings[k] = (struct building_t *)malloc(sizeof(struct building_t));
+            for (int z = 0; z < 10; ++z)
+            {
+              board->present_buildings[k]->nom[z] = '-'; // on réinitialise le batiment
+            }
+            // free_building(board->tab[board->indexes_present_buildings[k]]->building);
+            board->tab[board->indexes_present_buildings[k]]->building = NULL;
+          }
+        }
+      }
+    }
+
+    for (int k = 0; k < num_players; ++k)
+    {
+      printf("joueur %s, gold : %d,eliminated : %d\n", color_to_string(players[k]->color), players[k]->stockage[GOLD], players[k]->eliminated);
+    }
+    // donner les recompenses éventuelles (acheiv 4)
+    all_rewards(board, players, num_players);
+
     // tous les joueurs restants récupèrents leurs employés
-
-    // printf("Player with free workers %d, empty cell %d, exists a player %d.\n", exists_a_player_with_free_workers(players, num_players), exists_an_empty_cell(board), exists_a_player(players, num_players));
-
-    // dans ce test personne n'a pu payer ses couts d'entretien vers la fin de la manche N°2
     reset_workers_still_on_board(board);
     for (int i = 0; i < num_players; ++i)
     {
@@ -519,6 +544,10 @@ void game(int num_players, int init_param, int seed)
     // fin du jeu, free la mémoire
   }
   print_board(board);
+  for (int k = 0; k < num_players; ++k)
+  {
+    printf("joueur %s, gold : %d,eliminated : %d\n", color_to_string(players[k]->color), players[k]->stockage[GOLD], players[k]->eliminated);
+  }
   display_winner(num_players, players);
   for (int i = 0; i < num_players; ++i)
   {
@@ -530,7 +559,8 @@ void game(int num_players, int init_param, int seed)
     free(board->present_buildings[i]);
   }
   free(board->present_buildings);
-  free_board(board); // Les batiments sont free() deux fois, une avec free_affordable buildings et l'autre ici, (meme avec la condition batiment != NULL)
+  free(board->indexes_present_buildings);
+  free_board(board);
 }
 
 int main(int argc, char *argv[])
