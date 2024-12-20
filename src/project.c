@@ -337,6 +337,14 @@ void all_rewards(struct board_t *board, struct player_t **players, int num_playe
   }
 }
 
+// fonction qui check si des joueurs ont atteint des objectifs de l'achievement 4
+void check_objectives(struct board_t *board, struct player_t **players, int num_players)
+{
+  // check objective1 : avoir plus de batiments que d'employés
+  // check objective2 : avoir construit 2 batiments qui produisent du CORN
+  // check objective3 : avoir 3 batiments qui forment une composante connexe
+}
+
 void game(int num_players, int init_param, int seed)
 {
   init_positions(init_param); // initialisation des positions
@@ -465,8 +473,13 @@ void game(int num_players, int init_param, int seed)
               }
               else if (board->tab[neighbor]->building != NULL)
               {
+                int can_activate = 0;
+                if (resource_le_than(players[current_player]->stockage,board->tab[neighbor]->building->costs)==1)
+                {
+                  can_activate = 1;
+                }
                 int activation_choice = rand() % 2; // choice of the player whether to activate or not (random for now)
-                if (activation_choice)              // player wishes to activate     //if he wishes so and can't afford => eliminate player
+                if (activation_choice&&can_activate)              // player wishes to activate     //if he wishes so and can't afford => eliminate player
                 {
                   int owner = (board->tab[neighbor]->building->joueur) % num_players;
                   activate_building(players[owner], players[current_player], board->tab[neighbor]->building);
@@ -493,6 +506,7 @@ void game(int num_players, int init_param, int seed)
         print_board(board);
       }
     }
+
     // payer les couts d'entretien et eliminer les joueurs qui ne peuvent pas le faire
     pay_workers_on_board(board, num_players, players);
 
@@ -520,11 +534,11 @@ void game(int num_players, int init_param, int seed)
         }
       }
     }
-
     for (int k = 0; k < num_players; ++k)
     {
-      printf("joueur %s, gold : %d,eliminated : %d\n", color_to_string(players[k]->color), players[k]->stockage[GOLD], players[k]->eliminated);
+      printf("joueur %s , gold %d , eliminated %d\n", color_to_string(players[k]->color), players[k]->stockage[GOLD], players[k]->eliminated);
     }
+
     // donner les recompenses éventuelles (acheiv 4)
     all_rewards(board, players, num_players);
 
@@ -543,11 +557,13 @@ void game(int num_players, int init_param, int seed)
     // annoncer le/les gagnant(s) si existe
     // fin du jeu, free la mémoire
   }
+
+  // fin de partie
+
+  // objectifs eventuels : achiev 4
+  check_objectives(board, players, num_players);
+
   print_board(board);
-  for (int k = 0; k < num_players; ++k)
-  {
-    printf("joueur %s, gold : %d,eliminated : %d\n", color_to_string(players[k]->color), players[k]->stockage[GOLD], players[k]->eliminated);
-  }
   display_winner(num_players, players);
   for (int i = 0; i < num_players; ++i)
   {

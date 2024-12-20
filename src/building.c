@@ -197,7 +197,7 @@ void copy_building(struct building_t *b2, struct building_t *b1)
 }
 
 // achivement 4 (pouvoirs de certains batiments)
-int reward_cathedral(struct board_t *board, struct position_t *position)
+unsigned int reward_cathedral(struct board_t *board, struct position_t *position)
 {
   struct position_t **neighbors = NULL;
   neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
@@ -218,7 +218,70 @@ int reward_cathedral(struct board_t *board, struct position_t *position)
   return count;
 }
 
-int reward_castle(struct board_t *board, struct position_t *position)
+void parcours_composante_connexe_building(struct position_t *pos_initial, int *indices_composantes_connexes, int *longueur, struct board_t *board, int debut_composante)
+{
+    // question : on prend composantes connexes aussi en diagonales ou uniquement dans les directions cardinales
+    int index_pos_initial = PY(pos_initial) * MAX_X + PX(pos_initial);
+    for (int j = 0; j < *longueur; ++j)
+    {
+        if (indices_composantes_connexes[j] == index_pos_initial)
+        {
+            return; // si notre position existe déjà dans une composante connexe, on sort de la fonction
+        }
+    }
+    indices_composantes_connexes[*longueur] = index_pos_initial;
+    ++*longueur; // on stock cette position et on incrémente l'indice actuel (longueur) de notre tableau indices_composantes_connexes
+    struct position_t **neighbors = malloc(sizeof(struct position_t *) * 8);
+    for (int i = 0; i < 8; ++i)
+    {
+        neighbors[i] = make_invalid_position();
+    }
+    list_neighbors(pos_initial, neighbors);
+    int indices_voisins_a_parcourir[8] = {0};
+    int nb_voisins_a_parcourir = 0;
+    for (int i = 0; i < 8; ++i) // premierement stocker les mines voisines dans le tableau composante connexe
+    {
+        int neighbor_index = PY(neighbors[i]) * MAX_X + PX(neighbors[i]);
+        int appartient_autre_composante = 0;
+        for (int j = 0; j < *longueur; ++j)
+        {
+            if (indices_composantes_connexes[j] == neighbor_index)
+            {
+                appartient_autre_composante = 1;
+                break;
+            }
+        }
+        //printf("%d : is valid position, %d : is mine, %d : neighbor index\n",is_valid_position(neighbors[i]),(board->tab[neighbor_index]->building !=NULL), neighbor_index);
+        if (!appartient_autre_composante && neighbors[i] && is_valid_position(neighbors[i]) && (board->tab[neighbor_index]->building))
+        {
+            indices_voisins_a_parcourir[nb_voisins_a_parcourir] = i;
+            ++nb_voisins_a_parcourir;
+        }
+    }
+    for (int j = 0; j < nb_voisins_a_parcourir; ++j) // appeler la fonction recursivement sur ceux qui ne sont pas déjà dans le tableau
+    {
+        int neighbor_index = PY(neighbors[indices_voisins_a_parcourir[j]]) * MAX_X + PX(neighbors[indices_voisins_a_parcourir[j]]);
+        if (neighbors[indices_voisins_a_parcourir[j]] && is_valid_position(neighbors[indices_voisins_a_parcourir[j]]) && (board->tab[neighbor_index]->building))
+        {
+            parcours_composante_connexe_building(neighbors[indices_voisins_a_parcourir[j]], indices_composantes_connexes, longueur, board, 0);
+        }
+    }
+
+    if (debut_composante)
+    {
+        ++*longueur;
+        free(neighbors);
+        return;
+    }
+    else
+    {
+        free(neighbors);
+        return;
+    }
+}
+
+
+unsigned int reward_castle(struct board_t *board, struct position_t *position)
 {
   int *longueur = NULL;
   longueur = (int *)malloc(sizeof(int));
@@ -229,7 +292,7 @@ int reward_castle(struct board_t *board, struct position_t *position)
   {
     indices_composantes[i] = -1;
   }
-  parcours_composante_connexe(position, indices_composantes, longueur, board, 1);
+  parcours_composante_connexe_building(position, indices_composantes, longueur, board, 1);
   for (int i = 0; i < MAX_POSITIONS / 2; ++i)
   {
     if (indices_composantes[i] != -1)
@@ -247,7 +310,7 @@ int reward_castle(struct board_t *board, struct position_t *position)
   return gold_power;
 }
 
-int reward_tower(struct board_t *board, struct position_t *position)
+unsigned int reward_tower(struct board_t *board, struct position_t *position)
 {
   struct position_t **neighbors = NULL;
   neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);
@@ -269,7 +332,7 @@ int reward_tower(struct board_t *board, struct position_t *position)
 }
 
 // on imagine que la ferme gagne 2 gold si la ferme est construite a cote d'un field (mine de ressources)
-int reward_farm(struct board_t *board, struct position_t *position)
+unsigned int reward_farm(struct board_t *board, struct position_t *position)
 {
   struct position_t **neighbors = NULL;
   neighbors = (struct position_t **)malloc(sizeof(struct position_t *) * 8);

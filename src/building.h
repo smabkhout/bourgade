@@ -41,13 +41,15 @@ int length_of_affordable_buildings(struct building_t **affordable_buildings);
 void copy_building(struct building_t* building1, struct building_t* building2);
 
 //achievement 4
-int reward_cathedral(struct board_t* board, struct position_t* position);
+unsigned int reward_cathedral(struct board_t* board, struct position_t* position);
 
-int reward_castle(struct board_t* board,struct position_t* position);
+void parcours_composante_connexe_building(struct position_t *pos_initial, int *indices_composantes_connexes, int *longueur, struct board_t *board, int debut_composante);
 
-int reward_tower(struct board_t* board,struct position_t* position);
+unsigned int reward_castle(struct board_t* board,struct position_t* position);
 
-int reward_farm(struct board_t* board,struct position_t* position); //on invente un pouvoir pour
-//le batiment farm
+unsigned int reward_tower(struct board_t* board,struct position_t* position);
+
+unsigned int reward_farm(struct board_t* board,struct position_t* position); 
+//on invente un pouvoir pourle batiment farm
 
 #endif
