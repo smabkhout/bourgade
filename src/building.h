@@ -40,4 +40,14 @@ int length_of_affordable_buildings(struct building_t **affordable_buildings);
 
 void copy_building(struct building_t* building1, struct building_t* building2);
 
+//achievement 4
+int reward_cathedral(struct building_t* cathedral, struct board_t* board, struct position_t* position);
+
+int reward_castle(struct building_t* castle,struct board_t* board,struct position_t* position);
+
+int reward_tower(struct building_t* tower, struct board_t* board,struct position_t* position);
+
+int reward_farm(struct building_t* farm, struct board_t* board,struct position_t* position); //on invente un pouvoir pour
+//le batiment farm
+
 #endif

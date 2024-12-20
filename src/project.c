@@ -283,6 +283,60 @@ void display_remaining_players(int num_players, struct player_t **players)
   printf("\n");
 }
 
+// fonction pour l'achievement 4 : donne les récompenses éventuelles liées
+// aux pouvoirs des buildings aux joueurs
+void all_rewards(struct board_t *board, struct player_t **players, int num_players)
+{
+  for (int i = 0; i < MAX_POSITIONS; ++i)
+  {
+    unsigned int x = i % MAX_X;
+    unsigned int y = (i - x) / MAX_X;
+    if (board->tab[i]->building)
+    {
+      if (strcmp(board->tab[i]->building->nom, "Cathedral") == 0)
+      {
+        for (int k = 0; k < num_players; ++k)
+        {
+          if (players[k]->color == board->tab[i]->building->joueur)
+          {
+            players[k]->stockage[GOLD] += reward_cathedral(board->tab[i]->building, board, POS(x, y));
+          }
+        }
+      }
+      else if (strcmp(board->tab[i]->building->nom, "Castle") == 0)
+      {
+        for (int k = 0; k < num_players; ++k)
+        {
+          if (players[k]->color == board->tab[i]->building->joueur)
+          {
+            players[k]->stockage[GOLD] += reward_castle(board->tab[i]->building, board, POS(x, y));
+          }
+        }
+      }
+      else if (strcmp(board->tab[i]->building->nom, "Tower") == 0)
+      {
+        for (int k = 0; k < num_players; ++k)
+        {
+          if (players[k]->color == board->tab[i]->building->joueur)
+          {
+            players[k]->stockage[GOLD] += reward_tower(board->tab[i]->building, board, POS(x, y));
+          }
+        }
+      }
+      else if (strcmp(board->tab[i]->building->nom, "Farm") == 0)
+      {
+        for (int k = 0; k < num_players; ++k)
+        {
+          if (players[k]->color == board->tab[i]->building->joueur)
+          {
+            players[k]->stockage[GOLD] += reward_farm(board->tab[i]->building, board, POS(x, y));
+          }
+        }
+      }
+    }
+  }
+}
+
 void game(int num_players, int init_param, int seed)
 {
   init_positions(init_param); // initialisation des positions
