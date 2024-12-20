@@ -380,7 +380,7 @@ void game(int num_players, int init_param, int seed)
           {
             int building_choice = rand() % length_of_affordable_buildings(affordable_buildings);                      // le batiment à construire est choisi aleatoirement pour l'instant
             struct building_t *a_building = affordable_buildings[building_choice];                                    // on séléctionne ce batiment à construire
-            copy_building(board->present_buildings[nb_batiments_construits], a_building);                             // le contenu de a_building n'est pas copié et par suite apres free_affordable_buildings les batiments deja construits disparaissent
+            copy_building(board->present_buildings[nb_batiments_construits], a_building);
             place_building(players[current_player], current_cell, board->present_buildings[nb_batiments_construits]); // stocker les buildings dans un tableau present buildings
             ++nb_batiments_construits;
             printf("Le joueur %s construit un batiment %s à la position (%d,%d)\n", color_to_string(players[current_player]->color), a_building->nom, PY(a_pos) + 1, PX(a_pos) + 1);

@@ -107,7 +107,7 @@ unsigned int **resource_vectors(struct player_t *player)
         unsigned int current_nb_of_vectors = index_nb_of_vectors;
         for (unsigned int vector = 0; vector < current_nb_of_vectors; ++vector)
         {
-          for (unsigned int i = 1; i < (player->stockage[j]+1); ++i)
+          for (unsigned int i = 1; i < (player->stockage[j] + 1); ++i)
           {
             for (unsigned int resource = 0; resource < NUM_RESOURCES; ++resource)
             {
@@ -194,4 +194,31 @@ void copy_building(struct building_t *b2, struct building_t *b1)
     b2->value[i] = b1->value[i];
     b2->supplies[i] = b1->supplies[i];
   }
+}
+
+int reward_castle(struct building_t *castle, struct board_t *board, struct position_t *position)
+{
+  int longueur = 0;
+  int indices_composantes[MAX_POSITIONS / 2];
+  int gold_power = 0;
+  for (int i = 0; i < MAX_POSITIONS / 2; ++i)
+  {
+    indices_composantes[i] = -1;
+  }
+  parcours_composante_connexe(position, indices_composantes, longueur, board, 1);
+  for (int i = 0; i<MAX_POSITIONS/2; ++i)
+  {
+    if (indices_composantes[i] != -1)
+    {
+      if (board->tab[indices_composantes[i]]->building)
+      {
+        ++gold_power;
+      }
+    }
+    else
+    {
+      break;
+    }
+  }
+  return gold_power;
 }
