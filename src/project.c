@@ -345,6 +345,51 @@ void check_objectives(struct board_t *board, struct player_t **players, int num_
   // check objective3 : avoir 3 batiments qui forment une composante connexe
 }
 
+void check_objective3(struct board_t *board, struct player_t **players, int num_players)
+{
+  int *longueur = (int *)malloc(sizeof(int));
+  *longueur = 0;
+  int indices_composantes[MAX_POSITIONS / 2];
+  int debut_composante = 1;
+  for (int i = 0; i < MAX_POSITIONS / 2; ++i)
+  {
+    indices_composantes[i] = -1;
+  }
+  // contient les indices des positions
+  // on a MAX_POS/4 mines, au pire on a
+  // MAX_POS/4 amas différents et MAX_POS/4 -1 entre chaque donc MAX_POS/2 au total
+  for (int i = 0; i < MAX_POSITIONS; ++i)
+  {
+
+    if (board->tab[i]->building)
+    {
+      unsigned int x = i % MAX_X;
+      unsigned int y = (i - x) / MAX_X;
+      parcours_composante_connexe_building(POS(x, y), indices_composantes, longueur, board, debut_composante);
+    }
+  }
+  
+  //maintenant vérifier s'il y a une composante d'au moins 3 buildings du meme joueur et le récompenser
+
+  int length_of_group = 0;
+  int cost = 0;
+  int i = 0;
+  while (i < MAX_POSITIONS / 2)
+  {
+    if (indices_composantes[i] != -1)
+    {
+      ++length_of_group;
+    }
+    else
+    {
+      cost += length_of_group * length_of_group;
+      length_of_group = 0;
+    }
+    ++i;
+  }
+  free(longueur);
+}
+
 void game(int num_players, int init_param, int seed)
 {
   init_positions(init_param); // initialisation des positions
@@ -474,12 +519,12 @@ void game(int num_players, int init_param, int seed)
               else if (board->tab[neighbor]->building != NULL)
               {
                 int can_activate = 0;
-                if (resource_le_than(players[current_player]->stockage,board->tab[neighbor]->building->costs)==1)
+                if (resource_le_than(players[current_player]->stockage, board->tab[neighbor]->building->costs) == 1)
                 {
                   can_activate = 1;
                 }
-                int activation_choice = rand() % 2; // choice of the player whether to activate or not (random for now)
-                if (activation_choice&&can_activate)              // player wishes to activate     //if he wishes so and can't afford => eliminate player
+                int activation_choice = rand() % 2;    // choice of the player whether to activate or not (random for now)
+                if (activation_choice && can_activate) // player wishes to activate     //if he wishes so and can't afford => eliminate player
                 {
                   int owner = (board->tab[neighbor]->building->joueur) % num_players;
                   activate_building(players[owner], players[current_player], board->tab[neighbor]->building);
