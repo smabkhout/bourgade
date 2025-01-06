@@ -468,6 +468,7 @@ void game(int num_players, int init_param, int seed)
             place_building(players[current_player], current_cell, board->present_buildings[nb_batiments_construits]); // stocker les buildings dans un tableau present buildings
             board->indexes_present_buildings[nb_batiments_construits] = a_pos_index;
             ++nb_batiments_construits;
+            ++players[current_player]->nb_of_buildings_placed;
             printf("Le joueur %s construit un batiment %s à la position (%d,%d)\n", color_to_string(players[current_player]->color), a_building->nom, PY(a_pos) + 1, PX(a_pos) + 1);
           }
           else
