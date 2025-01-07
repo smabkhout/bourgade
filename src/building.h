@@ -43,7 +43,7 @@ void copy_building(struct building_t* building1, struct building_t* building2);
 //achievement 4
 unsigned int reward_cathedral(struct board_t* board, struct position_t* position);
 
-void parcours_composante_connexe_building(struct position_t *pos_initial, int *indices_composantes_connexes, int *longueur, struct board_t *board, int debut_composante);
+void parcours_composante_connexe_building(struct position_t *pos_initial, int *indices_composantes_connexes, int *longueur, struct board_t *board, int debut_composante, enum color_t joueur, int pouvoir);
 
 unsigned int reward_castle(struct board_t* board,struct position_t* position);
 

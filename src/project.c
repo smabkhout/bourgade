@@ -337,28 +337,58 @@ void all_rewards(struct board_t *board, struct player_t **players, int num_playe
   }
 }
 
-
-//avoir construit plus de batiments que MAX_WORKER_PER_PLAYER
-void check_objective1(struct player_t** players, int num_players)
+// avoir construit plus de batiments que MAX_WORKER_PER_PLAYER
+void check_objective1(struct player_t **players, int num_players)
 {
-  for (int i = 0; i<num_players; ++i)
+  for (int i = 0; i < num_players; ++i)
   {
-    if (players[i]->nb_of_buildings_placed >= MAX_WORKERS_PER_PLAYER) //objectif atteint
+    if (players[i]->nb_of_buildings_placed >= MAX_WORKERS_PER_PLAYER) // objectif atteint
     {
       players[i]->stockage[GOLD] += 3;
     }
   }
 }
 
-
-// fonction qui check si des joueurs ont atteint des objectifs de l'achievement 4
-void check_objectives(struct board_t *board, struct player_t **players, int num_players)
+// avoir construit 2 batiments qui produisent du CORN
+void check_objective2(struct board_t *board, struct player_t **players, int num_players)
 {
-  check_objective1(players,num_players);
-  // check objective2 : avoir construit 2 batiments qui produisent du CORN
-  // check objective3 : avoir 3 batiments qui forment une composante connexe
+  int *nb_batiments_corn = malloc(sizeof(int) * num_players);
+  for (int i = 0; i < num_players; ++i)
+  {
+    nb_batiments_corn[i] = 0;
+  }
+  for (int i = 0; i < MAX_BUILDINGS_PER_PLAYER * num_players; ++i)
+  {
+    if (board->present_buildings[i]->nom[0] != '-') // afin de parcourir uniquement les batiments presents
+    {
+      if (board->present_buildings[i]->supplies[CORN] != 0) // si le batiment produit du CORN
+      {
+        for (int joueur = 0; joueur < num_players; ++joueur) // trouver l'indice du joueur proprietaire du batiment et incrementer sa case dans nb_batiments_corn
+        {
+          if (players[joueur]->color == board->present_buildings[i]->joueur)
+          {
+            ++nb_batiments_corn[joueur];
+            break;
+          }
+        }
+      }
+    }
+    else
+    {
+      break;
+    }
+  }
+  for (int i = 0; i < num_players; ++i)
+  {
+    if (nb_batiments_corn[i] >= 2)
+    {
+      players[i]->stockage[GOLD] += 2;
+    }
+  }
+  free(nb_batiments_corn);
 }
 
+// avoir 3 batiments qui forment une composante connexe
 void check_objective3(struct board_t *board, struct player_t **players, int num_players)
 {
   int *longueur = (int *)malloc(sizeof(int));
@@ -379,14 +409,14 @@ void check_objective3(struct board_t *board, struct player_t **players, int num_
     {
       unsigned int x = i % MAX_X;
       unsigned int y = (i - x) / MAX_X;
-      parcours_composante_connexe_building(POS(x, y), indices_composantes, longueur, board, debut_composante);
+      parcours_composante_connexe_building(POS(x, y), indices_composantes, longueur, board, debut_composante, board->tab[i]->building->joueur, 0); // on l'utilise maintenantpour l'objectif
     }
   }
-  
-  //maintenant vérifier s'il y a une composante d'au moins 3 buildings du meme joueur et le récompenser
+
+  // maintenant vérifier s'il y a une composante d'au moins 3 buildings du meme joueur et le récompenser
+  // on connait maintenant que chaque composante contient les batiments du meme joueur
 
   int length_of_group = 0;
-  int cost = 0;
   int i = 0;
   while (i < MAX_POSITIONS / 2)
   {
@@ -396,12 +426,39 @@ void check_objective3(struct board_t *board, struct player_t **players, int num_
     }
     else
     {
-      cost += length_of_group * length_of_group;
+      if (length_of_group >= 3) // un joueur a verifie la condition et doit etre recompense
+      {
+        int pos_index = indices_composantes[i - 1];
+        enum color_t joueur = board->tab[pos_index]->building->joueur;
+        for (int j = 0; j < num_players; ++j)
+        {
+          if (players[j]->color == joueur)
+          {
+            players[j]->stockage[GOLD] += 2;
+            break;
+          }
+        }
+      }
       length_of_group = 0;
     }
     ++i;
   }
   free(longueur);
+}
+/*
+// avoir construit 2 batiments qui produisent du CORN
+void check_objective4(struct board_t *board, struct player_t **players, int num_players)
+{
+}
+*/
+
+// fonction qui check si des joueurs ont atteint des objectifs de l'achievement 4
+void check_objectives(struct board_t *board, struct player_t **players, int num_players)
+{
+  check_objective1(players, num_players);
+  check_objective2(board, players, num_players);
+  check_objective3(board, players, num_players);
+  // check_objective4(board, players, num_players);
 }
 
 void game(int num_players, int init_param, int seed)
@@ -447,40 +504,6 @@ void game(int num_players, int init_param, int seed)
     players[i] = initialize_player(random_color % MAX_COLORS);
     ++random_color;
   } // fin de l'initialisation des joueurs
-  /* *************************************************************************
-  struct player_t *test_player = initialize_player(random_color % MAX_COLORS);
-
-  for (int i = 0; i < NUM_RESOURCES; ++i)
-  {
-    test_player->stockage[i] += 1;
-    printf("%d-", test_player->stockage[i]);
-  }
-  printf("\n");
-
-  test_player->stockage[3 ] += 1;
-
-  unsigned int **resources_vectors = resource_vectors(test_player);
-  // tester avec des buildings
-  static struct building_t list_buildings_test[MAX_BUILDINGS_PER_PLAYER] = {
-      {.nom = "Farm", .costs = {0, 0, 0, 0, 0, 1}, .earns = {0, 0, 0, 0, 0, 3}, .supplies = {0, 1, 0, 0, 0, 0}, .value = {0, 0, 0, 1, 0, 0}, .joueur = 0},
-      {.nom = "Samwill", .costs = {0, 0, 0, 0, 0, 1}, .earns = {0, 0, 0, 0, 0, 4}, .supplies = {0, 0, 0, 3, 0, 0}, .value = {0, 0, 0, 2, 0, 0}, .joueur = 0},
-      {.nom = "Pontoon", .costs = {0, 0, 0, 0, 0, 1}, .earns = {0, 0, 0, 0, 0, 5}, .supplies = {0, 0, 2, 0, 0, 0}, .value = {0, 0, 0, 3, 0, 0}, .joueur = 0},
-      {.nom = "Quarry", .costs = {0, 0, 0, 0, 0, 2}, .earns = {0, 0, 0, 0, 0, 5}, .supplies = {0, 0, 0, 2, 0, 0}, .value = {0, 0, 0, 3, 0, 0}, .joueur = 0},
-      {.nom = "Market", .costs = {0, 0, 0, 0, 0, 3}, .earns = {0, 0, 0, 0, 0, 3}, .supplies = {1, 1, 1, 0, 1, 0}, .value = {0, 0, 0, 0, 0, 6}, .joueur = 0},
-      {.nom = "Bakery", .costs = {0, 0, 0, 0, 0, 1}, .earns = {0, 0, 0, 0, 0, 2}, .supplies = {0, 3, 0, 0, 0, 0}, .value = {0, 0, 0, 1, 1, 0}, .joueur = 0},
-      {.nom = "Factory", .costs = {0, 0, 0, 1, 1, 1}, .earns = {0, 1, 0, 0, 0, 2}, .supplies = {0, 3, 0, 1, 1, 0}, .value = {0, 1, 1, 1, 1, 0}, .joueur = 0}};
-
-  for (int i = 0; i < MAX_BUILDINGS_PER_PLAYER; ++i)
-  {
-    if (building_in_resource_vectors(&list_buildings_test[i], resources_vectors, test_player))
-    {
-      printf("The building %s is affordable.\n", list_buildings_test[i].nom);
-    }
-  }
-
-  free_resource_vectors(resources_vectors, test_player);
-  free_player(test_player);
-  ************************************************************************* */
   int nb_batiments_construits = 0;
   for (int j = 0; j < NUM_ROUNDS; ++j)
   {
