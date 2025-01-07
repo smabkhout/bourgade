@@ -343,6 +343,7 @@ void check_objectives(struct board_t *board, struct player_t **players, int num_
   check_objective1(players, num_players);
   check_objective2(board, players, num_players);
   check_objective3(board, players, num_players);
+  // check_objective4(board, players, num_players);
 }
 
 // avoir construit plus de batiments que MAX_WORKER_PER_PLAYER
@@ -361,6 +362,10 @@ void check_objective1(struct player_t **players, int num_players)
 void check_objective2(struct board_t *board, struct player_t **players, int num_players)
 {
   int *nb_batiments_corn = malloc(sizeof(int) * num_players);
+  for (int i = 0; i < num_players; ++i)
+  {
+    nb_batiments_corn[i] = 0;
+  }
   for (int i = 0; i < MAX_BUILDINGS_PER_PLAYER * num_players; ++i)
   {
     if (board->present_buildings[i]->nom[0] != '-') // afin de parcourir uniquement les batiments presents
@@ -449,7 +454,12 @@ void check_objective3(struct board_t *board, struct player_t **players, int num_
   }
   free(longueur);
 }
-
+/*
+// avoir construit 2 batiments qui produisent du CORN
+void check_objective4(struct board_t *board, struct player_t **players, int num_players)
+{
+}
+*/
 void game(int num_players, int init_param, int seed)
 {
   init_positions(init_param); // initialisation des positions
