@@ -337,15 +337,6 @@ void all_rewards(struct board_t *board, struct player_t **players, int num_playe
   }
 }
 
-// fonction qui check si des joueurs ont atteint des objectifs de l'achievement 4
-void check_objectives(struct board_t *board, struct player_t **players, int num_players)
-{
-  check_objective1(players, num_players);
-  check_objective2(board, players, num_players);
-  check_objective3(board, players, num_players);
-  // check_objective4(board, players, num_players);
-}
-
 // avoir construit plus de batiments que MAX_WORKER_PER_PLAYER
 void check_objective1(struct player_t **players, int num_players)
 {
@@ -460,6 +451,16 @@ void check_objective4(struct board_t *board, struct player_t **players, int num_
 {
 }
 */
+
+// fonction qui check si des joueurs ont atteint des objectifs de l'achievement 4
+void check_objectives(struct board_t *board, struct player_t **players, int num_players)
+{
+  check_objective1(players, num_players);
+  check_objective2(board, players, num_players);
+  check_objective3(board, players, num_players);
+  // check_objective4(board, players, num_players);
+}
+
 void game(int num_players, int init_param, int seed)
 {
   init_positions(init_param); // initialisation des positions
