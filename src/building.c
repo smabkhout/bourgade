@@ -304,7 +304,7 @@ unsigned int reward_castle(struct board_t *board, struct position_t *position)
   {
     indices_composantes[i] = -1;
   }
-  parcours_composante_connexe_building(position, indices_composantes, longueur, board, 1, NULL, 1); //ici on l'utilise avec un 1 car c'est pour verifier un pouvoir et le enum du joueur est NULL car on n'en a pas besoin
+  parcours_composante_connexe_building(position, indices_composantes, longueur, board, 1, 0, 1); //ici on l'utilise avec un 1 car c'est pour verifier un pouvoir et le enum du joueur est 0 car on n'en a pas besoin
   for (int i = 0; i < MAX_POSITIONS / 2; ++i)
   {
     if (indices_composantes[i] != -1)
