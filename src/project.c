@@ -345,6 +345,7 @@ void check_objective1(struct player_t **players, int num_players)
     if (players[i]->nb_of_buildings_placed >= MAX_WORKERS_PER_PLAYER) // objectif atteint
     {
       players[i]->stockage[GOLD] += 3;
+      printf("Le joueur %s a réussi OBJ1\n", color_to_string(players[i]->color));
     }
   }
 }
@@ -383,6 +384,7 @@ void check_objective2(struct board_t *board, struct player_t **players, int num_
     if (nb_batiments_corn[i] >= 2)
     {
       players[i]->stockage[GOLD] += 2;
+      printf("Le joueur %s a réussi OBJ2\n", color_to_string(players[i]->color));
     }
   }
   free(nb_batiments_corn);
@@ -435,6 +437,7 @@ void check_objective3(struct board_t *board, struct player_t **players, int num_
           if (players[j]->color == joueur)
           {
             players[j]->stockage[GOLD] += 2;
+            printf("Le joueur %s a réussi OBJ3\n", color_to_string(players[i]->color));
             break;
           }
         }
@@ -452,7 +455,10 @@ void check_objective4(struct player_t **players, int num_players)
   for (int i = 0; i < num_players; ++i)
   {
     if (players[i]->nb_of_buildings_placed == MAX_BUILDINGS_PER_PLAYER)
+    {
       players[i]->stockage[GOLD] += 3;
+      printf("Le joueur %s a réussi OBJ4\n", color_to_string(players[i]->color));
+    }
   }
 }
 
