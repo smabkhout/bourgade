@@ -147,7 +147,7 @@ Dans cette section, nous détaillons les rôles des fichiers `.c`, `.h`, et `.o`
     \item Les fichiers \textbf{.c} contiennent les définitions des fonctions et des structures(sauf position), ainsi que le code qui sera exécuté.
     \item Un fichier \textbf{.h} en langage C, appelé fichier d'en-tête (\emph{header file}), est utilisé pour déclarer des fonctions, des constantes, des structures, et des macros qui peuvent être partagées entre plusieurs fichiers sources \textbf{.c}. Il facilite la modularité en séparant les déclarations des implémentations, qui sont généralement placées dans les fichiers \textbf{.c}. Les fichiers \textbf{.h} sont inclus dans les fichiers sources à l'aide de la directive \texttt{\#include}. Pour éviter les inclusions multiples, on utilise souvent des \emph{garde-inclusions} (\emph{include guards}), assurant une compilation sans conflits.
 
-    \item Les fichiers \textbf{.o} sont des fichiers objets générés après la compilation des fichiers `.c`. Ils contiennent du code binaire intermédiaire, prêt à être lié par l'éditeur de liens (\texttt{linker}). Leur rôle est de permettre une compilation modulaire.(à modifier)
+    \item Un fichier \textbf{.o} (fichier objet) est une étape intermédiaire dans la compilation d’un programme en C. Il contient du code machine généré à partir d’un fichier source \textbf{.c}, ainsi que des symboles et des informations nécessaires à l’édition de liens. Non exécutable en lui-même, il est utilisé par le linker pour produire le fichier binaire final exécutable.
 \end{itemize}
 
 \subsection{Déclarations et types abstraits}
@@ -190,8 +190,7 @@ L'utilisation directe des définitions complètes dans plusieurs fichiers `.h` p
 \end{itemize}
 
 
-\section{Structure et initialisation des différentes entités du jeu}
-
+\section{Structure et initialisation des différentes entités du jeu} \label{structures}
 \subsection{Les positions}
 Nous avons choisi d'implémenter la structure des positions de la manière suivante dans le fichier \textit{position.c} : deux champs entiers x et y qui sont les coordonnées de la position et un champ entier init qui nous permet de savoir si la position à déjà été initialisée au préalable ou non.
 \begin{lstlisting}[caption={Structure position}, label={code:position}]
@@ -323,7 +322,30 @@ Nous commençons par initialiser les positions du plateau à l'aide de la foncti
 ...ICI...
 
 \section{Achievements}
+\subsection{Achievement 0}
+
+Tout d'abord, nous avons commencé par implémenter les fonctions déjà déclarées dans les fichiers d'en-tête (\textbf{.h}) fournis. Ces fonctions ont été définies dans les fichiers \textbf{.c} correspondants. Cette étape a permis de poser les bases du projet en remplissant les fonctions essentielles.
+
+Ensuite, nous avons créé nos propres fichiers \textbf{.h} et \textbf{.c} pour pouvoir implémenter de nouveaux éléments du jeu. Cela a inclus l'ajout de nouvelles entités et fonctionnalités, comme décrit dans la section \ref{structures}.
+
+Nous avons ensuite développé la fonction \textbf{game} dans le fichier \textbf{project.c}, qui contient la boucle principale du jeu. Cette boucle est au cœur du fonctionnement du jeu, et toutes les fonctions nécessaires ont été écrites pour garantir son bon fonctionnement.
+
+Une fois la boucle de jeu implémentée, nous avons testé son bon fonctionnement en créant un affichage du plateau via plusieurs fonctions. Cela nous a permis de vérifier si le jeu s'exécutait comme prévu. Toutefois, après plusieurs essais, nous avons identifié des erreurs algorithmiques qu'il a fallu corriger.
+
+Enfin, une fois le jeu fonctionnel, nous avons implémenté les conditions de victoire pour chaque partie jouée. L'affichage du vainqueur à la fin de la partie a été ajouté pour finaliser l'implémentation des règles du jeu.
+
+...ICI...
+
 \subsection{Achievement 1}
+...ICI...
+
+\subsection{Achievement 2}
+...ICI...
+
+\subsection{Achievement 3}
+...ICI...
+
+\subsection{Achievement 4}
 ...ICI...
 
 \subsection{}
