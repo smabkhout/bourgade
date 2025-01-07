@@ -11,7 +11,8 @@
 \usepackage{graphicx}   
 \usepackage{titling}   
 \usepackage{float}
-
+\usepackage{tikz}
+\usetikzlibrary{automata}
 \graphicspath{{img/}}
 
 %configuration des liens hypertexte
@@ -31,7 +32,7 @@
 
 
 \title{\textbf{Bourgade} \\ \large Projet de s5}
-\author{GUIOT Numa et MABKHOUT Salah-eddine}
+\author{GUIOT Numa et MABKHOUT Salah-Eddine}
 \date{\today}
 
 
@@ -112,7 +113,8 @@ Certains fichiers ont besoin de structures de données définies dans d'autres. 
 inévitables. Voici le graphe des inclusions : 
 \begin{figure}[H]
     \begin{center}
-    \includegraphics[width=0.7\textwidth]{dependances}
+    \input{dependances}
+    %[width=0.7\textwidth]{dependances}
     \end{center}
     \caption{Graphe des dépendances circulaires des fichiers de notre projet.}
     \label{fig:dependances}
@@ -121,6 +123,53 @@ Le graphe de la \autoref{fig:dependances} montre les différentes inclusions de 
 le noeud B, cela signifie que le fichier B est inclus dans l'entête du fichier A. Les flèches vertes représentent les dépendances circulaires.
 Toutefois, ces inclusions se font uniquement au moment de la compilation car lorsque le compilateur recopie les fichiers, 
 il remarque les marqueurs \#ifndef \_\_FICHIER\_H\_\_ et nous n'avons donc pas de redéfinitions éventuelles.
+\subsection{Rôles des fichiers source, entêtes, et objets}
+Dans cette section, nous détaillons les rôles des fichiers `.c`, `.h`, et `.o` dans notre projet :
+\begin{itemize}
+    \item Les fichiers \textbf{.c} contiennent les définitions des fonctions et des structures(sauf position), ainsi que le code qui sera exécuté.
+    \item Un fichier \textbf{.h} en langage C, appelé fichier d'en-tête (\emph{header file}), est utilisé pour déclarer des fonctions, des constantes, des structures, et des macros qui peuvent être partagées entre plusieurs fichiers sources \textbf{.c}. Il facilite la modularité en séparant les déclarations des implémentations, qui sont généralement placées dans les fichiers \textbf{.c}. Les fichiers \textbf{.h} sont inclus dans les fichiers sources à l'aide de la directive \texttt{\#include}. Pour éviter les inclusions multiples, on utilise souvent des \emph{garde-inclusions} (\emph{include guards}), assurant une compilation sans conflits.
+
+    \item Les fichiers \textbf{.o} sont des fichiers objets générés après la compilation des fichiers `.c`. Ils contiennent du code binaire intermédiaire, prêt à être lié par l'éditeur de liens (\texttt{linker}). Leur rôle est de permettre une compilation modulaire.(à modifier)
+\end{itemize}
+
+\section{Déclarations et types abstraits}
+\subsection{Gardes préprocesseurs (\#ifndef, \#define, \#endif)}
+Pour éviter les inclusions multiples lors de la compilation, nous utilisons des gardes préprocesseurs dans chaque fichier d'entête. Par exemple :
+\begin{verbatim}
+#ifndef __FICHIER_H__
+#define __FICHIER_H__
+
+/* Déclarations ici */
+
+#endif
+\end{verbatim}
+Ces marqueurs garantissent que chaque fichier d'entête n'est inclus qu'une seule fois, ce qui prévient les erreurs de redéfinition.
+
+\subsection{Déclarations de types abstraits et définitions complètes}
+Une \textbf{déclaration} de type abstrait est utilisée pour informer le compilateur qu'un type existe, sans révéler sa structure interne. Par exemple :
+\begin{verbatim}
+struct Joueur; /* Déclaration abstraite */
+\end{verbatim}
+Cela est particulièrement utile pour :
+\begin{itemize}
+    \item \textbf{La manipulation des pointeurs :} Si l'on a uniquement besoin de manipuler un pointeur vers ce type (par exemple, pour le passer en argument à une fonction ou le stocker dans une autre structure), une déclaration suffit.
+    \item \textbf{La réduction des dépendances circulaires :} Dans tels projets avec plusieurs fichiers, une déclaration abstraite permet de briser les cycles d'inclusion. Par exemple, si \texttt{player.h} et \texttt{worker.h} s'incluent mutuellement, cela peut être résolu en déclarant \texttt{struct worker\_t} dans \texttt{player.h} et vice-versa.
+\end{itemize}
+
+Une \textbf{définition complète}, en revanche, est nécessaire lorsque le contenu complet de la structure doit être manipulé. Cela implique d'inclure le fichier d'entête correspondant.
+On en a besoin principalement pour : 
+\begin{itemize}
+    \item \textbf{L'accès aux champs :} Si l’on doit accéder ou modifier les champs d’une structure ou effectuer des calculs basés sur eux, la définition complète est indispensable. Par exemple, pour modifier une valeur ou réaliser une opération sur un joueur, il faut inclure la structure complète de \texttt{struct player\_t}.
+    \item \textbf{Les allocations dynamiques :} Lorsqu’on alloue de la mémoire pour une structure à l'aide de \texttt{malloc}, le compilateur doit connaître la taille exacte de cette structure. Une simple déclaration abstraite ne suffit pas, car elle ne fournit pas cette information.
+\end{itemize}
+
+\subsection{Problèmes liés aux dépendances et solutions}
+L'utilisation directe des définitions complètes dans plusieurs fichiers `.h` peut entraîner des dépendances circulaires. Par exemple, si deux fichiers s'incluent mutuellement, cela peut provoquer des erreurs de compilation. Pour éviter cela, nous avons adopté les solutions suivantes :
+\begin{itemize}
+    \item \textbf{Déclarations abstraites :} Utiliser des déclarations abstraites dans les fichiers `.h` pour les types provenant d'autres fichiers.
+    \item \textbf{Inclusions limitées :} Inclure les fichiers `.h` uniquement dans les fichiers `.c` qui nécessitent les définitions complètes.
+    \item \textbf{Gardes préprocesseurs :} S'assurer que chaque fichier d'entête est protégé par des gardes préprocesseurs pour éviter les inclusions multiples.
+\end{itemize}
 
 
 \section{Structure et initialisation des différentes entités du jeu}
