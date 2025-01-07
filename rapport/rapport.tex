@@ -12,6 +12,7 @@
 \usepackage{titling}   
 \usepackage{float}
 \usepackage{tikz}
+\usepackage{listings}
 \usetikzlibrary{automata}
 \graphicspath{{img/}}
 
@@ -28,7 +29,22 @@
 \renewcommand{\cftsecfont}{\color{blue}}
 \renewcommand{\cftsubsecfont}{\color{blue}}
 
-
+%configuration du style pour le code
+\lstset{
+    language=C,                    
+    basicstyle=\ttfamily\small,    
+    keywordstyle=\color{blue},     
+    commentstyle=\color{green!50!black}, 
+    stringstyle=\color{red},       
+    numbers=left,                  
+    numberstyle=\tiny\color{gray},  
+    frame=single,                   
+    breaklines=true,                
+    captionpos=b,                  
+    tabsize=4,                      
+    showspaces=false,             
+    showstringspaces=false        
+}
 
 
 \title{\textbf{Bourgade} \\ \large Projet de s5}
@@ -175,36 +191,119 @@ L'utilisation directe des définitions complètes dans plusieurs fichiers `.h` p
 \section{Structure et initialisation des différentes entités du jeu}
 
 \subsection{Les positions}
-...ICI...
+Nous avons choisi d'implémenter la structure des positions de la manière suivante dans le fichier \textit{position.c} : deux champs entiers x et y qui sont les coordonnées de la position et un champ entier init qui nous permet de savoir si la position à déjà été initialisée au préalable ou non.
+\begin{lstlisting}[caption={Structure position}, label={code:position}]
+    struct position_t
+    {
+        unsigned int x;
+        unsigned int y;
+        int init; // booleen qui dit si la position a deja ete initialisee ou pas
+    };    
+\end{lstlisting}
+    
 
 \subsection{Les couleurs}
-...ICI...
+Les couleurs sont, quant à elles, définies dans le fichier \textit{color.h} de la manière suivante : 
+\begin{lstlisting}[caption={Structure couleur}, label={code:couleur}]
+    enum color_t {
+        BLACK      = 0,
+        WHITE      = 1,
+        ORANGE     = 2,
+        PINK       = 3,
+        VIOLET     = 4,
+        YELLOW     = 5,
+        BLUE       = 6,
+        BROWN      = 7,
+        GREEN      = 8,
+        RED        = 9,
+        SHINY      = 10,
+        MAX_COLORS = 11,
+    };
+\end{lstlisting}
 
 \subsection{Les ressources}
-...ICI...
+De même, les ressources sont définies dans le fichier \textit{resource.h} de la manière suivante :
+\begin{lstlisting}[caption={Structure resource}, label={code:couleur}]
+    enum resource_t {
+        NOTHING       = 0,
+        CORN          = 1,
+        FISH          = 2,
+        WOOD          = 3,
+        STONE         = 4,
+        GOLD          = 5,
+        RUBY          = 6,
+        SILVER        = 7,
+        SAPPHIRE      = 8,
+        EMERALD       = 9,
+        MAX_RESOURCES = 10, // The maximal number of resources possible
+    };
+\end{lstlisting}
 
 \subsection{Les joueurs}
-...ICI...
-
+Nous définissons les joueurs avec le type suivant dans le fichier \textit{player.h} : 
+\begin{lstlisting}[caption={Structure joueur}, label={code:joueur}]
+    struct player_t{
+        enum color_t color;  
+        unsigned int stockage[NUM_RESOURCES]; 
+        int number_of_workers; //vise a suivre le nombre d'employes utilises par le joueur, initialise a MAX_WORKERS_PAR_PLAYER
+        int eliminated; // le joueur est elimine ou non
+        int nb_of_buildings_placed; //nombre de batiments que va placer le joueur au cours de la partie
+    };
+\end{lstlisting}
+\textbf Nous choisissons de représenter le stockage du joueur sous la forme d'un tableau \textit{unsigned int stockage} de taille NUM\_RESOURCES. En effet si le joueur possède 3 FISH et 2 STONE, alors dans le tableau \textit{stockage}, il y aura la valeur 3 à l'indice correspondant à FISH (2) et 2 à l'indice correspondant à STONE (4).
 \subsection{Les employés}
-...ICI...
-
+Nous définissons les employés avec le type suivant dans le fichier \textit{worker.h} : 
+\begin{lstlisting}[caption={Structure employé}, label={code:employé}]
+    struct worker_t {
+        char* nom;
+        unsigned int costs[NUM_RESOURCES]; //ressources necessaires a payer l'employe
+        enum color_t joueur; //couleur representant le joueur qui controle l'employe
+        struct position_t * position; //position de l'employe sur le plateau
+    };
+\end{lstlisting}
 \subsection{Les bâtiments}
-...ICI...
-
+Nous définissons les bâtiments avec le type suivant dans le fichier \textit{building.h} :
+\begin{lstlisting}[caption={Structure bâtiment}, label={code:bâtiment}]
+    struct building_t{
+        char nom[12];
+        unsigned int value[NUM_RESOURCES];
+        unsigned int earns[NUM_RESOURCES];
+        unsigned int costs[NUM_RESOURCES];
+        unsigned int supplies[NUM_RESOURCES];
+        enum color_t joueur; //proprietaire du building
+    };
+\end{lstlisting}
 \subsection{Les mines}
-...ICI...
+Nous définissons les mines de ressources avec le type suivant dans le fichier \textit{mine.h} :
+\begin{lstlisting}[caption={Structure mine}, label={code:mine}]
+    struct mine_t {
+        char name[12];
+        enum resource_t r;
+    };
+\end{lstlisting}
 
 \subsection{Les cellules et le plateau}
-...ICI...
+Nous définissons les cellules du plateau ainsi que le plateau avec les types suivants respectivement dans les fichiers \textit{cell.h} et \textit{board.h} : 
+\begin{lstlisting}[caption={Structure cellule}, label={code:cellule}]
+    struct cell_t {
+        struct building_t* building;
+        struct worker_t* worker;
+        struct mine_t* mine;
+    };
+\end{lstlisting}
+\begin{lstlisting}[caption={Structure plateau}, label={code:plateau}]
+    struct board_t {
+        struct cell_t** tab;
+        struct mine_t* present_mines;
+        struct building_t** present_buildings;
+        int *indexes_present_buildings;
+    };
+\end{lstlisting}
+\textbf Les cellules contiennent des pointeurs vers les éléments des champs \textit{present\_mines} et \textit{present\_buildings} du plateau de type \textit{struct board\_t}. Le champ \textit{worker} est qaunt à lui alloué dynamiquement chaque fois que nous l'utilisons.\newline Le tableau \textit{present\_mines} stocke les mines de ressources présentes sur le plateau. Le tableau \textit{present\_buildings} stocke les bâtiments présents sur le plateau et \textit{indexes\_present\_buildings} stocke les indices des bâtiments de \textit{present\_buildings} dans le tableau qui représente la grille entière : \textit{tab}.
 
 
 \section{Interaction entre les différentes entités du jeu}
-\subsection{1}
-...ICI...
 
-\subsection{2}
-...ICI...
 
 \chapter{Boucle de jeu}
 \section{Déroulement d'une partie}
