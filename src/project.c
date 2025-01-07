@@ -445,12 +445,16 @@ void check_objective3(struct board_t *board, struct player_t **players, int num_
   }
   free(longueur);
 }
-/*
-// avoir construit 2 batiments qui produisent du CORN
-void check_objective4(struct board_t *board, struct player_t **players, int num_players)
+
+// avoir construit MAX_BUILDINGS_PER_PLAYER bâtiments, le joueur gagne alors 3 GOLD
+void check_objective4(struct player_t **players, int num_players)
 {
+  for (int i = 0; i < num_players; ++i)
+  {
+    if (players[i]->nb_of_buildings_placed == MAX_BUILDINGS_PER_PLAYER)
+      players[i]->stockage[GOLD] += 3;
+  }
 }
-*/
 
 // fonction qui check si des joueurs ont atteint des objectifs de l'achievement 4
 void check_objectives(struct board_t *board, struct player_t **players, int num_players)
@@ -458,7 +462,7 @@ void check_objectives(struct board_t *board, struct player_t **players, int num_
   check_objective1(players, num_players);
   check_objective2(board, players, num_players);
   check_objective3(board, players, num_players);
-  // check_objective4(board, players, num_players);
+  check_objective4(players, num_players); // objectif supplémentaire demandé
 }
 
 void game(int num_players, int init_param, int seed)
