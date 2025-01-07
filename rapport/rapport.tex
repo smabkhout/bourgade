@@ -51,6 +51,8 @@
 \author{GUIOT Numa et MABKHOUT Salah-Eddine}
 \date{\today}
 
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
 
 \begin{document}
 
@@ -95,7 +97,7 @@ de nous deux n'était familier avec ces notions. De plus, avoir une version fonc
 quelques achievements supplémentaires étaient des objectifs que nous visions avant de commencer ce projet.
 
 \chapter{Implémentation}
-\section{Organisation des fichiers et dépendances circulaires}
+\section{Organisation des fichiers}
 Notre projet est divisé en différents fichiers dans le dossier src/ : 
 \begin{itemize}
     \item project.c
@@ -149,7 +151,7 @@ Dans cette section, nous détaillons les rôles des fichiers `.c`, `.h`, et `.o`
 \end{itemize}
 
 \subsection{Déclarations et types abstraits}
-\subsection{Gardes préprocesseurs (\#ifndef, \#define, \#endif)}
+\subsubsection{Gardes préprocesseurs (\#ifndef, \#define, \#endif)}
 Pour éviter les inclusions multiples lors de la compilation, nous utilisons des gardes préprocesseurs dans chaque fichier d'entête. Par exemple :
 \begin{verbatim}
 #ifndef __FICHIER_H__
@@ -161,7 +163,7 @@ Pour éviter les inclusions multiples lors de la compilation, nous utilisons des
 \end{verbatim}
 Ces marqueurs garantissent que chaque fichier d'entête n'est inclus qu'une seule fois, ce qui prévient les erreurs de redéfinition.
 
-\subsection{Déclarations de types abstraits et définitions complètes}
+\subsubsection{Déclarations de types abstraits et définitions complètes}
 Une \textbf{déclaration} de type abstrait est utilisée pour informer le compilateur qu'un type existe, sans révéler sa structure interne. Par exemple :
 \begin{verbatim}
 struct Joueur; /* Déclaration abstraite */
@@ -179,7 +181,7 @@ On en a besoin principalement pour :
     \item \textbf{Les allocations dynamiques :} Lorsqu’on alloue de la mémoire pour une structure à l'aide de \texttt{malloc}, le compilateur doit connaître la taille exacte de cette structure. Une simple déclaration abstraite ne suffit pas, car elle ne fournit pas cette information.
 \end{itemize}
 
-\subsection{Problèmes liés aux dépendances et solutions}
+\subsubsection{Problèmes liés aux dépendances et solutions}
 L'utilisation directe des définitions complètes dans plusieurs fichiers `.h` peut entraîner des dépendances circulaires. Par exemple, si deux fichiers s'incluent mutuellement, cela peut provoquer des erreurs de compilation. Pour éviter cela, nous avons adopté les solutions suivantes :
 \begin{itemize}
     \item \textbf{Déclarations abstraites :} Utiliser des déclarations abstraites dans les fichiers `.h` pour les types provenant d'autres fichiers.
@@ -303,27 +305,28 @@ Nous définissons les cellules du plateau ainsi que le plateau avec les types su
 
 
 \section{Interaction entre les différentes entités du jeu}
-\begin{center}
-    \includegraphics[width=1\textwidth]{relations.png}
-    \caption{Graphe des relations entre les structures}
-    \label{fig:relations}
-\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=0.8\textwidth]{relations.png}
+        \caption{Graphe des relations entre les structures}
+        \label{fig:relations}
+    \end{center}
+\end{figure}
 
 \chapter{Boucle de jeu}
 \section{Déroulement d'une partie}
 \subsection{Initialisation}
-...ICI...
-
+Nous commençons par initialiser les positions du plateau à l'aide de la fonction \textit{init\_positions()} définie dans \textit{position.c}. Ensuite nous initialisons le plateau sans les bâtiments grâce à la fonction \textit{init\_best\_board()} qui place les mines de manières optimale sur le plateau.
 \subsection{Les différentes options}
 ...ICI...
 \subsection{Conditions de victoire}
 ...ICI...
 
-\section{Les choix des joueurs}
-\subsection{Un peu de stratégie}
+\section{Achievements}
+\subsection{Achievement 1}
 ...ICI...
 
-\subsection{Les pouvoirs}
+\subsection{}
 ...ICI...
 
 \subsection{Les faveurs}
