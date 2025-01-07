@@ -89,7 +89,7 @@
 \section{Objectifs}
 \subsection{Objectifs théoriques}
 Dans un premier temps, nos objectifs théoriques avec ce projet étaient multiples. D'abord, améliorer nos compétences respectives 
-de programmation en langage C. Ensuite, utiliser des allocations dynamiques lorsque cela était autorisé et gérer correctement la mémoire.
+de programmation en langage C. Ensuite, utiliser des allocations dynamiques lorsque cela était autorisé et gérer correctement la mémoire. Nous avons eu cette volonté d'utiliser des allocations dynamiques pour éviter l'utilisation abusive de variables statiques malgré la difficulté. 
 Enfin, trouver des solutions algorithmiques pour des problèmes rencontrés au fil de l'avancement du projet.  
 \subsection{Objectifs pratiques}
 Du côté des objectifs pratiques, le but était d'apprendre à utiliser un Makefile ainsi que de gérer un dépot git, étant donné qu'aucun
@@ -315,21 +315,17 @@ Nous définissons les cellules du plateau ainsi que le plateau avec les types su
 
 \chapter{Boucle de jeu}
 \section{Déroulement d'une partie}
+\subsection{Compilation}
+Nous commençons par compiler notre fichier \textit{project.c} à l'aide d'un fichier Makefile. Nous précisons les dimensions du plateau, ainsi qu'éventuellement, le nombre de joueur, la graine pseudo-aléatoire et le mode de jeu. (cf : 3.1.3)
 \subsection{Initialisation}
-Nous commençons par initialiser les positions du plateau à l'aide de la fonction \textit{init\_positions()} définie dans \textit{position.c}. Ensuite nous initialisons le plateau sans les bâtiments grâce à la fonction \textit{init\_best\_board()} qui place les mines de manières optimale sur le plateau.
+Nous initialisons les positions du plateau à l'aide de la fonction \textit{init\_positions()} définie dans \textit{position.c}. Ensuite nous initialisons le plateau sans les bâtiments grâce à la fonction \textit{init\_best\_board()} qui place les mines de manière optimale sur le plateau. Puis nous initialisons les bâtiments qui serviront pendant la partie et nous finissons par initialiser les joueurs. 
 \subsection{Les différentes options}
-...ICI...
+
 \subsection{Conditions de victoire}
 ...ICI...
 
 \section{Achievements}
 \subsection{Achievement 1}
-...ICI...
-
-\subsection{}
-...ICI...
-
-\subsection{Les faveurs}
 ...ICI...
 
 \section{Un peu de complexité}
@@ -357,15 +353,6 @@ Nous commençons par initialiser les positions du plateau à l'aide de la foncti
 ...ICI...
 
 \section{Erreurs en lien avec la forge}
-...ICI...
-
-\section{Implémentation des pouvoirs}
-...ICI...
-
-\section{Exportation et manipulation de notre guilde}
-...ICI...
-
-\section{Travail de groupe}
 ...ICI...
 
 \chapter{Conclusion}
