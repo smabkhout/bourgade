@@ -13,6 +13,7 @@
 \usepackage{float}
 \usepackage{tikz}
 \usepackage{listings}
+\usepackage{array}
 \usetikzlibrary{automata}
 \graphicspath{{img/}}
 
@@ -338,7 +339,7 @@ La partie se déroule en \textit{num\_rounds} manches. Un joueur est éliminé s
 \section{Achievements}
 \subsection{Achievement 0}
 
-Tout d'abord, nous avons commencé par implémenter les fonctions déjà déclarées dans les fichiers d'en-tête (\textbf{.h}) fournis. Ces fonctions ont été définies dans les fichiers \textbf{.c} correspondants. Cette étape a permis de poser les bases du projet en remplissant les fonctions essentielles.
+Tout d'abord, nous avons commencé par implémenter les fonctions déjà déclarées dans les fichiers \textbf{.h} fournis. Ces fonctions ont été définies dans les fichiers \textbf{.c} correspondants. Cette étape a permis de poser les bases du projet en remplissant les fonctions essentielles.
 
 Ensuite, nous avons créé nos propres fichiers \textbf{.h} et \textbf{.c} pour pouvoir implémenter de nouveaux éléments du jeu. Cela implique l'ajout de nouvelles entités et fonctionnalités, comme décrit dans la section \ref{structures}.
 
@@ -349,8 +350,55 @@ Une fois la boucle de jeu implémentée, nous avons testé son bon fonctionnemen
 Enfin, une fois le jeu fonctionnel, nous avons implémenté les conditions de victoire pour chaque partie jouée. L'affichage du vainqueur à la fin de la partie a été ajouté pour finaliser l'implémentation des règles du jeu.
 
 \subsection{Achievement 1}
-...ICI...       
+...ICI...
 
+Dans cette étape, nous avons ajouté la prise en charge de plusieurs types de plateaux de jeu, définis par un 
+paramètre passé en ligne de commande via \texttt{getopt()}. Ce paramètre \texttt{-c} modifie l'exécution de 
+la fonction \texttt{list\_neighbors}, qui détermine les voisins d'une position en fonction du type de plateau 
+sélectionné.
+
+\paragraph{Type 0 : Plateau normal} 
+Ce type de plateau représente la version de base du jeu, les voisins d'une position sont les huit 
+cases adjacentes dans un environnement classique en deux dimensions.
+
+%++++++++++++++++++++++++++++++++++++++++ (à modifier)
+\begin{center}
+    %\renewcommand{\arraystretch}{1} % Ensure square proportions
+    \begin{tabular}{|>{\centering\arraybackslash}p{1cm}|>{\centering\arraybackslash}p{1cm}|>{\centering\arraybackslash}p{1cm}|>{\centering\arraybackslash}p{1cm}|}
+    \hline
+     & & & \\[1cm] \hline % Adjust [2cm] for square height
+     & & V & \\[1cm] \hline
+     & \scalebox{4}{\textcolor{red}{A}} & & \\[1cm] \hline
+     & & & \\[1cm] \hline
+    \end{tabular}
+    \end{center}
+
+++++++++++++++++++++++++++++++++++++++++
+\paragraph{Type 1 : Plateau à voisins à 2}
+Pour ce type, les voisins incluent les cases situées à une distance de deux mouvements cardinaux (haut, bas, gauche, droite).
+
+\paragraph{Type 2 : Plateau à géométrie torique} 
+Dans ce plateau, les bords sont connectés, ce qui signifie que les voisins d'une position située en 
+bordure du plateau peuvent inclure des positions situées de l'autre côté.
+
+\paragraph{Type 3 : Plateau infernal}
+Pour ce type, on choisit exactement \texttt{MAX\_POSITIONS/4} cases qui ne seront plus valables dans le jeu.
+
+%++++++++++++++++++++++++++++++++++++++++ (à modifier)
+\begin{center}
+\renewcommand{\arraystretch}{1} % Ensure square proportions
+\begin{tabular}{|p{1cm}|p{1cm}|p{1cm}|p{1cm}|} % 2cm square cells
+\hline
+ & & & \\[1cm] \hline % Adjust [2cm] for square height
+ & & & \\[1cm] \hline
+ & & & \\[1cm] \hline
+ & & & \\[1cm] \hline
+\end{tabular}
+\end{center}
+
+++++++++++++++++++++++++++++++++++++++++
+
+...ICI...
 \subsection{Achievement 2}
 ...ICI...
 
