@@ -37,8 +37,8 @@ void activate_building(struct player_t *owner, struct player_t *user, struct bui
 struct building_t **list_buildings_costing_less_than(struct player_t *player)
 {
   struct building_t **affordable_buildings = NULL;
-  affordable_buildings = (struct building_t **)malloc(sizeof(struct building_t *) * 7);
-  for (int i = 0; i < 7; ++i)
+  affordable_buildings = (struct building_t **)malloc(sizeof(struct building_t *) * 8);
+  for (int i = 0; i < 8; ++i)
   {
     affordable_buildings[i] = NULL;
   }
@@ -177,9 +177,12 @@ void free_affordable_buildings(struct building_t **batiments)
 int length_of_affordable_buildings(struct building_t **affordable_buildings)
 {
   int count = 0;
-  while (affordable_buildings[count] != NULL)
+  if (affordable_buildings)
   {
-    ++count;
+    while (affordable_buildings[count] != NULL)
+    {
+      ++count;
+    }
   }
   return count;
 }
@@ -304,7 +307,7 @@ unsigned int reward_castle(struct board_t *board, struct position_t *position)
   {
     indices_composantes[i] = -1;
   }
-  parcours_composante_connexe_building(position, indices_composantes, longueur, board, 1, 0, 1); //ici on l'utilise avec un 1 car c'est pour verifier un pouvoir et le enum du joueur est 0 car on n'en a pas besoin
+  parcours_composante_connexe_building(position, indices_composantes, longueur, board, 1, 0, 1); // ici on l'utilise avec un 1 car c'est pour verifier un pouvoir et le enum du joueur est 0 car on n'en a pas besoin
   for (int i = 0; i < MAX_POSITIONS / 2; ++i)
   {
     if (indices_composantes[i] != -1)

@@ -615,7 +615,7 @@ void game(int num_players, int init_param, int seed)
           if ((players[i]->eliminated == 1) && (players[i]->color == couleur))
           {
             free_building(board->present_buildings[k]);
-
+            board->present_buildings[k] = NULL;
             board->present_buildings[k] = (struct building_t *)malloc(sizeof(struct building_t));
             for (int z = 0; z < 10; ++z)
             {
