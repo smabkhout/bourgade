@@ -386,17 +386,22 @@ Pour ce type, on choisit exactement \texttt{MAX\_POSITIONS/4} cases qui ne seron
 
 %++++++++++++++++++++++++++++++++++++++++ (à modifier)
 \begin{center}
-\renewcommand{\arraystretch}{1} % Ensure square proportions
-\begin{tabular}{|p{1cm}|p{1cm}|p{1cm}|p{1cm}|} % 2cm square cells
-\hline
- & & & \\[1cm] \hline % Adjust [2cm] for square height
- & & & \\[1cm] \hline
- & & & \\[1cm] \hline
- & & & \\[1cm] \hline
-\end{tabular}
+    \begin{tikzpicture}[scale=1]
+    
+    % Draw the grid
+    \foreach \x in {0,1,2,3,4} {
+        \foreach \y in {0,1,2,3,4} {
+            \draw (\x, \y) rectangle (\x+1, \y+1); % Draw square cells
+        }
+    }
+    
+    % Add letters or symbols in specific cells
+    \node at (0.5, 3.5) {\textcolor{red}{\Huge A}}; % Center 'A' in the cell (1,4)
+    \node at (1.5, 2.5) {\textcolor{blue}{\Huge B}}; % Center 'B' in the cell (2,3)
+    \node at (3.5, 1.5) {\textcolor{green!70!black}{\Huge C}}; % Center 'C' in the cell (4,2)
+    
+    \end{tikzpicture}
 \end{center}
-
-++++++++++++++++++++++++++++++++++++++++
 
 ...ICI...
 \subsection{Achievement 2}
