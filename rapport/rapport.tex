@@ -359,47 +359,92 @@ sélectionné.
 Ce type de plateau représente la version de base du jeu, les voisins d'une position sont les huit 
 cases adjacentes dans un environnement classique en deux dimensions.
 
-%++++++++++++++++++++++++++++++++++++++++ (à modifier)
 \begin{center}
-    %\renewcommand{\arraystretch}{1} % Ensure square proportions
-    \begin{tabular}{|>{\centering\arraybackslash}p{1cm}|>{\centering\arraybackslash}p{1cm}|>{\centering\arraybackslash}p{1cm}|>{\centering\arraybackslash}p{1cm}|}
-    \hline
-     & & & \\[1cm] \hline % Adjust [2cm] for square height
-     & & V & \\[1cm] \hline
-     & \scalebox{4}{\textcolor{red}{A}} & & \\[1cm] \hline
-     & & & \\[1cm] \hline
-    \end{tabular}
-    \end{center}
+    \begin{tikzpicture}[scale=1]
+    \foreach \x in {0,1,2,3,4} {
+        \foreach \y in {0,1,2,3,4} {
+            \draw (\x, \y) rectangle (\x+1, \y+1);
+        }
+    }
+    \node at (1.5, 2.5) {\textcolor{blue}{\Huge \textbf{\textsf{P}}}};
+    \node at (1.5, 3.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (1.5, 1.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (0.5, 2.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (2.5, 2.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (0.5, 1.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (0.5, 3.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (2.5, 3.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (2.5, 1.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \end{tikzpicture}
+\end{center}
 
-++++++++++++++++++++++++++++++++++++++++
 \paragraph{Type 1 : Plateau à voisins à 2}
 Pour ce type, les voisins incluent les cases situées à une distance de deux mouvements cardinaux (haut, bas, gauche, droite).
-
+\begin{center}
+    \begin{tikzpicture}[scale=1]
+    \foreach \x in {0,1,2,3,4} {
+        \foreach \y in {0,1,2,3,4} {
+            \draw (\x, \y) rectangle (\x+1, \y+1);
+        }
+    }
+    \node at (2.5, 2.5) {\textcolor{blue}{\Huge \textbf{\textsf{P}}}};
+    \node at (1.5, 2.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (0.5, 2.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (3.5, 2.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (4.5, 2.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (2.5, 1.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (2.5, 0.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (2.5, 3.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (2.5, 4.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \end{tikzpicture}
+\end{center}
 \paragraph{Type 2 : Plateau à géométrie torique} 
 Dans ce plateau, les bords sont connectés, ce qui signifie que les voisins d'une position située en 
 bordure du plateau peuvent inclure des positions situées de l'autre côté.
-
-\paragraph{Type 3 : Plateau infernal}
-Pour ce type, on choisit exactement \texttt{MAX\_POSITIONS/4} cases qui ne seront plus valables dans le jeu.
-
-%++++++++++++++++++++++++++++++++++++++++ (à modifier)
 \begin{center}
     \begin{tikzpicture}[scale=1]
-    
-    % Draw the grid
     \foreach \x in {0,1,2,3,4} {
         \foreach \y in {0,1,2,3,4} {
-            \draw (\x, \y) rectangle (\x+1, \y+1); % Draw square cells
+            \draw (\x, \y) rectangle (\x+1, \y+1);
         }
     }
-    
-    % Add letters or symbols in specific cells
-    \node at (0.5, 3.5) {\textcolor{red}{\Huge A}}; % Center 'A' in the cell (1,4)
-    \node at (1.5, 2.5) {\textcolor{blue}{\Huge B}}; % Center 'B' in the cell (2,3)
-    \node at (3.5, 1.5) {\textcolor{green!70!black}{\Huge C}}; % Center 'C' in the cell (4,2)
-    
+    \node at (0.5, 0.5) {\textcolor{blue}{\Huge \textbf{\textsf{P}}}};
+    \node at (0.5, 1.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (1.5, 1.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (1.5, 0.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (4.5, 0.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (4.5, 1.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (0.5, 4.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (1.5, 4.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
+    \node at (4.5, 4.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
     \end{tikzpicture}
 \end{center}
+\paragraph{Type 3 : Plateau infernal}
+Pour ce type, on choisit \texttt{MAX\_POSITIONS/4} cases qui ne seront plus valables dans le jeu.
+
+Dans notre cas, on a choisit d'éliminer les cases qui ont à la fois un abscisse et une ordonnée pair.
+
+Les positions marquées avec un \textcolor{orange}{\textbf{\textsf{X}}} sont considérées invalides.
+
+\textcolor{blue}{\textbf{\textsf{P}}} est un exemple d'une position valide.
+\begin{center}
+    \begin{tikzpicture}[scale=1]
+    \foreach \x in {0,1,2,3,4} {
+        \foreach \y in {0,1,2,3,4} {
+            \draw (\x, \y) rectangle (\x+1, \y+1);
+        }
+    }
+    \node at (0.5, 0.5) {\textcolor{blue}{\Huge \textbf{\textsf{P}}}};
+    \node at (1.5, 1.5) {\textcolor{orange}{\Huge \textbf{\textsf{X}}}};
+    \node at (3.5, 1.5) {\textcolor{orange}{\Huge \textbf{\textsf{X}}}};
+    \node at (3.5, 3.5) {\textcolor{orange}{\Huge \textbf{\textsf{X}}}};
+    \node at (1.5, 3.5) {\textcolor{orange}{\Huge \textbf{\textsf{X}}}};
+    \end{tikzpicture}
+\end{center}
+
+
+
+
 
 \subsection{Achievement 2}
 Dans cet achievement, l'objectif était d'implémenter une fonction qui calculait le coût d'une répartition de mines puis de trouver un algorithme recherchant une répartition initiale des mines de coût faible. 
