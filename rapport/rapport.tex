@@ -206,7 +206,7 @@ Nous avons choisi d'implémenter la structure des positions de la manière suiva
 
 \subsection{Les couleurs}
 Les couleurs sont, quant à elles, définies dans le fichier \textit{color.h} de la manière suivante : 
-\begin{lstlisting}[caption={Structure couleur}, label={code:couleur}]
+\begin{lstlisting}[caption={Structure couleur}, label={code:couleur_structure}]
     enum color_t {
         BLACK      = 0,
         WHITE      = 1,
@@ -225,7 +225,7 @@ Les couleurs sont, quant à elles, définies dans le fichier \textit{color.h} de
 
 \subsection{Les ressources}
 De même, les ressources sont définies dans le fichier \textit{resource.h} de la manière suivante :
-\begin{lstlisting}[caption={Structure resource}, label={code:couleur}]
+\begin{lstlisting}[caption={Structure resource}, label={code:ressource}]
     enum resource_t {
         NOTHING       = 0,
         CORN          = 1,
@@ -255,7 +255,7 @@ Nous définissons les joueurs avec le type suivant dans le fichier \textit{playe
 \textbf Nous choisissons de représenter le stockage du joueur sous la forme d'un tableau \textit{unsigned int stockage} de taille NUM\_RESOURCES. En effet si le joueur possède 3 FISH et 2 STONE, alors dans le tableau \textit{stockage}, il y aura la valeur 3 à l'indice correspondant à FISH (2) et 2 à l'indice correspondant à STONE (4).
 \subsection{Les employés}
 Nous définissons les employés avec le type suivant dans le fichier \textit{worker.h} : 
-\begin{lstlisting}[caption={Structure employé}, label={code:employé}]
+\begin{lstlisting}[caption={Structure employe}, label={code:employe}]
     struct worker_t {
         char* nom;
         unsigned int costs[NUM_RESOURCES]; //ressources necessaires a payer l'employe
@@ -265,7 +265,7 @@ Nous définissons les employés avec le type suivant dans le fichier \textit{wor
 \end{lstlisting}
 \subsection{Les bâtiments}
 Nous définissons les bâtiments avec le type suivant dans le fichier \textit{building.h} :
-\begin{lstlisting}[caption={Structure bâtiment}, label={code:bâtiment}]
+\begin{lstlisting}[caption={Structure batiment}, label={code:batiment}]
     struct building_t{
         char nom[12];
         unsigned int value[NUM_RESOURCES];
@@ -428,8 +428,26 @@ De même, nous avons ajouté un pouvoir au bâtiment \texttt{FARM} en imaginant 
 ...ICI...
 
 \section{L'affichage des résultats}
-...ICI...
-
+A la fin de la partie, nous appelons la fonction \texttt{display\_winner()} définie dans le fichier \texttt{project.c}. Voici le pseudo code de cette fonction :    
+\begin{lstlisting}[caption={Affichage vainqueurs}, label={display}]
+    count <- 0 ;
+    Pour chaque joueur dans le jeu :
+        Si le joueur n est pas elimine alors
+            count <- count + 1 ;
+        
+    Si count = 0 alors
+        personne n a gagne
+    
+    Sinon 
+        Si count = 1
+            un gagnant
+        Sinon 
+            comparer le nombre d or de chaque joueur
+            Si un joueur a plus d or que les autres alors
+                c est le gagnant
+            sinon 
+                egalite : il n y a pas de vainqueurs
+\end{lstlisting}
 \chapter{Outils de travail}
 \section{Makefile}
 ...ICI...
