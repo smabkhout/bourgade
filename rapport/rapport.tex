@@ -343,6 +343,49 @@ Tout d'abord, nous avons commencé par implémenter les fonctions déjà déclar
 
 Ensuite, nous avons créé nos propres fichiers \textbf{.h} et \textbf{.c} pour pouvoir implémenter de nouveaux éléments du jeu. Cela implique l'ajout de nouvelles entités et fonctionnalités, comme décrit dans la section \ref{structures}.
 
+Pour les positions, on a décidé de les stocker dans un tableau de taille \texttt{MAX\_POSITIONS+1} qui représente en vrai une matrice de taille \texttt{MAX\_X}\(\times\)\texttt{MAX\_Y} plus une case pour stocker la position invalide.
+
+Donc afin d'accéder à une position (x,y) de la grille, il faut aller à son indice dans la table des positions qui serq : indice\_position = y\(\times\)\texttt{MAX\_Y}+x
+
+Voici un exemple illustrant cela pour un plateau dde taille \texttt{6}\(\times\)\texttt{4} :
+
+\begin{center}
+    \begin{tikzpicture}[scale=1]
+    \foreach \x in {0,1,2,3,4,5} {
+        \foreach \y in {0,1,2,3} {
+            \draw (\x, \y) rectangle (\x+1, \y+1);
+        }
+    }
+    \node at (0.5, 3.5) {\textcolor{blue}{\textbf{\textsf{0}}}};
+    \node at (0.5, 2.5) {\textcolor{blue}{\textbf{\textsf{6}}}};
+    \node at (0.5, 1.5) {\textcolor{blue}{\textbf{\textsf{12}}}};
+    \node at (0.5, 0.5) {\textcolor{blue}{\textbf{\textsf{18}}}};
+    \node at (1.5, 3.5) {\textcolor{blue}{\textbf{\textsf{1}}}};
+    \node at (1.5, 2.5) {\textcolor{blue}{\textbf{\textsf{7}}}};
+    \node at (1.5, 1.5) {\textcolor{blue}{\textbf{\textsf{13}}}};
+    \node at (1.5, 0.5) {\textcolor{blue}{\textbf{\textsf{19}}}};
+    \node at (2.5, 3.5) {\textcolor{blue}{\textbf{\textsf{2}}}};
+    \node at (2.5, 2.5) {\textcolor{blue}{\textbf{\textsf{8}}}};
+    \node at (2.5, 1.5) {\textcolor{blue}{\textbf{\textsf{14}}}};
+    \node at (2.5, 0.5) {\textcolor{blue}{\textbf{\textsf{20}}}};
+    \node at (3.5, 3.5) {\textcolor{blue}{\textbf{\textsf{3}}}};
+    \node at (3.5, 2.5) {\textcolor{blue}{\textbf{\textsf{9}}}};
+    \node at (3.5, 1.5) {\textcolor{blue}{\textbf{\textsf{15}}}};
+    \node at (3.5, 0.5) {\textcolor{blue}{\textbf{\textsf{21}}}};
+    \node at (4.5, 3.5) {\textcolor{blue}{\textbf{\textsf{4}}}};
+    \node at (4.5, 2.5) {\textcolor{blue}{\textbf{\textsf{10}}}};
+    \node at (4.5, 1.5) {\textcolor{blue}{\textbf{\textsf{16}}}};
+    \node at (4.5, 0.5) {\textcolor{blue}{\textbf{\textsf{22}}}};
+    \node at (5.5, 3.5) {\textcolor{blue}{\textbf{\textsf{5}}}};
+    \node at (5.5, 2.5) {\textcolor{blue}{\textbf{\textsf{11}}}};
+    \node at (5.5, 1.5) {\textcolor{blue}{\textbf{\textsf{17}}}};
+    \node at (5.5, 0.5) {\textcolor{blue}{\textbf{\textsf{23}}}};
+    \node at (6.5, 0.5) {\textcolor{blue}{\textbf{\textsf{24}}}};
+    \end{tikzpicture}
+\end{center}
+
+La position \textcolor{blue}{\textbf{\textsf{24}}} représente la position invalide de notre plateau de jeu.
+
 Nous avons ensuite développé la fonction \textbf{game} dans le fichier \textbf{project.c}, qui contient la boucle principale du jeu. Cette boucle est au cœur du fonctionnement du jeu, et toutes les fonctions nécessaires ont été écrites pour garantir son bon fonctionnement.
 
 Une fois la boucle de jeu implémentée, nous avons testé son bon fonctionnement en créant un affichage du plateau via plusieurs fonctions. Cela nous a permis de vérifier si le jeu s'exécutait comme prévu. Toutefois, après plusieurs essais, nous avons identifié des erreurs algorithmiques qu'il a fallu corriger.
@@ -470,6 +513,159 @@ La date de fin de projet approchant, nous avions envisagé de faire l'achievemen
 Ce quatrième achievement nous paraissait plus facilement implémentable que le troisième. Nous nous sommes donc concentrés dessus et avons développé les pouvoirs liés à certains bâtiments ainsi que des objectifs que les joueurs peuvent remplir et qui leur permettent d'obtenir des récompenses. Nous avons ainsi ajouté, en plus des 3 objectifs qui étaient fournis dans le sujet, un objectif qui consiste à construire \texttt{MAX\_BUILDING\_PER\_PLAYER} et rapporte ainsi 3 \texttt{GOLD} au joueur qui le complète.
 De même, nous avons ajouté un pouvoir au bâtiment \texttt{FARM} en imaginant que ce dernier gagnait 2 \texttt{GOLD} s'il était placé à côté d'une mine de ressources de type \texttt{FIELD}.
 \section{Un peu de complexité}
+
+Pour l'\textbf{achievement 2}, nous avons décidé d'implémenter un algorithme récursif qui permet de parcourir les 
+composants connexes formées par les mines dans notre plateau de jeu. Cet algorithme est conçu pour identifier 
+toutes les composantes connexes d'un plateau de jeu et les retourner, en tenant compte des règles spécifiques 
+du jeu (voisinage et géométrie du plateau). 
+
+Pour mieux comprendre ce que réalise cet algorithme, nous définissions tout d'abord ses entrées et sorties 
+principales avant d'en détailler les étapes sous forme d'un pseudo code.
+
+\subsubsection{Entrées et sorties}
+
+\begin{itemize}
+    \item \textbf{Entrées :}
+    \begin{itemize}
+        \item \textbf{position initiale :} La position pour laquelle on va effectuer le parcours.
+        \item \textbf{tableau \texttt{indices\_composantes} :} Un tableau initialisé à des \texttt{-1} qui, au cours 
+        de l'execution, sera rempli par les indices des composantes connexes du plateau. Ce tableau sera de 
+        taille \texttt{MAX\_POSITIONS/2}, car au pire des cas on aura une mine par composante connexe, donc on 
+        aura besoin de \texttt{MAX\_POSITIONS/4} cases pour les indices des positions des mines et \texttt{MAX\_POSITIONS/4} 
+        cases pour les séparer (en utilisant des \texttt{-1}).
+        \item \textbf{pointeur vers un entier \texttt{longueur} :} Un pointeur vers un entier qui indique l'indice à 
+        partir duquel on commence à remplir le tableau 
+        
+        \texttt{indices\_composantes} par des indices de 
+        positions formant une composante connexe.
+        \item \textbf{Plateau :} Une grille de jeu \(plateau\) de dimensions \texttt{MAX\_X}\(\times\)\texttt{MAX\_Y}, 
+        où chaque case peut contenir une mine ou être vide.
+        \item \textbf{booléen \texttt{debut\_composante} :} Un entier indiquant si la position passée en paramètre 
+        est la première position de la composante connexe qu'on est en train de parcourir ou non. (Cet entier 
+        est utilisé essentiellement comme condition d'arrêt dans notre algorithme).
+    \end{itemize}
+    \item \textbf{Sorties :} Pas de retour, il s'agit d'une fonction de type \texttt{void()}, elle modifie le 
+    tableau \texttt{indices\_composantes} passé en paramètres qui contient maintenant tous les indices des 
+    composantes connexes en séparant chaque deux successions d'indices représentant deux composantes différentes 
+    par un séparateur \texttt{-1}, et modifie ainsi au fur et à mesure l'entier \texttt{longueur}.
+\end{itemize}
+
+Exemple, pour ce plateau de jeu :
+
+\begin{center}
+    \begin{tikzpicture}[scale=1]
+    \foreach \x in {0,1,2,3,4,5} {
+        \foreach \y in {0,1,2,3} {
+            \draw (\x, \y) rectangle (\x+1, \y+1);
+        }
+    }
+    \node at (1.5, 2.5) {\textcolor{red}{\textbf{\textsf{Fi}}}};
+    \node at (2.5, 2.5) {\textcolor{red}{\textbf{\textsf{RM}}}};
+    \node at (4.5, 2.5) {\textcolor{red}{\textbf{\textsf{Ri}}}};
+    \node at (4.5, 1.5) {\textcolor{red}{\textbf{\textsf{Fo}}}};
+    \node at (4.5, 0.5) {\textcolor{red}{\textbf{\textsf{Fi}}}};
+    \node at (5.5, 0.5) {\textcolor{red}{\textbf{\textsf{Ri}}}};
+    \end{tikzpicture}
+\end{center}
+
+Les cases en rouge représentent les différentes mines de ressources présentes dans le plateau : Fi(Field), RM(Rock Mine), 
+Ri(River), Fo(Forest).
+
+Le tableau \texttt{indices\_composantes} est initialisé au début comme suit :
+
+\begin{center}
+    \begin{tikzpicture}[scale=1]
+    \foreach \x in {0,1,2,3,4,5,6,7,8,9,10,11} {
+        \foreach \y in {0} {
+            \draw (\x, \y) rectangle (\x+1, \y+1);
+        }
+    }
+    \node at (0.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (1.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (2.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (3.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (4.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (5.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (6.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (7.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (8.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (9.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (10.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (11.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \end{tikzpicture}
+\end{center}
+
+Après exécution de l'algorithme sur notre plateau de jeu le tableau devient :
+
+\begin{center}
+    \begin{tikzpicture}[scale=1]
+    \foreach \x in {0,1,2,3,4,5,6,7,8,9,10,11} {
+        \foreach \y in {0} {
+            \draw (\x, \y) rectangle (\x+1, \y+1);
+        }
+    }
+    \node at (0.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (1.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (2.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (3.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (4.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (5.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (6.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (7.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (8.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (9.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (10.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \node at (11.5, 0.5) {\textcolor{blue}{ \textbf{\texttt{-1}}}};
+    \end{tikzpicture}
+\end{center}
+
+(à modifier à partir d'ici)
+
+L'algorithme suit les étapes suivantes :
+
+\begin{enumerate}
+    \item Initialiser une structure de données pour marquer les positions visitées.
+    \item Pour chaque position non visitée, lancer un parcours en profondeur (\textit{Depth-First Search}) ou en largeur (\textit{Breadth-First Search}), selon la préférence.
+    \item Ajouter les positions connectées à un composant connexe.
+    \item Répéter jusqu'à ce que toutes les positions soient visitées.
+\end{enumerate}
+
+Le pseudocode correspondant est présenté ci-dessous : 
+
+\begin{verbatim}
+fonction ParcoursComposants(plateau, N, M):
+    Initialise Visité[N][M] à faux
+    Pour i de 0 à N-1 :
+        Pour j de 0 à M-1 :
+            Si Visité[i][j] == faux :
+                LanceRecherche(i, j, Visité, plateau)
+fin fonction
+\end{verbatim}
+
+\subsubsection{Complexité}
+
+\paragraph{Complexité temporelle :}  
+L'algorithme parcourt chaque position du plateau une fois. La complexité dépend du nombre de positions sur la grille (\(P\)) et du nombre de mines (\(M\)). Pour un plateau de taille \(N \times M\), la complexité temporelle est donnée par :  
+\[
+O(P + M) = O(N \times M)
+\]
+où \(M\) représente les positions occupées par des mines, et \(P\) les positions restantes.
+
+\paragraph{Complexité spatiale :}  
+La mémoire utilisée est dominée par la structure de marquage (\texttt{Visité}), qui est de taille \(O(N \times M)\). À cela s'ajoute la pile d'appels pour un DFS, dont la profondeur maximale est proportionnelle au plus grand composant connexe. La complexité spatiale totale est donc de \(O(N \times M)\).
+
+\subsubsection{Preuve de correction}
+
+Pour garantir la correction de l'algorithme, une \textbf{preuve orale} a été effectuée. Cette preuve s'appuie sur les propriétés suivantes :
+\begin{itemize}
+    \item Chaque position est visitée une seule fois.
+    \item Les composants connexes sont correctement identifiés grâce à la propagation via les voisins.
+    \item La terminaison est assurée car le nombre de positions est fini.
+\end{itemize}
+
+Ces éléments démontrent que l'algorithme est correct pour toutes les configurations du plateau de jeu.
+
+
 ...ICI...
 
 \section{L'affichage des résultats}
@@ -491,8 +687,12 @@ A la fin de la partie, nous appelons la fonction \texttt{display\_winner()} déf
             Si un joueur a plus d or que les autres alors
                 c est le gagnant
             sinon 
-                egalite : il n y a pas de vainqueurs
+                egalite : plusieurs de vainqueurs
 \end{lstlisting}
+
+
+(jusqu'à ici)
+
 \chapter{Outils de travail}
 \section{Makefile}
 ...ICI...
