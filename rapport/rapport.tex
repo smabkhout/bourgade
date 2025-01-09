@@ -350,8 +350,6 @@ Une fois la boucle de jeu implémentée, nous avons testé son bon fonctionnemen
 Enfin, une fois le jeu fonctionnel, nous avons implémenté les conditions de victoire pour chaque partie jouée. L'affichage du vainqueur à la fin de la partie a été ajouté pour finaliser l'implémentation des règles du jeu.
 
 \subsection{Achievement 1}
-...ICI...
-
 Dans cette étape, nous avons ajouté la prise en charge de plusieurs types de plateaux de jeu, définis par un 
 paramètre passé en ligne de commande via \texttt{getopt()}. Ce paramètre \texttt{-c} modifie l'exécution de 
 la fonction \texttt{list\_neighbors}, qui détermine les voisins d'une position en fonction du type de plateau 
@@ -403,9 +401,22 @@ Pour ce type, on choisit exactement \texttt{MAX\_POSITIONS/4} cases qui ne seron
     \end{tikzpicture}
 \end{center}
 
-...ICI...
 \subsection{Achievement 2}
-...ICI...
+Dans cet achievement, l'objectif était d'implémenter une fonction qui calculait le coût d'une répartition de mines puis de trouver un algorithme recherchant une répartition initiale des mines de coût faible. 
+Pour ces deux algorithmes, nous avons eu besoin d'une fonction de parcours de composantes connexes des mines que l'on détaillera dans la section 3.3. Ainsi nous avons pu calculer le coût d'une répartition initiale en sommant les carrés des tailles de chaque composante connexe.
+\begin{figure}[h!]
+    \begin{minipage}{0.45\textwidth}
+        \includegraphics[width=0.5\textwidth]{mine1.png}
+        \caption{Exemple de répartition de coût 16}
+        \label{fig:mine1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \includegraphics[width=0.5\textwidth]{mine2.png}
+        \caption{Exemple de répartition de coût réduit 4}
+        \label{fig:mine2}
+    \end{minipage}
+\end{figure}
 
 \subsection{Achievement 3}
 ...ICI...
