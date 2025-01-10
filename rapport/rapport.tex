@@ -718,7 +718,7 @@ Valgrind nous a aussi été très utile dans la mesure où nous utilisons de l'a
 \begin{itemize}
     \item -s (--show-reachable=yes) qui permet d'afficher des informations supplémentaires sur les blocs mémoires qui sont atteignables
     \item --leak-check=full permet d'avoir un rapport détaillé pour chaque fuite, incluant un backtrace
-    \item --track-origins=yes permet 
+    \item --track-origins=yes permet de suivre les données non initialisées
 \end{itemize}
 \section{Utilisation des tests}
 Comme présenté dans la section \ref{organisation}, nous avons implémenté un fichier \texttt{test\_file.c} pour chaque fichier \texttt{file.c}. Ces fichiers nous ont permis d'identifier et de localiser précisément des erreurs.
