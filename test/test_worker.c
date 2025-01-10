@@ -1,7 +1,4 @@
-#include "worker.h"
-#include "player.h"
-#include "cell.h"
-#include "resource.h"
+#include "board.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>

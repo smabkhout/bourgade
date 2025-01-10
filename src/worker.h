@@ -2,7 +2,6 @@
 #define __WORKER_H__
 
 #include "player.h"
-#include "board.h"
 
 #ifndef MAX_WORKERS_PER_PLAYER
     #define MAX_WORKERS_PER_PLAYER 6
@@ -19,16 +18,12 @@ struct worker_t {
     struct position_t * position;
 };
 
-struct worker_t *make_worker(char* name, unsigned int cost[NUM_RESOURCES], enum color_t couleur);
+
 
 void pay_worker(struct player_t *player, struct worker_t* worker);
 
-void place_worker(struct player_t *player, struct cell_t* cell, struct worker_t *worker);
 
 void free_worker(struct worker_t* worker);
 
-void pay_workers_on_board(struct board_t* board, int num_players, struct player_t** players);
-
-void reset_workers_still_on_board(struct board_t*);
 
 #endif

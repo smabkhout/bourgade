@@ -152,7 +152,7 @@ Dans cette section, nous détaillons les rôles des fichiers `.c`, `.h`, et `.o`
 \end{itemize}
 
 \subsection{Déclarations et types abstraits}
-\subsubsection{Gardes préprocesseurs (\#ifndef, \#define, \#endif)}
+\subsubsection*{Gardes préprocesseurs (\#ifndef, \#define, \#endif)}
 Pour éviter les inclusions multiples lors de la compilation, nous utilisons des gardes préprocesseurs dans chaque fichier d'entête. Par exemple :
 \begin{verbatim}
 #ifndef __FICHIER_H__
@@ -164,7 +164,7 @@ Pour éviter les inclusions multiples lors de la compilation, nous utilisons des
 \end{verbatim}
 Ces marqueurs garantissent que chaque fichier d'entête n'est inclus qu'une seule fois, ce qui prévient les erreurs de redéfinition.
 
-\subsubsection{Déclarations de types abstraits et définitions complètes}
+\subsubsection*{Déclarations de types abstraits et définitions complètes}
 Une \textbf{déclaration} de type abstrait est utilisée pour informer le compilateur qu'un type existe, sans révéler sa structure interne. Par exemple :
 \begin{verbatim}
 struct Joueur; /* Déclaration abstraite */
@@ -182,7 +182,7 @@ On en a besoin principalement pour :
     \item \textbf{Les allocations dynamiques :} Lorsqu’on alloue de la mémoire pour une structure à l'aide de \texttt{malloc}, le compilateur doit connaître la taille exacte de cette structure. Une simple déclaration abstraite ne suffit pas, car elle ne fournit pas cette information.
 \end{itemize}
 
-\subsubsection{Problèmes liés aux dépendances et solutions}
+\subsubsection*{Problèmes liés aux dépendances et solutions}
 L'utilisation directe des définitions complètes dans plusieurs fichiers `.h` peut entraîner des dépendances circulaires. Par exemple, si deux fichiers s'incluent mutuellement, cela peut provoquer des erreurs de compilation. Pour éviter cela, nous avons adopté les solutions suivantes :
 \begin{itemize}
     \item \textbf{Déclarations abstraites :} Utiliser des déclarations abstraites dans les fichiers `.h` pour les types provenant d'autres fichiers.
@@ -724,8 +724,13 @@ Pour ce projet nous avons appris à utiliser un Makefile pour la compilation. Ce
 
 \section{Valgrind et GDB}
 Dans notre démarche d'analyse et de résolution de bugs, nous avons utilisé deux outils : Valgrind et GDB. 
-Nous nous sommes familiarisés avec GDB qui nous a permis de comprendre d'où venait nos nombreux segmention fault grâce à ses commandes telles que \texttt{backtrace}, \texttt{up}, \texttt{down} ainsi que l'utilisation de breakpoints : \texttt{break file.c:line}. Nous avons aussi utilisé la commande \texttt{set args} pour utiliser gdb avec les options possible de notre projet (-v, -p, -c, -s).\\
-Valgrind nous a aussi été très utile dans la mesure où nous utilisons de l'allocation dynamique dans notre projet. La commande 'valgrind' prenant en argument une commande (du type './project -p 5'), nous n'avons pas besoin de gérer nous même les options.
+Nous nous sommes familiarisés avec GDB qui nous a permis de comprendre d'où venait nos nombreux segmention fault grâce à ses commandes telles que \texttt{backtrace}, \texttt{up}, \texttt{down} ainsi que l'utilisation de breakpoints qui permet de stopper l'exécution du programme à l'endroit où le breakpoint est placé : \texttt{break file.c:line}. Nous avons aussi utilisé la commande \texttt{set args} pour utiliser gdb avec les options possible de notre projet (-v, -p, -c, -s).\\
+Valgrind nous a aussi été très utile dans la mesure où nous utilisons de l'allocation dynamique dans notre projet. La commande 'valgrind' prenant en argument une commande (du type './project -p 5'), nous n'avons pas besoin de gérer nous même les options. Nous avons utilisé les options de valgrind suivantes : 
+\begin{itemize}
+    \item -s (--show-reachable=yes) qui permet d'afficher des informations supplémentaires sur les blocs mémoires qui sont atteignables
+    \item --leak-check=full permet d'avoir un rapport détaillé pour chaque fuite, incluant un backtrace
+    \item --track-origins=yes permet de suivre les données non initialisées
+\end{itemize}
 \section{Utilisation des tests}
 Comme présenté dans la section \ref{organisation}, nous avons implémenté un fichier \texttt{test\_file.c} pour chaque fichier \texttt{file.c}. Ces fichiers nous ont permis d'identifier et de localiser précisément des erreurs.
 

@@ -5,9 +5,7 @@
 #include <getopt.h>
 #include <string.h>
 
-#include "board.h"
 #include "optimal_pos.h"
-#include "building.h"
 
 #define NUM_ROUNDS 4
 
