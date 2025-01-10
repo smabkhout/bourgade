@@ -12,10 +12,10 @@
 \tikzset{greenarrow/.style={->, draw=green, >=stealth[green]}}
 
 \node[state]  (board)                    {$board.h$};
-\node[state]  (optimal) [right of=board] {$opt\_pos.h$};
-\node[state]  (project) [above of=board] {$project.c$};
-\node[state]  (building) [right of=optimal] {$building.h$};
-\node[state]  (cell) [below of=board] {$cell.h$};
+\node[state]  (optimal) [left of=board] {$opt\_pos.h$};
+\node[state]  (project) [left of=optimal] {$project.c$};
+\node[state]  (building) [right of=board] {$building.h$};
+\node[state]  (cell) [below of=building] {$cell.h$};
 \node[state]  (mine) [below right of=cell] {$mine.h$};
 \node[state]  (worker) [below left of=cell] {$worker.h$};
 \node[state]  (position) [below of=mine] {$position.h$};
@@ -23,20 +23,15 @@
 \node[state]  (resource) [below right of=player] {$resource.h$};
 \node[state]  (color) [below left of=player] {$color.h$};
 
-\path (project) edge              node {} (board)
-edge              node {} (optimal)
-edge              node {} (building);
-%(project) edge [loop above] node {} (project)
-%   edge [bend left]  node {} (optimal)
-%  edge   node {} (optimal);
-\path (board) edge              node {} (cell);
-\path [greenarrow] (optimal) edge              node {} (board); %uniquement lors de la compilation
+\path (project) edge              node {} (optimal);
+\path (optimal) edge              node {} (board);
+\path (board) edge              node {} (building);
 \path (cell) edge              node {} (worker)
 edge              node {} (mine);
 \path (mine) edge              node {} (position);
-\path [greenarrow, bend right] (mine) edge node {} (board); %uniquement lors de la compilation
+\path (building) edge              node {} (cell);
+\path (mine) edge              node {} (resource);
 \path (worker) edge              node {} (player);
-\path [greenarrow, bend left] (worker) edge node {} (board); %uniquement lors de la compilation
 \path (player) edge              node {} (color)
 edge              node {} (resource);
   %(project) edge [loop above] node {} (project)

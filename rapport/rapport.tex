@@ -522,7 +522,7 @@ du jeu (voisinage et géométrie du plateau).
 Pour mieux comprendre ce que réalise cet algorithme, nous définissions tout d'abord ses entrées et sorties 
 principales avant d'en détailler les étapes sous forme d'un pseudo code.
 
-\subsubsection{Entrées et sorties}
+\subsection{Entrées et sorties}
 
 \begin{itemize}
     \item \textbf{Entrées :}
@@ -549,6 +549,8 @@ principales avant d'en détailler les étapes sous forme d'un pseudo code.
     composantes connexes en séparant chaque deux successions d'indices représentant deux composantes différentes 
     par un séparateur \texttt{-1}, et modifie ainsi au fur et à mesure l'entier \texttt{longueur}.
 \end{itemize}
+
+\subsection{Exemple d'exécution}
 
 Exemple, pour ce plateau de jeu :
 
@@ -625,6 +627,8 @@ La première composante connexe (Fi, RM) est représenté par les indices des po
 La deuxième composante connexe (Ri, Fo, Fi, Ri) est représenté par les indices des positions de ses constituants: 
 (\textcolor{red}{ \textbf{\texttt{10}}}, \textcolor{red}{ \textbf{\texttt{16}}}, \textcolor{red}{ \textbf{\texttt{22}}}, \textcolor{red}{ \textbf{\texttt{23}}}).
 
+\subsection{Algorithme et pseudo code}
+
 L'algorithme suit les étapes suivantes :
 
 \begin{enumerate}
@@ -681,29 +685,36 @@ fin algorithme
 
 
 (à modifier à partir d'ici)
-
-\subsubsection{Complexité}
+\subsection{Complexité}
 
 \paragraph{Complexité temporelle :}  
-L'algorithme parcourt chaque position du plateau une fois. La complexité dépend du nombre de positions sur la grille (\(P\)) et du nombre de mines (\(M\)). Pour un plateau de taille \(N \times M\), la complexité temporelle est donnée par :  
+L'algorithme effectue un parcours en profondeur (\textit{Depth-First Search}, DFS) pour identifier les composants connexes. Chaque position contenant une mine est visitée au maximum une fois, et ses voisins sont parcourus pour déterminer les connexions. Ainsi, le coût temporel dépend du nombre total de mines (\(M\)) et du nombre de voisins vérifiés pour chaque mine. Sur un plateau de taille \(N \times M\), avec \(V\) représentant le nombre moyen de voisins par position (en général 8 pour une grille classique), la complexité temporelle est donnée par :  
 \[
-O(P + M) = O(N \times M)
+O(M \times V) = O(M)
 \]
-où \(M\) représente les positions occupées par des mines, et \(P\) les positions restantes.
+puisque \(V\) est une constante pour un type de plateau donné.
 
 \paragraph{Complexité spatiale :}  
-La mémoire utilisée est dominée par la structure de marquage (\texttt{Visité}), qui est de taille \(O(N \times M)\). À cela s'ajoute la pile d'appels pour un DFS, dont la profondeur maximale est proportionnelle au plus grand composant connexe. La complexité spatiale totale est donc de \(O(N \times M)\).
+La complexité spatiale est dominée par :
+\begin{itemize}
+    \item Un tableau pour stocker les indices des mines visitées, de taille \(O(M)\).
+    \item La pile d'appels pour le DFS, dont la profondeur maximale est égale à la taille du plus grand composant connexe. Dans le pire des cas, cela peut représenter \(M\) appels imbriqués.
+\end{itemize}
+La complexité spatiale totale est donc :
+\[
+O(M)
+\]
 
 \subsubsection{Preuve de correction}
 
-Pour garantir la correction de l'algorithme, une \textbf{preuve orale} a été effectuée. Cette preuve s'appuie sur les propriétés suivantes :
+Pour garantir la correction de l'algorithme, nous avons procédé à une analyse systématique de son fonctionnement, basée sur les points suivants :
 \begin{itemize}
-    \item Chaque position est visitée une seule fois.
-    \item Les composants connexes sont correctement identifiés grâce à la propagation via les voisins.
-    \item La terminaison est assurée car le nombre de positions est fini.
+    \item Chaque mine est ajoutée au tableau des composantes connexes uniquement si elle n'a pas encore été visitée, assurant ainsi qu'aucune position n'est traitée plusieurs fois.
+    \item Les voisins d'une mine sont correctement identifiés grâce à l'appel récursif sur les positions voisines.
+    \item La terminaison de l'algorithme est garantie, car le nombre de mines sur le plateau est fini, limitant le nombre d'appels récursifs.
 \end{itemize}
 
-Ces éléments démontrent que l'algorithme est correct pour toutes les configurations du plateau de jeu.
+Ces éléments montrent que l'algorithme identifie correctement et complètement les composants connexes pour tous les types de plateaux définis.
 
 (jusqu'à ici)
 
