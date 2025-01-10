@@ -452,7 +452,17 @@ Pour ces deux algorithmes, nous avons eu besoin d'une fonction de parcours de co
 \end{figure}
 
 \subsection{Achievement 3}
-La date de fin de projet approchant, nous avions envisagé de faire l'achievement 3. Nous avons donc travaillé dessus et avons réussi à implémenter la fonction qui trouve tous les vecteurs de ressources inférieurs ou égaux à un vecteur de ressources donné. Toutefois, la suite de l'achievement nous paraissait complexe vis-à-vis du temps qui nous restait. Nous avons donc décidé d'abandonner cet achievement au profit du suivant. 
+
+Dans le cadre de l'achievement 3, nous avons initialement réussi à implémenter un algorithme glouton capable de calculer et de stocker dans un tableau 
+tous les vecteurs de ressources "inférieurs ou égaux" à un vecteur donné en paramètre. Cette approche nous semblait conforme à l'objectif de l'achievement. 
+Cependant, après une analyse approfondie, nous avons réalisé qu'il était attendu d'utiliser un algorithme représentant ces vecteurs sous forme de frontière, 
+plutôt que de les énumérer individuellement.
+
+La transition vers cette nouvelle approche s'est avérée complexe, notamment en raison des ajustements nécessaires pour modifier notre algorithme existant. 
+Étant donné le temps limité qu'il nous restait avant la soumission du rapport, nous avons jugé préférable de ne pas poursuivre cette implémentation et de 
+concentrer nos efforts sur l'achievement 4. Celui-ci nous paraissait plus accessible et directement compatible avec notre implémentation déjà en place.
+
+Ce choix nous a permis d'optimiser notre gestion du temps tout en progressant efficacement dans le projet.
 
 \subsection{Achievement 4} \label{achiev4}
 Ce quatrième achievement nous paraissait plus facilement implémentable que le troisième. Nous nous sommes donc concentrés dessus et avons développé les pouvoirs liés à certains bâtiments ainsi que des objectifs que les joueurs peuvent remplir et qui leur permettent d'obtenir des récompenses. Nous avons ainsi ajouté, en plus des 3 objectifs qui étaient fournis dans le sujet, un objectif qui consiste à construire \texttt{MAX\_BUILDING\_PER\_PLAYER} et rapporte ainsi 3 \texttt{GOLD} au joueur qui le complète.
