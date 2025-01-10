@@ -563,6 +563,21 @@ La première composante connexe (Fi, RM) est représenté par les indices des po
 La deuxième composante connexe (Ri, Fo, Fi, Ri) est représenté par les indices des positions de ses constituants: 
 (\textcolor{red}{ \textbf{\texttt{10}}}, \textcolor{red}{ \textbf{\texttt{16}}}, \textcolor{red}{ \textbf{\texttt{22}}}, \textcolor{red}{ \textbf{\texttt{23}}}).
 
+\subsection{Analogie avec le parcours en profondeur d'un graphe}
+
+L'algorithme suit une approche de parcours en profondeur (\textit{Depth-First Search, DFS}) dans un graphe non orienté, où les nœuds représentent les positions contenant des 
+mines, et les arêtes relient deux nœuds si les positions correspondantes sont voisines selon les règles du jeu (voisinage normal, à distance de 2, ou 
+géométrie torique).
+
+Le but est d'identifier les composantes connexes, soit les sous-ensembles de nœuds où chaque paire est reliée par un chemin. Le \textit{DFS} explore un 
+chemin jusqu'à sa fin avant de revenir en arrière pour explorer d'autres chemins. À chaque nœud non visité, l'algorithme le marque comme visité et explore 
+récursivement ses voisins non visités.
+
+Dans notre contexte, les composantes connexes sont formées par les nœuds explorés à partir d'un même point de départ. La complexité du \textit{DFS} est 
+O(V+E), où V est le nombre de nœuds (positions de mines sur le plateau) et E le nombre d'arêtes (liens entre mines voisines). Le nombre d'arêtes 
+E est déterminé par les paires de mines voisines, qui sont connectées si elles respectent les règles de voisinage. Le calcul de E dépend donc du nombre 
+de mines et de leur distribution sur le plateau, ainsi que de la manière dont elles sont reliées selon les règles de voisinage spécifiques au jeu.
+
 \subsection{Algorithme et pseudo code}
 
 L'algorithme suit les étapes suivantes :
