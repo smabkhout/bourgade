@@ -220,11 +220,33 @@ Nous définissons les employés dans le fichier \textit{worker.h} avec une chaî
 \subsection{Les bâtiments}
 Nous définissons les bâtiments dans le fichier \textit{building.h} avec une chaîne de caractères pour le nom du bâtiment, un champ \texttt{joueur} de type couleur, et quatre tableaux de taille \texttt{NUM\_RESOURCES} : \texttt{value} qui contient la valeur d'achat du bâtiment, \texttt{earns} qui contient les gains immédiats à l'achat, \texttt{costs} qui contient le coût d'activation et \texttt{supplies} qui contient les ressources gagnées grâce à l'activation du bâtiment. 
 \subsection{Les mines}
-Nous définissons les mines de ressources dans le fichier \texttt{mine.h} avec une chaîne de caractères pour le nom de la mine et un type \texttt{resource} correspondant à la ressource fournit par la mine.
+Nous définissons les mines de ressources avec le type suivant dans le fichier \textit{mine.h} :
+\begin{lstlisting}[caption={Structure mine}, label={code:mine}]
+    struct mine_t {
+        char name[12];
+        enum resource_t r;
+    };
+\end{lstlisting}
 
 \subsection{Les cellules et le plateau}
-Nous définissons les cellules du plateau ainsi que le plateau respectivement dans les fichiers \textit{cell.h} et \textit{board.h}. La structure d'une cellule contient un pointeur vers un bâtiment, un pointeur vers un employé et un pointeur vers une mine. 
-La structure du plateau est constituée d'un tableau de cellules, d'un tableau contenant les mines présentes sur le plateau, d'un tableau contenant les bâtiments présents sur le plateau ainsi qu'un tableau contenant les indices de ces mêmes bâtiments.
+Nous définissons les cellules du plateau ainsi que le plateau avec les types suivants respectivement dans les fichiers \textit{cell.h} et \textit{board.h} : 
+\begin{lstlisting}[caption={Structure cellule}, label={code:cellule}]
+    struct cell_t {
+        struct building_t* building;
+        struct worker_t* worker;
+        struct mine_t* mine;
+    };
+\end{lstlisting}
+\begin{lstlisting}[caption={Structure plateau}, label={code:plateau}]
+    struct board_t {
+        struct cell_t** tab;
+        struct mine_t* present_mines;
+        struct building_t** present_buildings;
+        int *indexes_present_buildings;
+    };
+\end{lstlisting}
+\textbf Les cellules contiennent des pointeurs vers les éléments des champs \textit{present\_mines} et \textit{present\_buildings} du plateau de type \textit{struct board\_t}. Le champ \textit{worker} est qaunt à lui alloué dynamiquement chaque fois que nous l'utilisons.\newline Le tableau \textit{present\_mines} stocke les mines de ressources présentes sur le plateau. Le tableau \textit{present\_buildings} stocke les bâtiments présents sur le plateau et \textit{indexes\_present\_buildings} stocke les indices des bâtiments de \textit{present\_buildings} dans le tableau qui représente la grille entière : \textit{tab}.
+
 
 \section{Interaction entre les différentes entités du jeu}
 \begin{figure}[H]
@@ -632,40 +654,46 @@ pour chaque mine dans plateau :
 fin algorithme
 \end{verbatim}
 
+\subsection{Analyse de la complexité}
 
-(à modifier à partir d'ici)
-\subsection{Complexité}
+L'algorithme explore un plateau de mines pour identifier les composantes connexes, utilisant une approche de recherche en profondeur \textit{DFS}. Le nombre de 
+mines est de \texttt{MAX\_POSITIONS/4}, et la taille du tableau \texttt{indices\_composantes} est \texttt{MAX\_POSITIONS/2}.
 
-\paragraph{Complexité temporelle :}  
-L'algorithme effectue un parcours en profondeur (\textit{Depth-First Search}, DFS) pour identifier les composants connexes. Chaque position contenant une mine est visitée au maximum une fois, et ses voisins sont parcourus pour déterminer les connexions. Ainsi, le coût temporel dépend du nombre total de mines (\(M\)) et du nombre de voisins vérifiés pour chaque mine. Sur un plateau de taille \(N \times M\), avec \(V\) représentant le nombre moyen de voisins par position (en général 8 pour une grille classique), la complexité temporelle est donnée par :  
-\[
-O(M \times V) = O(M)
-\]
-puisque \(V\) est une constante pour un type de plateau donné.
+\paragraph{Complexité en temps :}
 
-\paragraph{Complexité spatiale :}  
-La complexité spatiale est dominée par :
+L'algorithme parcourt chaque mine du plateau une seule fois. Pour chaque mine, on explore ses voisins (maximum 8 voisins possibles, car chaque cellule peut 
+avoir jusqu'à 8 voisins adjacents). En d'autres termes, pour chaque mine, on vérifie ses voisins et on effectue un appel récursif pour chaque voisin non 
+exploré.
+
 \begin{itemize}
-    \item Un tableau pour stocker les indices des mines visitées, de taille \(O(M)\).
-    \item La pile d'appels pour le DFS, dont la profondeur maximale est égale à la taille du plus grand composant connexe. Dans le pire des cas, cela peut représenter \(M\) appels imbriqués.
-\end{itemize}
-La complexité spatiale totale est donc :
-\[
-O(M)
-\]
-
-\subsubsection*{Preuve de correction}
-
-Pour garantir la correction de l'algorithme, nous avons procédé à une analyse systématique de son fonctionnement, basée sur les points suivants :
-\begin{itemize}
-    \item Chaque mine est ajoutée au tableau des composantes connexes uniquement si elle n'a pas encore été visitée, assurant ainsi qu'aucune position n'est traitée plusieurs fois.
-    \item Les voisins d'une mine sont correctement identifiés grâce à l'appel récursif sur les positions voisines.
-    \item La terminaison de l'algorithme est garantie, car le nombre de mines sur le plateau est fini, limitant le nombre d'appels récursifs.
+    \item Le nombre total de mines est \texttt{MAX\_POSITIONS/4}.
+    \item Pour chaque mine, on effectue un travail constant lié à la vérification de ses voisins et à la gestion de l'appel récursif. 
+    On peut considérer que cette opération prend \( O(1) \) pour chaque mine et chaque voisin.
+    \item Le parcours récursif assure que chaque mine et ses voisins sont visités une seule fois. Ainsi, le nombre d'opérations effectuées est proportionnel 
+    au nombre de mines et de voisins.
 \end{itemize}
 
-Ces éléments montrent que l'algorithme identifie correctement et complètement les composants connexes pour tous les types de plateaux définis.
+La complexité temporelle totale est donc de \( O(n) \), où \(n=\)\texttt{MAX\_POSITIONS/4}, car chaque mine et chaque cellule voisine est visitée une 
+seule fois. Cependant, il est important de noter que \( n \) est directement lié à \texttt{MAX\_POSITIONS}, ce qui implique que la complexité en 
+temps de l'algorithme est linéaire par rapport à \texttt{MAX\_POSITIONS}.
 
-(jusqu'à ici)
+\paragraph{Complexité en espace :}
+
+L'algorithme utilise :
+\begin{itemize}
+    \item Un tableau \texttt{indices\_composantes} de taille \texttt{MAX\_POSITIONS/2}, qui stocke les indices des mines explorées.
+    \item La pile de récursion peut atteindre une profondeur maximale de \( O(n) \), dans le cas où les mines sont disposées de manière à ce que chaque mine soit explorée de manière séquentielle, par exemple dans un cas de plateau très linéaire (où toutes les mines forment une seule composante connexe).
+\end{itemize}
+
+Par conséquent, la complexité en espace est \( O(m) \), où \(m=\)\texttt{MAX\_POSITIONS/2}. La mémoire utilisée par l'algorithme est proportionnelle 
+au nombre de mines, à la taille du tableau \texttt{indices\_composantes} et à la profondeur maximale de la récursion, mais reste linéaire par rapport à la taille du plateau. 
+
+\paragraph{Conclusion :}
+
+En résumé, l'algorithme de recherche de composantes connexes a une complexité en temps et en espace linéaire par rapport à la taille du plateau. La 
+complexité temporelle \( O(n) \), où \( n \) est le nombre de mines, indique que l'algorithme explore chaque mine et ses voisins de manière efficace, 
+sans répétition d'opérations. Quant à la complexité en espace, elle est également \( O(m) \), où \( m \) est lié à la taille du tableau 
+\texttt{indices\_composantes}(qui est \( 2*n \)) et à la profondeur de la pile de récursion. Ainsi, l'algorithme est bien adapté pour des plateaux de taille importante.
 
 \chapter{Outils de travail}
 \section{Makefile}
