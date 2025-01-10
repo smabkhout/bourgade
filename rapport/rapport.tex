@@ -98,7 +98,7 @@ de nous deux n'était familier avec ces notions. De plus, avoir une version fonc
 quelques achievements supplémentaires étaient des objectifs que nous visions avant de commencer ce projet.
 
 \chapter{Implémentation}
-\section{Organisation des fichiers}
+\section{Organisation des fichiers} \label{organisation}
 Notre projet est divisé en différents fichiers dans le dossier src/ : 
 \begin{itemize}
     \item project.c
@@ -673,12 +673,14 @@ Ces éléments démontrent que l'algorithme est correct pour toutes les configur
 
 \chapter{Outils de travail}
 \section{Makefile}
-Pour ce projet nous avons appris à utiliser un Makefile pour la compilation. Ce fichier nous sert à compiler notre projet ainsi qu'à tester nos fichiers séparemment ou non. 
-\section{Valgrind et GDB}
-...ICI...
+Pour ce projet nous avons appris à utiliser un Makefile pour la compilation. Ce Makefile définit des variables comme MAX\_X, MAX\_Y et NUM\_RESOURCES, permettant de configurer dynamiquement certains paramètres du projet à la compilation, grâce à des drapeaux (BOURGADE\_FLAGS). Les fichiers sources, objets et de tests sont organisés en différentes cibles, ce qui facilite la gestion du code. La cible principale (all) compile le projet et les exécutables de test. Chaque fichier source est compilé séparément en un fichier objet, garantissant une compilation efficace. Une cible clean a également été définie pour supprimer les fichiers temporaires et garder l'environnement propre. Enfin, la cible test exécute automatiquement tous les tests unitaires, assurant la vérification fonctionnelle des différentes parties du programme.
 
+\section{Valgrind et GDB}
+Dans notre démarche d'analyse et de résolution de bugs, nous avons utilisé deux outils : Valgrind et GDB. 
+Nous nous sommes familiarisés avec GDB qui nous a permis de comprendre d'où venait nos nombreux segmention fault grâce à ses commandes telles que \texttt{backtrace}, \texttt{up}, \texttt{down} ainsi que l'utilisation de breakpoints : \texttt{break file.c:line}. Nous avons aussi utilisé la commande \texttt{set args} pour utiliser gdb avec les options possible de notre projet (-v, -p, -c, -s).\\
+Valgrind nous a aussi été très utile dans la mesure où nous utilisons de l'allocation dynamique dans notre projet. La commande 'valgrind' prenant en argument une commande (du type './project -p 5'), nous n'avons pas besoin de gérer nous même les options.
 \section{Utilisation des tests}
-...ICI...
+Comme présenté dans la section \ref{organisation}, nous avons implémenté un fichier \texttt{test\_file.c} pour chaque fichier \texttt{file.c}. Ces fichiers nous ont permis d'identifier et de localiser précisément des erreurs.
 
 \chapter{Difficultés rencontrées et solutions}
 \section{Les erreurs de segmentation}
