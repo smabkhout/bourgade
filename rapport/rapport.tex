@@ -197,53 +197,13 @@ L'utilisation directe des définitions complètes dans plusieurs fichiers `.h` p
 
 \section{Structure et initialisation des différentes entités du jeu} \label{structures}
 \subsection{Les positions}
-Nous avons choisi d'implémenter la structure des positions de la manière suivante dans le fichier \textit{position.c} : deux champs entiers x et y qui sont les coordonnées de la position et un champ entier init qui nous permet de savoir si la position à déjà été initialisée au préalable ou non.
-\begin{lstlisting}[caption={Structure position}, label={code:position}]
-    struct position_t
-    {
-        unsigned int x;
-        unsigned int y;
-        int init; // booleen qui dit si la position a deja ete initialisee ou pas
-    };    
-\end{lstlisting}
-    
+Nous avons choisi d'implémenter la structure des positions de la manière suivante dans le fichier \textit{position.c} : deux champs entiers \texttt{x} et \texttt{y} qui sont les coordonnées de la position et un booléen \texttt{init} (implémenté avec un type \texttt{int}) qui nous permet de savoir si la position à déjà été initialisée au préalable ou non.
 
 \subsection{Les couleurs}
-Les couleurs sont, quant à elles, définies dans le fichier \textit{color.h} de la manière suivante : 
-\begin{lstlisting}[caption={Structure couleur}, label={code:couleur_structure}]
-    enum color_t {
-        BLACK      = 0,
-        WHITE      = 1,
-        ORANGE     = 2,
-        PINK       = 3,
-        VIOLET     = 4,
-        YELLOW     = 5,
-        BLUE       = 6,
-        BROWN      = 7,
-        GREEN      = 8,
-        RED        = 9,
-        SHINY      = 10,
-        MAX_COLORS = 11,
-    };
-\end{lstlisting}
+Les couleurs sont, quant à elles, définies dans le fichier \textit{color.h} avec une structure \texttt{enum}. Il y a 11 couleurs de 0 à 10 avec une 11ième valeur pour \texttt{MAX\_COLORS}.
 
 \subsection{Les ressources}
-De même, les ressources sont définies dans le fichier \textit{resource.h} de la manière suivante :
-\begin{lstlisting}[caption={Structure resource}, label={code:ressource}]
-    enum resource_t {
-        NOTHING       = 0,
-        CORN          = 1,
-        FISH          = 2,
-        WOOD          = 3,
-        STONE         = 4,
-        GOLD          = 5,
-        RUBY          = 6,
-        SILVER        = 7,
-        SAPPHIRE      = 8,
-        EMERALD       = 9,
-        MAX_RESOURCES = 10, // The maximal number of resources possible
-    };
-\end{lstlisting}
+De même, les ressources sont définies dans le fichier \textit{resource.h} avec une structure \texttt{enum}. Il y a 10 ressources de 0 à 9 avec une 10ième valeur pour \texttt{MAX\_RESOURCES}.
 
 \subsection{Les joueurs}
 Nous définissons les joueurs avec le type suivant dans le fichier \textit{player.h} : 
@@ -251,34 +211,16 @@ Nous définissons les joueurs avec le type suivant dans le fichier \textit{playe
     struct player_t{
         enum color_t color;  
         unsigned int stockage[NUM_RESOURCES]; 
-        int number_of_workers; //vise a suivre le nombre d'employes utilises par le joueur, initialise a MAX_WORKERS_PAR_PLAYER
-        int eliminated; // le joueur est elimine ou non
-        int nb_of_buildings_placed; //nombre de batiments que va placer le joueur au cours de la partie
+        int number_of_workers;
+        int eliminated; 
+        int nb_of_buildings_placed; 
     };
 \end{lstlisting}
-\textbf Nous choisissons de représenter le stockage du joueur sous la forme d'un tableau \textit{unsigned int stockage} de taille NUM\_RESOURCES. En effet si le joueur possède 3 FISH et 2 STONE, alors dans le tableau \textit{stockage}, il y aura la valeur 3 à l'indice correspondant à FISH (2) et 2 à l'indice correspondant à STONE (4).
+Le champ \texttt{color} stocke la couleur qui représente le joueur. Nous choisissons de représenter le stockage du joueur sous la forme d'un tableau \textit{unsigned int stockage} de taille NUM\_RESOURCES. En effet si le joueur possède 3 FISH et 2 STONE, alors dans le tableau \textit{stockage}, il y aura la valeur 3 à l'indice correspondant à FISH (2) et 2 à l'indice correspondant à STONE (4). L'entier \texttt{number\_of\_workers} vise à suivre le nombre d'employés utilisés par le joueur, sa valeur est initialisée à MAX\_WORKERS\_PER\_PLAYER. Le champ entier \texttt{eliminated} permet de savoir si le joueur est éliminé ou non et enfin, le champ entier \texttt{nb\_of\_buildings\_placed} permet de suivre le nombre de bâtiments que va placer le joueur au cours de la partie. Ce dernier champ est utilisé pour l'achievement 4, section : \ref{achiev4}.
 \subsection{Les employés}
-Nous définissons les employés avec le type suivant dans le fichier \textit{worker.h} : 
-\begin{lstlisting}[caption={Structure employe}, label={code:employe}]
-    struct worker_t {
-        char* nom;
-        unsigned int costs[NUM_RESOURCES]; //ressources necessaires a payer l'employe
-        enum color_t joueur; //couleur representant le joueur qui controle l'employe
-        struct position_t * position; //position de l'employe sur le plateau
-    };
-\end{lstlisting}
+Nous définissons les employés dans le fichier \textit{worker.h} avec une chaîne de caractères pour le nom de l'employé, un tableau \texttt{costs} de taille \texttt{NUM\_RESOURCES} contenant les ressources nécessaires à payer l'employé. La structure d'employé contient aussi un champ \texttt{joueur} de type couleur représentant le joueur qui possède l'employé. Enfin la strucure d'employé contient un pointeur vers une position du plateau localisant ainsi l'employé.
 \subsection{Les bâtiments}
-Nous définissons les bâtiments avec le type suivant dans le fichier \textit{building.h} :
-\begin{lstlisting}[caption={Structure batiment}, label={code:batiment}]
-    struct building_t{
-        char nom[12];
-        unsigned int value[NUM_RESOURCES];
-        unsigned int earns[NUM_RESOURCES];
-        unsigned int costs[NUM_RESOURCES];
-        unsigned int supplies[NUM_RESOURCES];
-        enum color_t joueur; //proprietaire du building
-    };
-\end{lstlisting}
+Nous définissons les bâtiments dans le fichier \textit{building.h} avec une chaîne de caractères pour le nom du bâtiment, un champ \texttt{joueur} de type couleur, et quatre tableaux de taille \texttt{NUM\_RESOURCES} : \texttt{value} qui contient la valeur d'achat du bâtiment, \texttt{earns} qui contient les gains immédiats à l'achat, \texttt{costs} qui contient le coût d'activation et \texttt{supplies} qui contient les ressources gagnées grâce à l'activation du bâtiment. 
 \subsection{Les mines}
 Nous définissons les mines de ressources avec le type suivant dans le fichier \textit{mine.h} :
 \begin{lstlisting}[caption={Structure mine}, label={code:mine}]
@@ -512,7 +454,7 @@ Pour ces deux algorithmes, nous avons eu besoin d'une fonction de parcours de co
 \subsection{Achievement 3}
 La date de fin de projet approchant, nous avions envisagé de faire l'achievement 3. Nous avons donc travaillé dessus et avons réussi à implémenter la fonction qui trouve tous les vecteurs de ressources inférieurs ou égaux à un vecteur de ressources donné. Toutefois, la suite de l'achievement nous paraissait complexe vis-à-vis du temps qui nous restait. Nous avons donc décidé d'abandonner cet achievement au profit du suivant. 
 
-\subsection{Achievement 4}
+\subsection{Achievement 4} \label{achiev4}
 Ce quatrième achievement nous paraissait plus facilement implémentable que le troisième. Nous nous sommes donc concentrés dessus et avons développé les pouvoirs liés à certains bâtiments ainsi que des objectifs que les joueurs peuvent remplir et qui leur permettent d'obtenir des récompenses. Nous avons ainsi ajouté, en plus des 3 objectifs qui étaient fournis dans le sujet, un objectif qui consiste à construire \texttt{MAX\_BUILDING\_PER\_PLAYER} et rapporte ainsi 3 \texttt{GOLD} au joueur qui le complète.
 De même, nous avons ajouté un pouvoir au bâtiment \texttt{FARM} en imaginant que ce dernier gagnait 2 \texttt{GOLD} s'il était placé à côté d'une mine de ressources de type \texttt{FIELD}.
 
@@ -709,7 +651,7 @@ La complexité spatiale totale est donc :
 O(M)
 \]
 
-\subsubsection{Preuve de correction}
+\subsubsection*{Preuve de correction}
 
 Pour garantir la correction de l'algorithme, nous avons procédé à une analyse systématique de son fonctionnement, basée sur les points suivants :
 \begin{itemize}
