@@ -1,8 +1,6 @@
 #ifndef __BUILDING_H__
 #define __BUILDING_H__
 
-
-#include "player.h"
 #include "cell.h"
 
 #ifndef MAX_BUILDINGS_PER_PLAYER
