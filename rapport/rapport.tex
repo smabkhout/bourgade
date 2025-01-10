@@ -483,13 +483,14 @@ Les positions marquées avec un \textcolor{orange}{\textbf{\textsf{X}}} sont con
     \end{tikzpicture}
 \end{center}
 
-
+Dans tous ces exemples \textcolor{blue}{\textbf{\textsf{P}}} est une position donnée et les \textcolor{red}{\textbf{\textsf{V}}} sont ses voisins 
+selon le type de plateau choisi.
 
 
 
 \subsection{Achievement 2}
 Dans cet achievement, l'objectif était d'implémenter une fonction qui calculait le coût d'une répartition de mines puis de trouver un algorithme recherchant une répartition initiale des mines de coût faible. 
-Pour ces deux algorithmes, nous avons eu besoin d'une fonction de parcours de composantes connexes des mines que l'on détaillera dans la section 3.3. Ainsi nous avons pu calculer le coût d'une répartition initiale en sommant les carrés des tailles de chaque composante connexe.
+Pour ces deux algorithmes, nous avons eu besoin d'une fonction de parcours de composantes connexes des mines que l'on détaillera dans la section \ref{algorithme}. Ainsi nous avons pu calculer le coût d'une répartition initiale en sommant les carrés des tailles de chaque composante connexe.
 \begin{figure}[h!]
     \begin{minipage}{0.45\textwidth}
         \includegraphics[width=0.5\textwidth]{mine1.png}
@@ -510,7 +511,8 @@ La date de fin de projet approchant, nous avions envisagé de faire l'achievemen
 \subsection{Achievement 4}
 Ce quatrième achievement nous paraissait plus facilement implémentable que le troisième. Nous nous sommes donc concentrés dessus et avons développé les pouvoirs liés à certains bâtiments ainsi que des objectifs que les joueurs peuvent remplir et qui leur permettent d'obtenir des récompenses. Nous avons ainsi ajouté, en plus des 3 objectifs qui étaient fournis dans le sujet, un objectif qui consiste à construire \texttt{MAX\_BUILDING\_PER\_PLAYER} et rapporte ainsi 3 \texttt{GOLD} au joueur qui le complète.
 De même, nous avons ajouté un pouvoir au bâtiment \texttt{FARM} en imaginant que ce dernier gagnait 2 \texttt{GOLD} s'il était placé à côté d'une mine de ressources de type \texttt{FIELD}.
-\section{Un peu de complexité}
+
+\section{Algorithme pour la parcours des composantes connexes} \label{algorithme}
 
 Pour l'\textbf{achievement 2}, nous avons décidé d'implémenter un algorithme récursif qui permet de parcourir les 
 composants connexes formées par les mines dans notre plateau de jeu. Cet algorithme est conçu pour identifier 
@@ -593,7 +595,7 @@ Le tableau \texttt{indices\_composantes} est initialisé au début comme suit :
     \end{tikzpicture}
 \end{center}
 
-Après exécution de l'algorithme sur notre plateau de jeu le tableau devient :
+Après exécution de l'algorithme sur notre plateau de jeu, le tableau devient :
 
 \begin{center}
     \begin{tikzpicture}[scale=1]
@@ -617,34 +619,68 @@ Après exécution de l'algorithme sur notre plateau de jeu le tableau devient :
     \end{tikzpicture}
 \end{center}
 
-La première composante connexe est (Fi, RM) représenté par les indices des positions de ses constituants; 
+La première composante connexe (Fi, RM) est représenté par les indices des positions de ses constituants: 
 (\textcolor{red}{ \textbf{\texttt{7}}}, \textcolor{red}{ \textbf{\texttt{8}}}).
 
-La deuxième composante connexe est (Ri, Fo, Fi, Ri) représenté par les indices des positions de ses constituants; 
+La deuxième composante connexe (Ri, Fo, Fi, Ri) est représenté par les indices des positions de ses constituants: 
 (\textcolor{red}{ \textbf{\texttt{10}}}, \textcolor{red}{ \textbf{\texttt{16}}}, \textcolor{red}{ \textbf{\texttt{22}}}, \textcolor{red}{ \textbf{\texttt{23}}}).
-
-(à modifier à partir d'ici)
 
 L'algorithme suit les étapes suivantes :
 
 \begin{enumerate}
-    \item Initialiser une structure de données pour marquer les positions visitées.
-    \item Pour chaque position non visitée, lancer un parcours en profondeur (\textit{Depth-First Search}) ou en largeur (\textit{Breadth-First Search}), selon la préférence.
-    \item Ajouter les positions connectées à un composant connexe.
-    \item Répéter jusqu'à ce que toutes les positions soient visitées.
+    \item Parcourir les mines présentes dans le tableau.
+    \item Pour chaque mine (si elle n'est pas déjà parcouru), on stocke l'indice de sa position dans un tableau des composantes connexes à l'indice longueur 
+    et on parcourt ses voisins et stocke dans un tableau des mines voisines ceux qui sont des mines non déjà parcourues.
+    \item Appeler récursivement l'algorithme sur ces mines voisines et les stocker à chaque fois dans le tableau des composantes connexes.
+    \item Incrémenter l'indice longueur pour marque la fin de notre composante connexe et passer à la composante connexe suivante.
+    \item Répéter jusqu'à ce que toutes les cellules du plateau soient visitées.
 \end{enumerate}
 
 Le pseudocode correspondant est présenté ci-dessous : 
 
 \begin{verbatim}
-fonction ParcoursComposants(plateau, N, M):
-    Initialise Visité[N][M] à faux
-    Pour i de 0 à N-1 :
-        Pour j de 0 à M-1 :
-            Si Visité[i][j] == faux :
-                LanceRecherche(i, j, Visité, plateau)
-fin fonction
+fonction parcours_composantes_connexes(entier : indice_position_mine, tableau 
+d'entiers : indices_composantes, entier* : longueur, struct plateau_t : plateau, 
+bool : debut_composante):
+    debut
+        si mine n'est pas dans indices_composantes :
+            indices_composantes[*longueur] = indice_position_mine;
+            *longueur +=1;
+            mines_voisines = allouerTableau(8, MAX_POSITIONS+1);
+            entier nb_mines_voisines = 0;
+            //on l'initialise à des position invalides
+            pour chaque cellule voisine à notre mine :
+                si (cellule contient une mine) ET (indice de cette cellule non 
+                déjà présent dans indices_composantes) :
+                    mines_voisines[i] = indice_cellule;
+                    nb_mines_voisines += 1;          
+            pour i allant de 0 à nb_mines_voisines :
+                fonction parcours_composantes_connexes(mines_voisines[i], 
+                indices_composantes, longueur, plateau, 0);
+            si (debut_composante) :
+                //cela signifie qu'on a parcouru toute la composante connexe
+                et on doit marquer sa fin
+                *longueur += 1;
+                retourner;
+            sinon :
+                //nous sommes toujours dans la meme composante connexe
+                retourner;
+    fin fonction
+
+debut algorithme
+indices_composantes = allouerTableau(MAX_POSITIONS/2, -1)
+entier* longueur = allouerEntier(0);
+pour chaque mine dans plateau :
+    si mine non parcourue :
+        entier debut_composante = 1; // on est sur qu'elle est la première
+        position de notre composante
+        fonction parcours_composantes_connexes(indice_position_mine, 
+        indices_composantes, longueur, plateau, debut_composante);
+fin algorithme
 \end{verbatim}
+
+
+(à modifier à partir d'ici)
 
 \subsubsection{Complexité}
 
