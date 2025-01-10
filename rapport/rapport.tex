@@ -249,13 +249,15 @@ Nous définissons les cellules du plateau ainsi que le plateau avec les types su
 
 
 \section{Interaction entre les différentes entités du jeu}
+Toutes ces structures dépendent et intéragissent entres elles. Voici un graphe qui illustre les relations entre les différentes structures pour articuler le jeu. 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=0.8\textwidth]{relations.png}
+        \includegraphics[width=0.65\textwidth]{relations.png}
         \caption{Graphe des relations entre les structures}
         \label{fig:relations}
     \end{center}
 \end{figure}
+On remarque par exemple que la relation entre les joueurs et les bâtiments est double. En effet, les joueurs peuvent construire leurs propres bâtiments ou activer ceux d'autres joueurs pour commercer avec eux. On a alors un échange de ressources : le joueur paye un certain nombre de ressources pour construire ou activer un bâtiment et reçoit en échange un certain nombre de ressources de la part du bâtiment. 
 
 \chapter{Boucle de jeu}
 \section{Déroulement d'une partie}
@@ -712,17 +714,20 @@ Valgrind nous a aussi été très utile dans la mesure où nous utilisons de l'a
 Comme présenté dans la section \ref{organisation}, nous avons implémenté un fichier \texttt{test\_file.c} pour chaque fichier \texttt{file.c}. Ces fichiers nous ont permis d'identifier et de localiser précisément des erreurs.
 
 \chapter{Difficultés rencontrées et solutions}
-\section{Les erreurs de segmentation}
-\subsection{Dépassements de tableaux}
-...ICI...
-
-\subsection{Les tests de vérification de pointeurs}
-...ICI...
-
-\section{Erreurs en lien avec la forge}
-...ICI...
-
+Nous avons rencontrés de nombreuses difficultés lors du développement du projet. Nous allons maintenant vous en présenter quelques unes.
+\section{Les erreurs algorithmiques}
+Certaines de nos erreurs les plus complexes ont été de nature algorithmique.
+\subsection*{Position optimale}
+Nous nous sommes rendu compte que notre fonction \texttt{choose\_optimal\_pos(board)} ne renvoyait pas toujours la position optimale sur le plateau suivant les ressources disponibles et que parfois, elle renvoyait une position invalide. 
+Initialement, notre fonction utilisait un histogramme où l'on vérifiait chaque voisin d'une case donnée et on ajoutait 1 dans l'histogramme à l'indice de cette case si l'on trouvait une mine dans les voisins de celle-ci. Le problème arrivait vers la fin d'une manche lorsqu'il ne restait plus qu'une case de libre, la fonction ne donnait pas cette case mais plutot la première position de plateau, même si celle-ci était déjà remplie. Nous avons donc totalement changé la structure de la fonction. Dans la nouvelle version, nous avons, pour chaque case, compté le nombre de mines qui se situent parmi ses voisins et que l'on compare au maximum trouvé jusqu'alors. De cette façon, lorsqu'on arrivait au cas limite où il ne restait plus qu'une case disponible, le maximum était 0 mais la fonction renvoyait bien cette dernière position libre. \href{https://thor.enseirb-matmeca.fr/git/pr103-24344/commit/?id=225bd9191fb65d16bc76c80a9a703afb792f3fd9}{commit associé}
+\subsection*{Free worker}
+Aussi, nous avions une boucle infinie dans notre jeu, les joueurs pouvant jouer à l'infini. Nous avons identifié le problème suivant : la boucle principale du jeu dans la fonction \texttt{game()} fait appel à la fonction \texttt{exist\_a\_player\_with\_free\_workers()} qui nous permet de savoir s'il reste des joueurs avec des employés disponibles. Toutefois nous avions oublié d'ajouter une condition dans cette fonction pour vérifier que ce joueur n'était pas déjà éliminé. En conséquence on avait des joueurs éliminés qui pouvaient continuer à jouer. Nous avons donc corrigé ce problème en ajoutant cette vérification. \href{https://thor.enseirb-matmeca.fr/git/pr103-24344/commit/?id=38d9878c6dab18e00bc192cc488c749d25cfc4df}{commit associé}
+\section{Les erreurs de mémoire}
+Puisque nous avons utilisé des allocations dynamiques, nous avons aussi eu quelques erreurs liées à l'utilisation de la mémoire.
+\subsection*{Variables non initialisées}
+Il nous est parfois arrivé d'avoir des erreurs de mémoires liées à des variables non initialisées (que l'on a identifié avec valgrind --track-origins=yes). Par exemple, dans le fichier \texttt{board.c}, nous avions oublié d'initialiser les voisins avant de les utiliser. Nous avons donc initialisé les voisins pour régler ce problème. \href{https://thor.enseirb-matmeca.fr/git/pr103-24344/commit/?id=29b963c47776a5f7875dd4a6949a67e9f0c58e5e}{commit associé}
+\subsection*{Mauvais free}
+Enfin, il nous est parfois arrivé d'avoir des problèmes liés à la libération de mémoire car nous n'utilisions pas les bonnes fonctions de libération. Exemple : \texttt{free(board)} au lieu de \texttt{free\_board(board)}. Ces erreurs bêtes étaient assez complexe à detecter et causaient de sévères dommages. \href{https://thor.enseirb-matmeca.fr/git/pr103-24344/commit/?id=b4902a65027cccd7db93f518f178839ca33083ed}{commit associé}
 \chapter{Conclusion}
-...ICI...
-
+En conclusion, nous avons atteint nos objectifs aussi bien théoriques que pratiques tout au long du développement de ce projet de S5.
 \end{document}
