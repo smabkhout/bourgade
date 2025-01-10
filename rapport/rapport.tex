@@ -315,8 +315,6 @@ Nous définissons les cellules du plateau ainsi que le plateau avec les types su
 
 \chapter{Boucle de jeu}
 \section{Déroulement d'une partie}
-\subsection{Compilation}
-Nous commençons par compiler notre fichier \textit{project.c} à l'aide d'un fichier Makefile. Nous pouvons alors préciser les dimensions du plateau de jeu au moment de la compilation. Nous utilisons la compilation séparée pour produire des fichiers .o qui servent ensuite à l'édition de lien et à la création d'un fichier exécutable. 
 \subsection{Initialisation}
 Nous initialisons les positions du plateau à l'aide de la fonction \textit{init\_positions()} définie dans \textit{position.c}. Ensuite nous initialisons le plateau sans les bâtiments grâce à la fonction \textit{init\_best\_board()} qui place les mines de manière optimale sur le plateau. Puis nous initialisons les bâtiments qui serviront pendant la partie et nous finissons par initialiser les joueurs. 
 \begin{figure}[H]
