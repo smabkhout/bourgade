@@ -315,8 +315,6 @@ Nous définissons les cellules du plateau ainsi que le plateau avec les types su
 
 \chapter{Boucle de jeu}
 \section{Déroulement d'une partie}
-\subsection{Compilation}
-Nous commençons par compiler notre fichier \textit{project.c} à l'aide d'un fichier Makefile. Nous pouvons alors préciser les dimensions du plateau de jeu au moment de la compilation. Nous utilisons la compilation séparée pour produire des fichiers .o qui servent ensuite à l'édition de lien et à la création d'un fichier exécutable. 
 \subsection{Initialisation}
 Nous initialisons les positions du plateau à l'aide de la fonction \textit{init\_positions()} définie dans \textit{position.c}. Ensuite nous initialisons le plateau sans les bâtiments grâce à la fonction \textit{init\_best\_board()} qui place les mines de manière optimale sur le plateau. Puis nous initialisons les bâtiments qui serviront pendant la partie et nous finissons par initialiser les joueurs. 
 \begin{figure}[H]
@@ -707,37 +705,11 @@ Pour garantir la correction de l'algorithme, une \textbf{preuve orale} a été e
 
 Ces éléments démontrent que l'algorithme est correct pour toutes les configurations du plateau de jeu.
 
-
-...ICI...
-
-\section{L'affichage des résultats}
-A la fin de la partie, nous appelons la fonction \texttt{display\_winner()} définie dans le fichier \texttt{project.c}. Voici le pseudo code de cette fonction :    
-\begin{lstlisting}[caption={Affichage vainqueurs}, label={display}]
-    count <- 0 ;
-    Pour chaque joueur dans le jeu :
-        Si le joueur n est pas elimine alors
-            count <- count + 1 ;
-        
-    Si count = 0 alors
-        personne n a gagne
-    
-    Sinon 
-        Si count = 1
-            un gagnant
-        Sinon 
-            comparer le nombre d or de chaque joueur
-            Si un joueur a plus d or que les autres alors
-                c est le gagnant
-            sinon 
-                egalite : plusieurs de vainqueurs
-\end{lstlisting}
-
-
 (jusqu'à ici)
 
 \chapter{Outils de travail}
 \section{Makefile}
-Pour ce projet nous avons appris à utiliser un Makefile pour la compilation. 
+Pour ce projet nous avons appris à utiliser un Makefile pour la compilation. Ce fichier nous sert à compiler notre projet ainsi qu'à tester nos fichiers séparemment ou non. 
 \section{Valgrind et GDB}
 ...ICI...
 
