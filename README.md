@@ -34,6 +34,6 @@ exemple de commande d'exécution :
 
 Il est aussi possible de tester les différents fichiers de notre projet avec la commande :
 
-'make test' qui compile et lance tous nos fichiers de test ou alors avec la commande :
+'make test' qui compile et lance tous nos fichiers de test ou alors avec les commandes :
 
-'make' puis en exécutant les fichiers de test de manière indépendantes , exemple : './test_building' ou './test_mine'
+'make test_fichier.c' qui permet de tester uniquement le fichier visé. Exemple : 'make test_building.c'
