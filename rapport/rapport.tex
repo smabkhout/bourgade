@@ -128,20 +128,17 @@ Ainsi que nos fichiers de test dans le dossier test/ :
     \item test\_worker.c
 \end{itemize}
 \vspace{0.5cm}
-Certains fichiers ont besoin de structures de données définies dans d'autres. Nous avons donc des dépendances circulaires 
-inévitables. Voici le graphe des inclusions : 
+Certains fichiers ont besoin de structures de données définies dans d'autres. Nous avons donc représenté le graphe des dépendances des fichiers comme suit : 
 \begin{figure}[H]
     \begin{center}
     \input{dependances}
     %[width=0.7\textwidth]{dependances}
     \end{center}
-    \caption{Graphe des dépendances circulaires des fichiers de notre projet.}
+    \caption{Graphe des dépendances des fichiers de notre projet.}
     \label{fig:dependances}
 \end{figure}
 Le graphe de la \autoref{fig:dependances} montre les différentes inclusions de fichiers de notre projet. S'il existe une flèche du noeud A vers 
-le noeud B, cela signifie que le fichier B est inclus dans l'entête du fichier A. Les flèches vertes représentent les dépendances circulaires.
-Toutefois, ces inclusions se font uniquement au moment de la compilation car lorsque le compilateur recopie les fichiers, 
-il remarque les marqueurs \#ifndef \_\_FICHIER\_H\_\_ et nous n'avons donc pas de redéfinitions éventuelles.
+le noeud B, cela signifie que le fichier B est inclus dans l'entête du fichier A.
 \subsection{Rôles des fichiers source, entêtes, et objets}
 Dans cette section, nous détaillons les rôles des fichiers `.c`, `.h`, et `.o` dans notre projet :
 \begin{itemize}
@@ -169,27 +166,28 @@ Une \textbf{déclaration} de type abstrait est utilisée pour informer le compil
 \begin{verbatim}
 struct Joueur; /* Déclaration abstraite */
 \end{verbatim}
-Cela est particulièrement utile pour :
+
+La déclaration des types abstraits permet de centraliser la définition complète d'un type dans un seul fichier. 
+Cela garantit que seul ce fichier dépend directement de l'implémentation choisie pour ce type abstrait. Cette approche offre une grande flexibilité, 
+car elle rend possible le changement de l'implémentation sans avoir besoin de faire des modifications dans les autres parties du projet qui utilisent 
+ce type.
+
+
+\subsubsection*{Utilité des types abstraits et manipulation}
+
+La déclaration de types abstraits est particulièrement utile pour réduire les dépendances entre fichiers dans un projet. Elle permet de manipuler 
+uniquement des pointeurs vers ces types, ce qui limite les inclusions inutiles et évite les cycles d'inclusion entre fichiers.
+
+En revanche, une \textbf{définition complète} du type abstrait est nécessaire dans les fichiers qui doivent :  
 \begin{itemize}
-    \item \textbf{La manipulation des pointeurs :} Si l'on a uniquement besoin de manipuler un pointeur vers ce type (par exemple, pour le passer en argument à une fonction ou le stocker dans une autre structure), une déclaration suffit.
-    \item \textbf{La réduction des dépendances circulaires :} Dans tels projets avec plusieurs fichiers, une déclaration abstraite permet de briser les cycles d'inclusion. Par exemple, si \texttt{player.h} et \texttt{worker.h} s'incluent mutuellement, cela peut être résolu en déclarant \texttt{struct worker\_t} dans \texttt{player.h} et vice-versa.
+    \item \textbf{Allouer dynamiquement de la mémoire :} La définition complète est requise pour utiliser \texttt{sizeof()} et connaître la taille 
+    exacte du type abstrait lors de l'allocation dynamique de mémoire. Cette allocation, ainsi que les fonctions de libération de mémoire (\texttt{free()}), 
+    doivent impérativement être mises en œuvre dans les fichiers contenant cette définition complète.
+    \item \textbf{Accéder aux champs :} L'accès direct aux champs d'une structure n'est possible que dans les fichiers où la définition complète est 
+    disponible, car ces fichiers nécessitent une connaissance détaillée de la structure.
 \end{itemize}
 
-Une \textbf{définition complète}, en revanche, est nécessaire lorsque le contenu complet de la structure doit être manipulé. Cela implique d'inclure le fichier d'entête correspondant.
-On en a besoin principalement pour : 
-\begin{itemize}
-    \item \textbf{L'accès aux champs :} Si l’on doit accéder ou modifier les champs d’une structure ou effectuer des calculs basés sur eux, la définition complète est indispensable. Par exemple, pour modifier une valeur ou réaliser une opération sur un joueur, il faut inclure la structure complète de \texttt{struct player\_t}.
-    \item \textbf{Les allocations dynamiques :} Lorsqu’on alloue de la mémoire pour une structure à l'aide de \texttt{malloc}, le compilateur doit connaître la taille exacte de cette structure. Une simple déclaration abstraite ne suffit pas, car elle ne fournit pas cette information.
-\end{itemize}
-
-\subsubsection*{Problèmes liés aux dépendances et solutions}
-L'utilisation directe des définitions complètes dans plusieurs fichiers `.h` peut entraîner des dépendances circulaires. Par exemple, si deux fichiers s'incluent mutuellement, cela peut provoquer des erreurs de compilation. Pour éviter cela, nous avons adopté les solutions suivantes :
-\begin{itemize}
-    \item \textbf{Déclarations abstraites :} Utiliser des déclarations abstraites dans les fichiers `.h` pour les types provenant d'autres fichiers.
-    \item \textbf{Inclusions limitées :} Inclure les fichiers `.h` uniquement dans les fichiers `.c` qui nécessitent les définitions complètes.
-    \item \textbf{Gardes préprocesseurs :} S'assurer que chaque fichier d'entête est protégé par des gardes préprocesseurs pour éviter les inclusions multiples.
-\end{itemize}
-
+L'utilisation des pointeurs devient donc indispensable pour manipuler ces types abstraits dans les autres parties du projet.
 
 \section{Structure et initialisation des différentes entités du jeu} \label{structures}
 \subsection{Les positions}
@@ -331,6 +329,8 @@ Il était demandé d'utiliser \textit{getopt()} afin d'ajouter des options lors 
         \caption{Exemple d'affichage réduit(sans -v)}
     \end{center}
 \end{figure}
+Chaque ligne de l'affichage décrit une action faite par un joueur, principalement "placer un employé" ou "activer/construire un batiment" ou déclarer le début d'une manche ou la fin du jeu et annoncer les gagnants.
+
 \subsection{Conditions de victoire}
 La partie se déroule en \textit{num\_rounds} manches. Un joueur est éliminé s'il ne peut plus payer les coûts d'entretien de ses employés. S'il reste plus qu'un joueur à la fin de la dernière manche, le gagnant est celui qui a le plus d'or parmi ses ressources.
 
@@ -396,7 +396,7 @@ paramètre passé en ligne de commande via \texttt{getopt()}. Ce paramètre \tex
 la fonction \texttt{list\_neighbors}, qui détermine les voisins d'une position en fonction du type de plateau 
 sélectionné.
 
-\paragraph{Type 0 : Plateau normal} 
+\paragraph{Type 0 : Plateau normal :} 
 Ce type de plateau représente la version de base du jeu, les voisins d'une position sont les huit 
 cases adjacentes dans un environnement classique en deux dimensions.
 
@@ -419,7 +419,7 @@ cases adjacentes dans un environnement classique en deux dimensions.
     \end{tikzpicture}
 \end{center}
 
-\paragraph{Type 1 : Plateau à voisins à 2}
+\paragraph{Type 1 : Plateau à voisins à 2 :}
 Pour ce type, les voisins incluent les cases situées à une distance de deux mouvements cardinaux (haut, bas, gauche, droite).
 \begin{center}
     \begin{tikzpicture}[scale=1]
@@ -439,7 +439,7 @@ Pour ce type, les voisins incluent les cases situées à une distance de deux mo
     \node at (2.5, 4.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
     \end{tikzpicture}
 \end{center}
-\paragraph{Type 2 : Plateau à géométrie torique} 
+\paragraph{Type 2 : Plateau à géométrie torique :} 
 Dans ce plateau, les bords sont connectés, ce qui signifie que les voisins d'une position située en 
 bordure du plateau peuvent inclure des positions situées de l'autre côté.
 \begin{center}
@@ -460,7 +460,7 @@ bordure du plateau peuvent inclure des positions situées de l'autre côté.
     \node at (4.5, 4.5) {\textcolor{red}{\Huge \textbf{\textsf{V}}}};
     \end{tikzpicture}
 \end{center}
-\paragraph{Type 3 : Plateau infernal}
+\paragraph{Type 3 : Plateau infernal :}
 Pour ce type, on choisit \texttt{MAX\_POSITIONS/4} cases qui ne seront plus valables dans le jeu.
 
 Dans notre cas, on a choisit d'éliminer les cases qui ont à la fois un abscisse et une ordonnée pair.
