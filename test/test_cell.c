@@ -1,8 +1,4 @@
-#include "cell.h"
-#include "building.h"
-#include "worker.h"
-#include "mine.h"
-#include "position.h"
+#include "board.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
