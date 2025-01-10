@@ -29,3 +29,11 @@ Il est possble d'ajouter des options à la ligne d'exécution de notre projet po
 exemple de commande d'exécution : 
 
 './project -p 2 -c 3' : execute le jeu avec deux joueurs dans le mode de jeu numéro 3 (plateau infernal) avec un affichage réduit
+
+******** TEST ********
+
+Il est aussi possible de tester les différents fichiers de notre projet avec la commande :
+
+'make test' qui compile et lance tous nos fichiers de test ou alors avec la commande :
+
+'make' puis en exécutant les fichiers de test de manière indépendantes , exemple : './test_building' ou './test_mine'
