@@ -1,7 +1,6 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#include "cell.h"
 #include "building.h"
 
 struct board_t {
